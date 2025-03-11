@@ -1,0 +1,251 @@
+Mouse Events
+------------------
+
+- onMouseOver
+- onMouseOut
+- onMouseDown
+- onMouseUp
+- onMouseMove
+
+            https://cssloaders.github.io/
+
+Ex:
+mouse-animation.jsx
+
+import { useState } from 'react';
+
+export function MouseAnimation(){
+
+   
+    const [styleObj, setStyleObj] = useState({position:'fixed', left:'', top:''});
+
+    function handleMouseMove(e){
+        setStyleObj({
+            position: 'fixed',
+            left: e.clientX + 'px',
+            top: e.clientY + 'px'
+        })
+    }
+
+    return(
+        <div className="container-fluid" onMouseMove={handleMouseMove}>
+            <div style={{height:'1000px'}}>Move mouse pointer to test</div>
+            <img style={styleObj} src="flag.gif" width="50" height="50" />
+        </div>
+    )
+}
+
+Keyboard Events:
+    onKeyUp
+    onKeyDown
+    onKeyPress
+
+- KeyUp & KeyDown are recommended to handle interactions with the characters that user key-in.
+- KeyPress is recommended to handle the character ASCII code.
+- The common key event argument properties are
+        a) keycode
+        b) charCode
+        c) which
+        d) shiftKey
+        e) ctrlKey
+        f) altKey etc..
+
+Ex:
+key-demo.jsx
+
+
+import axios from "axios";
+import { useState, useTransition } from "react"
+
+export function KeyDemo(){
+
+
+    const [username, setUsername] = useState('');
+    const [statusMsg, setStatusMsg] = useState('');
+    const [errorClass, setErrorClass] = useState('');
+    const [toggle, setToggle] = useState('d-none');
+   
+    function handleUserName(e){
+        setUsername(e.target.value);
+    }
+
+    function VerifyName(){
+        axios.get('users.json')
+        .then(response=>{
+              for(var user of response.data){
+                  if(user.UserName===username){
+                       setStatusMsg('User Name Taken - Try Another');
+                       setErrorClass('text-danger');
+                       break;
+                  } else {
+                      setStatusMsg('User Name Available');
+                      setErrorClass('text-success');
+                  }
+              }
+        })
+    }
+
+    function VerifyCaps(e){
+        if(e.which >=65 && e.which<=90) {
+            setToggle('d-block');
+        } else {
+            setToggle('d-none');
+        }
+    }
+
+    return(
+        <div className="container-fluid">
+            <h3>Register User</h3>
+            <dl>
+                <dt>User Name</dt>
+                <dd><input type="text" onKeyUp={VerifyName} onChange={handleUserName} /></dd>
+                <dd className={errorClass} >{statusMsg}</dd>
+                <dt>Password</dt>
+                <dd><input type="password" onKeyPress={VerifyCaps} /></dd>
+                <dd className={toggle}>
+                    <span className="bi bi-exclamation-triangle text-warning"> Warning : Caps ON </span>
+                </dd>
+            </dl>
+        </div>
+    )
+}
+
+Ex: Password with Meter
+
+import axios from "axios";
+import { useState, useTransition } from "react"
+
+export function KeyDemo(){
+
+
+    const [username, setUsername] = useState('');
+    const [statusMsg, setStatusMsg] = useState('');
+    const [errorClass, setErrorClass] = useState('');
+    const [pwdMsg, setPwdMsg] = useState('');
+    const [strength, setStrength] = useState(1);
+   
+    function handleUserName(e){
+        setUsername(e.target.value);
+    }
+
+    function VerifyName(){
+        axios.get('users.json')
+        .then(response=>{
+              for(var user of response.data){
+                  if(user.UserName===username){
+                       setStatusMsg('User Name Taken - Try Another');
+                       setErrorClass('text-danger');
+                       break;
+                  } else {
+                      setStatusMsg('User Name Available');
+                      setErrorClass('text-success');
+                  }
+              }
+        })
+    }
+
+    function handlePasswordChange(e){
+         if(e.target.value.match(/(?=.*[A-Z])\w{4,15}/)) {
+              setPwdMsg('Strong Password');
+              setStrength(100);
+         } else {
+              if(e.target.value.length<4) {
+                  setPwdMsg('Poor Password');
+                  setStrength(20);
+              } else {
+                  setPwdMsg('Weak Password');
+                  setStrength(70);
+              }
+         }
+    }
+
+    return(
+        <div className="container-fluid">
+            <h3>Register User</h3>
+            <dl className="w-25">
+                <dt>User Name</dt>
+                <dd><input type="text" className="form-control" onKeyUp={VerifyName} onChange={handleUserName} /></dd>
+                <dd className={errorClass} >{statusMsg}</dd>
+                <dt>Password</dt>
+                <dd><input type="password" className="form-control" onKeyUp={handlePasswordChange} /></dd>
+                <dd><meter className="w-100" min={1} max={100} value={strength} ></meter></dd>
+                <dd>{pwdMsg}</dd>
+            </dl>
+        </div>
+    )
+}
+
+
+Ex: Password with Bootstrap Progress Bar
+
+import axios from "axios";
+import { useState, useTransition } from "react"
+
+export function KeyDemo(){
+
+
+    const [username, setUsername] = useState('');
+    const [statusMsg, setStatusMsg] = useState('');
+    const [errorClass, setErrorClass] = useState('');
+    const [pwdMsg, setPwdMsg] = useState('');
+    const [progressClass, setProgressClass] = useState('');
+    const [progressWidth, setProgressWidth] = useState({width:''});
+   
+    function handleUserName(e){
+        setUsername(e.target.value);
+    }
+
+    function VerifyName(){
+        axios.get('users.json')
+        .then(response=>{
+              for(var user of response.data){
+                  if(user.UserName===username){
+                       setStatusMsg('User Name Taken - Try Another');
+                       setErrorClass('text-danger');
+                       break;
+                  } else {
+                      setStatusMsg('User Name Available');
+                      setErrorClass('text-success');
+                  }
+              }
+        })
+    }
+
+    function handlePasswordChange(e){
+         if(e.target.value.match(/(?=.*[A-Z])\w{4,15}/)) {
+              setPwdMsg('Strong Password');
+              setProgressWidth({width:'100%'});
+              setProgressClass('progress-bar bg-success progress-bar-striped progress-bar-animated');
+         } else {
+              if(e.target.value.length<4) {
+                  setPwdMsg('Poor Password');
+                  setProgressWidth({width:'20%'});
+                  setProgressClass('progress-bar bg-danger progress-bar-striped progress-bar-animated');
+              } else {
+                  setPwdMsg('Weak Password');
+                  setProgressWidth({width:'70%'});
+                   setProgressClass('progress-bar bg-warning progress-bar-striped progress-bar-animated');
+              }
+         }
+    }
+
+    return(
+        <div className="container-fluid">
+            <h3>Register User</h3>
+            <dl className="w-25">
+                <dt>User Name</dt>
+                <dd><input type="text" className="form-control" onKeyUp={VerifyName} onChange={handleUserName} /></dd>
+                <dd className={errorClass} >{statusMsg}</dd>
+                <dt>Password</dt>
+                <dd><input type="password" className="form-control" onKeyUp={handlePasswordChange} /></dd>
+                <dd>
+                    <div className="progress">
+                        <div className={progressClass} style={progressWidth}>
+                            {pwdMsg}
+                        </div>
+                    </div>
+                </dd>
+            </dl>
+        </div>
+    )
+}

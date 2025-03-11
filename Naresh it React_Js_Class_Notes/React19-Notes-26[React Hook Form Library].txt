@@ -1,0 +1,124 @@
+React Hook Form
+https://react-hook-form.com/
+
+1. To know about how to install and setup a library
+
+        "Get Started"
+
+2. Go to "API" of any library to explore everything provided by them.
+
+3. Identify the required service for your project.
+
+4. Explore details of required service
+   
+        - Get to know about the definition
+        - Its features
+        - Its syntax
+       
+5. Syntax provides all properties and methods required
+
+        - now you can explore the purpose of every method and property
+        - you must know about its type, return type and basic syntax
+
+Implementing Hook Form:
+
+Features:
+- It provides various hooks to handle form and its state.
+- It is light weight and faster.
+- It uses all default HTML validations.
+- It is loosely coupled and extensible.
+
+Limitations:
+- It completely depends on hooks.
+- Hooks are allowed only in function component.
+- Hence it is not good for class components.
+- HTML validations are not enough for handling all types of validations.
+
+1. Install Hook Form library
+
+    >npm install react-hook-form --save
+
+2. Hook Form library provides various hooks
+
+          useForm()
+          useController()
+          useWatch()
+          useFormContext()
+          useFormState()
+          useFieldArray()
+          createFormControl() [beta]
+
+3. You can configure a form and validations by using "useForm()".
+
+        import  { useForm }  from  "react-hook-form";
+
+            const { formName,  handleSubmit,  formState: { errors } } = useForm();
+
+
+        formName        : It refers to the form.
+        handleSubmit        : It refers to the function to execute on submit
+        formState        : It returns "errors" object, that contains field errors.
+
+4. Write a function for submit
+
+        const  submit  = (values) =>{
+            console.log(values);
+        }
+
+        <form  onSubmit={ handleSubmit(submit) }>
+
+        </form>
+
+5. You can access data from elements by using hook-form spread operator.
+
+     <input type="text" name="Name"  {...formName("Name", { validations })}  />
+
+      validations        : required, minLength, maxLength, pattern, email, url ..
+
+6. Errors are handled by using "errors" object.
+
+      {  errors.fieldName.type==="errorType" }    // Boolean expression
+
+Note: FieldName returns undefined, as it is expecting validation to fireup at complile
+      time. To configure runtime validation, you have to make the field as nullable type.
+   
+      The null reference character is "?".
+
+      {  errors.fieldName?.type==="errortype" }
+
+        fieldname?    => can be null or have error.
+
+Ex:
+hook-form-demo.jsx
+
+import { useForm } from "react-hook-form";
+
+export function HookFormDemo(){
+
+    const {register, handleSubmit, formState:{errors}} = useForm();
+
+    const submit = (values)=>{
+        console.log(values);
+    }
+
+    return(
+        <div className="container-fluid">
+            <h2>Register User</h2>
+            <form onSubmit={handleSubmit(submit)} >
+                <dl>
+                    <dt>User Name</dt>
+                    <dd><input type="text" name="UserName" {...register("UserName", { required:true, minLength:4 })} /></dd>
+                    <dd className="text-danger">
+                        {(errors.UserName?.type==="required")?<span>User Name Required</span>:<span></span> && (errors.UserName?.type==="minLength")?<span>Name too short</span>:<span></span>}
+                    </dd>
+                    <dt>Mobile</dt>
+                    <dd><input type="text" name="Mobile" {...register("Mobile", { required:true, pattern:/\+91\d{10}/ })} /></dd>
+                    <dd className="text-danger">
+                        {(errors.Mobile?.type==="required")?<span>Mobile Required</span>:<span></span> && (errors.Mobile?.type==="pattern")?<span>Invalid Mobile</span>:<span></span> }
+                    </dd>
+                </dl>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    )
+}

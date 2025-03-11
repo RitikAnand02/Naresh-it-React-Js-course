@@ -1,0 +1,313 @@
+JavaScript Ajax Methods
+-----------------------------------
+- XMLHttpRequest
+- Fetch Promise
+
+FAQ: What are the issues with "fetch()"?
+Ans:
+      - It returns data in binary format.
+      - You have to parse the data explicitly.
+      - CORS issues [Cross Origin Resource Sharing]
+      - It allows only GET.
+      - It not good handling XSRF & XSS.
+        [ Cross Site Request Forgery & Cross Site Scripting Attacks ]
+
+
+                        jQuery Ajax
+- jQuery is a JavaScript library.
+- It provides various Ajax methods to handle Async requests.
+- It returns data directly in the native format of source.
+- It doesn't require explicit parsing of data.
+- It provides various life cycle methods that allow to track the request.
+- It is good in error handling.
+- CORS, XSRF & XSS have issues. [Limited]
+- You can't cancel the requests.
+- jQuery Ajax methods
+    a) getJSON()
+    b) $.ajax()
+
+1. Install jQuery for your project
+
+        >npm install jquery --save
+
+2. jQuery library is accessed in any component using "$" reference.
+
+        import  $  from  "jquery";
+
+3. Create Ajax request
+
+        $.ajax( {
+                method: "get | post | put | delete ..",
+                url: "api_url",
+                data: data_to_submit,
+                success: ()=>{ on success },
+                error: ()=> { on failure }
+              })
+
+4. On Success Ajax returns data in native format. [JSON, XML, Text, HTML..]
+
+5. You can use the response data directly in component.
+
+Ex:
+flipkart-mobile.jsx
+
+import { useEffect, useState } from "react";
+import $ from "jquery";
+
+
+export function FlipkartMobile()
+{
+
+    const [product, setProduct] = useState({title:'', price:0, rating:{rate:0, ratings:0, reviews:0}, offers:[], image:''});
+
+
+    function LoadProduct(){
+
+         $.ajax({
+             method: "get",
+             url: "product.json",
+             success: (product) => {
+                 setProduct(product);
+             }
+         })
+
+    }
+
+    useEffect(()=>{
+
+        LoadProduct();
+
+    },[])
+
+
+    return(
+        <div className="container-fluid">
+            <div className="row mt-4">
+                <div className="col-3">
+                    <img src={product.image} width="100%" />
+                </div>
+                <div className="col-9">
+                    <div className="h4 my-2">{product.title}</div>
+                    <div>
+                        <span className="badge bg-success text-white">{product.rating.rate} <span className="bi bi-star-fill"></span> </span>
+                        <span className="text-secondary fw-bold"> {product.rating.ratings.toLocaleString()} ratings & {product.rating.reviews} reviews </span>
+                    </div>
+                    <div className="my-3">
+                        <div className="fs-2 fw-bold"> &#8377; {product.price.toLocaleString('en-in')}</div>
+                    </div>
+                    <div>
+                        <h5>Available Offers</h5>
+                        <ul className="list-unstyled">
+                            {
+                                product.offers.map(offer=><li className="bi bi-tag-fill my-3 text-success" key={offer}> <span className="text-secondary">{offer}</span> </li>)
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+                        3rd Party Ajax Libraries
+- React can use various 3rd Party libraries to handle Ajax requests.
+- The popular 3rd party for React are
+        a) Axios
+        b) WHATWGFetch
+        c) React Relay
+        d) Redux React Ajax methods etc..
+        e) Telerik
+
+        www.npmjs.com
+
+Axios for Ajax in React:
+- It is promise based.
+- It is async by default.
+- It can handle multiple requests simultaneously at the same time.
+- It is good in error handling.
+- It provides better features to manage CORS, XSRF & XSS.
+- It doesn't require explicit parsing.
+- It is built for React.
+- It uses virtual DOM.
+- It can cancel the requests.
+
+1. Install Axios for project
+
+        > npm  install axios --save
+
+2. Import axios into component
+
+        import  axios  from  "axios";
+
+3. Configure axios request
+
+Syntax:
+        axios.get("url").then(response=>{}).catch(error=>{}).finally(()=>{ })
+
+4. "response" returns various details like
+        a) statusCode            200, 404
+        b) statusText            OK, Not Found
+        c) data                XML, JSON, Text, HTML
+        d) headers            Request & Response details
+
+Ex:
+flipkart-mobile.jsx
+
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+export function FlipkartMobile()
+{
+
+    const [product, setProduct] = useState({title:'', price:0, rating:{rate:0, ratings:0, reviews:0}, offers:[], image:''});
+
+
+    function LoadProduct(){
+
+         axios.get('product.json')
+         .then(response=>{
+             setProduct(response.data);
+         })
+
+    }
+
+    useEffect(()=>{
+
+        LoadProduct();
+
+    },[])
+
+
+    return(
+        <div className="container-fluid">
+            <div className="row mt-4">
+                <div className="col-3">
+                    <img src={product.image} width="100%" />
+                </div>
+                <div className="col-9">
+                    <div className="h4 my-2">{product.title}</div>
+                    <div>
+                        <span className="badge bg-success text-white">{product.rating.rate} <span className="bi bi-star-fill"></span> </span>
+                        <span className="text-secondary fw-bold"> {product.rating.ratings.toLocaleString()} ratings & {product.rating.reviews} reviews </span>
+                    </div>
+                    <div className="my-3">
+                        <div className="fs-2 fw-bold"> &#8377; {product.price.toLocaleString('en-in')}</div>
+                    </div>
+                    <div>
+                        <h5>Available Offers</h5>
+                        <ul className="list-unstyled">
+                            {
+                                product.offers.map(offer=><li className="bi bi-tag-fill my-3 text-success" key={offer}> <span className="text-secondary">{offer}</span> </li>)
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+
+       
+Ex:  api.nasa.gov  
+
+nasa.jsx
+
+import axios from "axios";
+import { useEffect, useState } from "react"
+
+
+export function Nasa(){
+
+    const [marsObject, setMarsObject] = useState({photos:[]});
+
+
+    useEffect(()=>{
+
+        axios.get('https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&api_key=DEMO_KEY&#39;)
+        .then(response=>{
+            setMarsObject(response.data);
+        })
+
+    },[])
+
+    return(
+        <div className="container-fluid">
+            <h3>Mars Rover Photos</h3>
+            <table className="table table-hover">
+                <thead>
+                    <tr>
+                        <th className="bi bi-key"> Photo Id</th>
+                        <th className="bi bi-camera"> Camera Name </th>
+                        <th className="bi bi-rocket"> Rover Name </th>
+                        <th className="bi bi-eye"> Preview </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        marsObject.photos.map(item=>
+                            <tr key={item.id}>
+                                <td>{item.id}</td>
+                                <td>{item.camera.full_name}</td>
+                                <td>{item.rover.name}</td>
+                                <td><a href={item.img_src} target="_blank"><img src={item.img_src} width="100" height="100" /></a></td>
+                            </tr>
+                        )
+                    }
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
+
+
+
+Ex: Cards
+
+Nasa.jsx
+
+import axios from "axios";
+import { useEffect, useState } from "react"
+
+
+export function Nasa(){
+
+    const [marsObject, setMarsObject] = useState({photos:[]});
+
+
+    useEffect(()=>{
+
+        axios.get('https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&api_key=DEMO_KEY&#39;)
+        .then(response=>{
+            setMarsObject(response.data);
+        })
+
+    },[])
+
+    return(
+        <div className="container-fluid">
+            <h3>Mars Rover Photos</h3>
+            <main className="d-flex flex-wrap">
+                {
+                    marsObject.photos.map(item=>
+                    <div key={item.id} className="card m-3 p-2 w-25">
+                        <img src={item.img_src} className="card-img-top" height="100" />
+                        <div className="card-header">
+                            <div className="h3">{item.id}</div>
+                        </div>
+                        <div className="card-body">
+                                <dl>
+                                    <dt>Camera Name</dt>
+                                    <dd>{item.camera.full_name}</dd>
+                                    <dt>Rover Name</dt>
+                                    <dd>{item.rover.name}</dd>
+                                </dl>
+                        </div>
+                    </div>
+                   )
+                }
+            </main>
+        </div>
+    )
+}

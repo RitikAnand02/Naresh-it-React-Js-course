@@ -1,0 +1,142 @@
+React Application:
+- You can create react application without any framework. It requires any bundling tool like "Webpack, parcel, vite etc.
+- You can create production grade react application using any framework like 
+	a) Next.js
+	b) Remix
+	c) Gatsby 
+	d) Expo etc.
+
+Creating a React application without framework: [ using Webpack bundler ]
+
+1. Go to any physical location on your PC using command prompt 
+
+		D:\> npm config set legacy-peer-deps true
+
+ 
+2. Create a new application using the command
+
+		D:\> npx   create-react-app    your_app_name
+
+		D:\> npx   create-react-app    demo-react-app
+
+3. Open project folder in VS code   "D:\demo-react-app"
+
+
+4. Project file system comprises of following files & folders
+
+
+	node_modules			: It contains all library files installed using NPM.
+	public					: It contains static resources like html, image, docs etc
+	src						: It contains dynamic resources like js, jsx, ts, css etc.
+	.gitignore					: It configures folder & file to ignore for GIT.
+	package.json				: It comprises of project meta data.
+	package.lock.json			: It comprises of dependencies meta data.
+	README.md				: It is a help document for developers.
+
+5. Open Terminal in your project and install  JavaScript Validation module.
+
+	 >npm  install  ajv  --save
+
+6. Start project using the command
+
+	> npm start
+
+	- You project starts on local server at 3000 port
+	- Open any browser and request
+
+			http://127.0.0.1:3000
+				     (or)
+			http://localhost:3000
+
+
+React Application Flow [High Level Design]:
+
+1. React application starts with "index.html" defined in "public" folder
+
+		<div id="root"> </div>
+
+2. The logic for index page is defined in "src/index.js". It creates virtual DOM and renders into actual DOM.
+
+    Version 18x & 19x:
+
+		const  root = ReactDOM.createRoot(document.getElementById("root");
+		root.render(
+				<App />
+				 );
+
+     Version up to 17x:
+	
+		ReactDOM.render(<App />, document.getElementById("root"));
+
+FAQ: What is <React.StrictMode> ?
+Ans:  Strict Mode is used in JavaScript application to avoid code inconsistency.
+
+Adding a new component in to project:
+
+1. Add a new file into "src" folder with extension  ".jsx  or  .js"
+
+				login.jsx
+
+
+
+export function Login()
+{
+    return(
+        <div>
+            <h3>User Login</h3>
+            <dl>
+                <dt>User Name</dt>
+                <dd><input type="text" /></dd>
+                <dt>Password</dt>
+                <dd><input type="password" /></dd>
+            </dl>
+            <button>Login</button>
+        </div>
+    )
+}
+
+2. Go to "index.js"
+
+	import   { Login }  from   './login';
+
+	render(
+		 <Login />
+	 )
+
+Data Binding & State 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

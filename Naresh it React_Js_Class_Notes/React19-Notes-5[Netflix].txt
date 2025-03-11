@@ -1,0 +1,198 @@
+Note: JSX elements can't use attributes. You have to configure properties.	
+			
+			<img  src=""  width=""  height="" class="img-fluid">       attributes
+
+			document.querySelector("img").src="";		property
+			document.querySelector("img").className=""
+
+Syntax:
+		<img  src=""  className=""  />
+
+
+	   All JSX elements from HTML must be in lowercase. 
+
+		 <form> <button> <select>		valid
+		 <Form> <Button> <Select>		Invalid
+
+Setup Bootstrap for project:
+1. Open Terminal 
+2. Run the following command in project terminal
+
+		> npm  install  bootstrap  bootstrap-icons  --save
+
+3. Link the bootstrap files to your web page.
+
+<head>
+ <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+ <link rel="stylesheet" href="../node_modules/bootstrap/dis/css/bootstrap.css">
+ <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js">
+</head>
+
+
+
+
+Ex: Netflix.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix</title>
+    <style>
+        .bg-image {
+            background-image: url("netflix-banner.jpg");
+            height: 100vh;
+            background-size: cover;
+        }
+        .bg-shade {
+            background-color: rgba(0,0,0,0.7);
+            height: 100vh;
+        }
+        .brand-title {
+            font-size: 35px;
+            font-weight: bold;
+            color:red;
+        }
+        main {
+            padding-top: 100px;
+            font-family: Arial;
+        }
+        .main-title {
+            font-size: 45px;
+            font-weight: bold;
+        }
+        .main-subtitle {
+            font-size: 22px;
+        }
+    </style>
+    <!-- Bootstrap Library -->
+    <link  rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link  rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <!-- React Library -->
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <!-- Compiler Library -->
+    <script src="../node_modules/@babel/standalone/babel.js"></script>
+    <!-- React Application Library -->
+    <script type="text/babel">
+        function NetflixIndex(){
+            return(
+                <div className="bg-image">
+                    <div className="bg-shade">
+                        <NetflixHeader />
+                        <NetflixMain />
+                    </div>
+                </div>
+            )
+        }
+        function NetflixHeader(){
+            return(
+                <header className="p-4 text-white d-flex justify-content-between">
+                    <div className="brand-title"> NETFLIX </div>
+                    <div className="d-flex">
+                        <div>
+                            <div className="input-group">
+                            <span className="bi bi-translate input-group-text"></span>
+                            <select className="form-select">
+                                <option>Language</option>
+                                <option>English</option>
+                            </select>
+                        </div>
+                        </div>
+                        <div>
+                            <button data-bs-target="#signin" data-bs-toggle="modal" className="btn btn-danger ms-2">Sign In</button>
+                            <div className="modal fade" id="signin">
+                                <div className="modal-dialog modal-dialog-centered">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h3 className="bi bi-person-fill text-danger">User Login </h3> 
+                                            <button data-bs-dismiss="modal" className="btn btn-close"></button>
+                                        </div>
+                                        <div className="modal-body text-dark">
+                                            <dl> 
+                                                <dt>User Name </dt> 
+                                                <dd><input type="text" className="form-control"/> </dd>
+                                                <dt> Password </dt> 
+                                                <dd><input type="password" className="form-control"/> </dd>
+                                            </dl> 
+                                        </div>
+                                        <div className="modal-footer">
+                                            <button className="btn btn-danger w-100">Login </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            )
+        }
+        function NetflixMain(){
+            return(
+                <main className="text-white text-center">
+                    <div className="main-title">Unlimited movies, TV <br /> shows and more</div>
+                    <div className="main-subtitle">Starts at ₹149. Cancel at any time.</div>
+                    <NetflixRegister />
+                </main>
+            )
+        }
+        function NetflixRegister(){
+            return(
+                <form className="d-flex justify-content-center mt-4">
+                    <div>
+                        <p>Ready to watch? Enter your email to create or restart your membership.</p>
+                     <div>
+                        <div className="input-group input-group-lg">
+                        <input className="form-control" type="email" placeholder="Email address" />
+                        <button className="btn btn-danger"> Get Started <span className="bi bi-chevron-right"></span> </button>
+                        </div>
+                      </div>
+                    </div>
+                </form>
+            )
+        }
+
+        ReactDOM.render(<NetflixIndex />, document.getElementById("root"));
+
+    </script>
+</head>
+<body>
+    <noscript> Please enable JavaScript on your browser </noscript>
+    <div id="root"></div>
+</body>
+</html>
+
+						React 19
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

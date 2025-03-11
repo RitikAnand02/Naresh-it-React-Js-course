@@ -1,0 +1,237 @@
+How to use react in existing web application?
+1. Install Node JS
+2. VS Code
+3. Create a project
+4. Setup file system for project
+5. Enable React in page using CDN	
+		a) React
+		b) React DOM
+		c) Babel 
+
+Install react & babel library for project:
+
+1. Run the following commands in your project terminal 
+
+		>npm  i  react   react-dom   @babel/standalone  --save	[ latest - 19]
+
+		>npm  i  react@18.2  react-dom@18.2  @babel/standalone --save
+
+2. All library files are copied into "node_modules".
+
+3. You web application requires react libraries from "UMD" [Universal Module Distribution] system.
+
+4. Link library files to your HTML page.
+
+<head>
+<script  src="../node_modules/react/umd/react.development.js"> </script>
+<script src="../node_modules/react-dom/umd/react-dom.development.js"> </script>
+<script src="../node_modules/@babel/standalone/babel.js"> </script>
+</head>
+
+Ex:
+home.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../node_modules/@babel/standalone/babel.js"></script>
+    <script type="text/babel">
+        ReactDOM.render("Welcome to React", document.getElementById("root"));
+    </script>
+</head>
+<body>
+    <h2>Home</h2>
+    <noscript>Please enable JavaScript on your browser.</noscript>
+    <div id="root"></div>
+</body>
+</html>
+
+FAQ: What is "ReactDOM" ?
+Ans:  It is a property that creates "Virtual DOM" and  "render()" is a method that renders 
+	 virtual DOM into actual DOM.
+
+Syntax:
+	 ReactDOM.render( <your_component>,  dom_target_element );
+
+
+					       React Components
+- Component is a template with pre-defined design, styles and functionality.
+- Design is created using "HTML".
+- Styles are configured using "CSS".
+- Functionality is defined by using "JavaScript / TypeScript".
+- React uses JavaScript Extension known as "JSX".
+- React component can be created by using 2 techniques
+	a) JavaScript Class
+	b) JavaScript Function 
+
+JavaScript Function Topics:
+- Function Declaration
+- Function Expression
+- Function Definition 
+- Function Parameters
+- Rest Parameters
+- Spread Operator
+- Function Closure 
+- Function Return 
+- Function Currying 
+- Higher Order Functions 
+- Function Recursion
+- Function Signature 
+- Function Generator
+- Function Call back
+- Function Promise 
+- Async Functions
+- Anonymous Functions 
+- IIFE Pattern
+- Arrow Functions
+
+Function Component Rules:
+1. A component function can't be void.
+2. A component function must return JSX element. 
+3. Component function name must start with Uppercase letter. 
+4. Component JSX must return only one fragment. 
+5. Every element in component must have an end token.
+		<img> </img>
+		<img />
+		<input type="text">  </input>
+		<input type="text" />
+
+Syntax:
+	 function   Component()
+	 {
+	   return (
+			<fragment>
+
+			</fragment>
+		      );
+	 }
+
+- Component is accessed and used as a token  "<Component />".
+
+Ex:
+home.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        form {
+            border: 1px solid gray;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 2px black;
+            width: 200px;
+            margin: 20px;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            border: 1px solid gray;
+            padding: 20px;
+        }
+        footer {
+            background-color: black;
+            color:white;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../node_modules/@babel/standalone/babel.js"></script>
+    <script type="text/babel">
+        
+        function Login()
+        {
+            return (
+                <form>
+                    <h3>User Login</h3>
+                    <dl>
+                        <dt>User Name</dt> 
+                        <dd><input type="text" /></dd>
+                        <dt>Password </dt> 
+                        <dd><input type="password"/> </dd> 
+                    </dl>
+                    <button>Login</button>
+                </form>
+            );
+        }
+
+        const SearchBar = ()=> (
+            <div>
+                <input type="text" placeholder="Search Netflix.in" />
+                <button>Search</button>
+            </div>
+        )
+
+        const Navbar = () => (
+            <nav>
+                <div>Netflix</div>
+                <div>
+                    <SearchBar />
+                </div>
+                <div> 
+                  <select>
+                    <option>Language</option>
+                    <option>English</option>
+                  </select>    
+                  <button>Sign In</button>
+                </div>
+            </nav>
+        )
+
+        function Footer()
+        {
+            return(
+                <footer>
+                    &copy; 2025  All right reserved for Netflix
+                </footer>
+            )
+        }
+
+        ReactDOM.render(<section> <Navbar/> <Login/>  <Footer /> </section>, document.getElementById("root"));
+    </script>
+</head>
+<body>
+    <noscript>Please enable JavaScript on your browser.</noscript>
+    <div id="root"></div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

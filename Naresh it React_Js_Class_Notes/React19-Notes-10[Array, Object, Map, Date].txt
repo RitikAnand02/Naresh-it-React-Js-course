@@ -1,0 +1,319 @@
+Binding Object Type:
+- Object is a key and value collection.
+
+		{
+		  Key: value
+		}
+
+- Key is string type & value can be any type.
+- The value are accessed with reference of Key.
+
+	<p> { objectName.key } </p>
+
+Object Manipulations:
+1. How to read all keys from object?
+A. Object.keys()
+
+2. How to remove any specific key?
+A. By "delete" operator
+
+3. How to check any key?
+A. By using "in" operator
+
+4. How to check the data type of value in a key?
+A. By using "typeof" operator
+
+
+Ex:
+data-binding.jsx
+
+import { useState } from "react"
+
+export  function DataBinding()
+{
+    
+    const [product] = useState({Id:1, Name:"TV", Price:4000.33, Stock:true, Cities:['Delhi', 'Hyd'], Rating:{Rate:4.5, Count:500}});
+    
+    return(
+        <div className="container-fluid">
+            <h2>Product Details</h2>
+            <dl>
+                <dt>Product Id</dt>
+                <dd>{product.Id}</dd>
+                <dt>Name</dt>
+                <dd>{product.Name}</dd>
+                <dt>Price</dt>
+                <dd>{product.Price}</dd>
+                <dt>Stock</dt>
+                <dd>{(product.Stock===true)?"Available":"Out of Stock"}</dd>
+                <dt>Cities</dt>
+                <dd>
+                    <ol>
+                        {
+                            product.Cities.map(city=><li key={city}>{city}</li>)
+                        }
+                    </ol>
+                </dd>
+                <dt>Rating</dt>
+                <dd>
+                    {product.Rating.Rate} <span className="bi bi-star-fill"></span> {product.Rating.Count}
+                </dd>
+            </dl>
+        </div>
+    )
+}
+
+Ex:
+import { useState } from "react"
+
+export  function DataBinding()
+{
+    
+    const [product] = useState({Id:1, Name:"TV", Price:4000.33, Stock:true, Cities:['Delhi', 'Hyd'], Rating:{Rate:4.5, Count:500}});
+    
+    return(
+        <div className="container-fluid">
+            <h2>Product Details</h2>
+            <ol>
+                {
+                    Object.keys(product).map(key=> <li key={key}>{key}</li>)
+                }
+            </ol>
+        </div>
+    )
+}
+
+
+
+Array of Objects:
+- Data from API is accessed in JSON format.
+- Usually JSON comprises of an Object with key & value or an Array with a collection of object.
+
+Syntax:	
+		[
+		  { Key: value },
+		  { Key: value}
+		]
+
+- The basic Array iterators are used to read and present data.
+
+		map()
+		forEach()
+
+Ex:
+data-binding.jsx
+
+import { useState } from "react"
+
+export  function DataBinding()
+{
+    
+    const [products] = useState([
+        {Name: "TV", Price:45000.44},
+        {Name: "Mobile", Price:12000.33},
+        {Name: "Watch", Price:3000.44},
+        {Name: "Jeans", Price:3600.55}
+    ]);
+    
+    return(
+        <div className="container-fluid">
+            <h2>Product Details</h2>
+            <table className="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        products.map(product=><tr key={product}> <td>{product.Name}</td> <td>{product.Price}</td> <td> <button className="btn btn-warning bi bi-pen-fill mx-2"></button> <button className="btn btn-danger bi bi-trash"></button> </td> </tr>)
+                    }
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
+
+FAQ: What are the issues with Object type?
+Ans: 
+	 - Key must be always string type.
+	 - It requires all explicit methods for manipulation
+	 - It is slow in interactions 
+	 - It is structured. [not good for schema less data]
+
+Map Type
+- It is a key and value collection.
+- Key can be any type and value can be any type.
+- It provides implicit methods.
+- It is faster than object.
+
+Syntax:
+	  var data = new Map();
+	
+	  data.set(key, value)
+	  data.get(key)
+	  data.remove(key)
+	  data.clear()
+	  data.has(key)
+	  data.size
+	  data.keys()
+	  data.values()
+	  data.entries() etc..
+
+Date Type:
+- Date values are stored using a Date() constructor.
+- JavaScript date & time functions are used to present date.
+
+		getHours()				setHours()
+		getMinutes()				setMinutes()
+		getSeconds()				setSeconds()
+		getMilliSeconds()			setMilliSeconds()
+		getDate()					setDate()
+		getDay()					setMonth()
+		getMonth()				setFullYear() 
+		getFullYear()
+		toLocaleDateString()
+		toDateString()
+		toLocaleTimeString()
+		toTimeString()
+
+- React can't use the date & time functions of JavaScript to present in desired format.
+- React requires various 3rd party library to handle date & time.
+- The popular date & time libraries of JavaScript are
+		a) moment 
+		b) dayjs
+		c) luxon 
+
+Setup Moment in your project:
+1. Open Terminal 
+2. Install Moment
+
+	> npm  install  moment --save
+
+3. Import moment into component
+
+	import   moment  from  "moment";
+
+4. Define format for your date value using moment.
+
+	const [mfd] = useState(Date());
+
+	<p>  {  moment(mdf).format('date_time_format')  }  </p>
+
+		do		  5th
+		dd		  05
+		ddd		  Fri
+		dddd	  Friday			https://momentjs.com/
+		
+		MM		  02
+		MMM	  Feb
+		MMMM	  February 
+
+		YY		 25
+		YYYY	 2025
+
+Ex:
+data-binding.jsx
+
+import { useState } from "react";
+import moment from "moment";
+
+export  function DataBinding()
+{
+    
+    const [Mfd] = useState(Date());
+  
+    
+    return(
+        <div className="container-fluid">
+           <p>{moment(Mfd).format('dddd do MMMM YYYY')}</p>
+        </div>
+    )
+}
+
+Regular Expression Type:
+- Regular expression uses Meta characters and quantifiers.
+- Expression is enclosed in "/  /".
+- Expression is verified by using "match()" method.
+
+Syntax:
+	  const [mobile] = useState("9876543210");
+
+	  <p>
+		{
+		   (mobile.match(/\+91\d{10}/) ? "Verified": "Invalid Mobile"
+		}
+	</p>
+
+Ex:
+data-binding.jsx
+
+import { useState } from "react";
+import moment from "moment";
+
+export  function DataBinding()
+{
+    
+    const [password] = useState(prompt("Enter Password"));
+    
+    return(
+        <div className="container-fluid">
+           <p>
+               {
+                  (password.match(/(?=.*[A-Z])\w{4,15}/))?"Verified":"Invalid Password"
+               }
+           </p>
+        </div>
+    )
+}
+
+Summary:
+1. Primitive Types
+		number
+		string
+		Boolean
+		null
+		undefined 
+		symbol
+		bigint 
+
+2. Non Primitive Type
+		array
+		object
+		map
+3. Additional
+		date
+		regular expression
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

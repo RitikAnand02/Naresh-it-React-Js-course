@@ -1,0 +1,177 @@
+Conditional Rendering
+------------------------------
+
+- Conditional Rendering is a technique where component can render different content according to the state and situation.
+- You can use various decision making approaches to render different components.
+
+Syntax: Uncontrolled component - conditional rendering
+
+         if (condition )
+         {
+         setComponent(<name1 />);
+         }
+        else
+         {
+        setComponent(<name2 />);
+         }
+
+Ex:
+conditional-demo.jsx
+
+import { useState } from "react"
+import { Weather } from "../weather/weather";
+import { CarouselDemo } from "../carousel-demo/carousel-demo";
+
+export function ConditionalDemo(){
+    const [component, setComponent] = useState();
+
+
+    function LoadComponent(cname){
+        switch(cname){
+            case "Weather":
+            setComponent(<Weather />);
+            break;
+            case "SlideShow":
+            setComponent(<CarouselDemo />);
+            break;
+        }
+    }
+
+    return(
+        <div className="container-fluid">
+            <h2>My Projects</h2>
+            <button onClick={()=> LoadComponent('Weather')} className="btn btn-primary mx-2">Weather API</button>
+            <button onClick={()=> LoadComponent('SlideShow') } className="btn btn-warning">Slide Show</button>
+            <div className="mt-4">
+                {
+                    component
+                }
+            </div>
+        </div>
+    )
+}
+
+- A controlled component can render different content using props.
+- Props and provide a property, which allows to render different content by using any decision making approach. [if, else, switch, case, default]
+
+Syntax: Conditional Render with controlled component
+
+    function ControlledComponent(props)
+    {
+         if (props.key === value )
+         {
+         return(
+               <Layout1 />
+         );
+        }
+        else
+        {
+        return(
+              <Layout2 />
+             );
+         }
+     }
+
+Ex:
+1. Go to controlled-components and add  "dynamic-grid.jsx"
+
+
+
+export function DynamicGrid(props){
+
+     if(props.layout==="grid"){
+        return(
+            <table className="table caption-top table-hover">
+                <caption>{props.caption}</caption>
+                <thead>
+                    <tr>
+                        {
+                            props.fields.map(field=><th key={field}>{field}</th>)
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        props.records.map(record=>
+                        <tr key={record}>
+                            {
+                                Object.keys(record).map(key=><td key={key}>{record[key]}</td>)
+                            }
+                        </tr>
+                        )
+                    }
+                </tbody>
+            </table>
+        )
+     } else {
+        return(
+            <div className="d-flex flex-wrap">
+                {
+                    props.records.map(record=>
+                        <div className="card m-2 p-2" style={{width:'250px'}}>
+                            <div className="card-header" style={{height:'100px'}}>
+                               <h3>
+                                {
+                                    record[Object.keys(record)[0]]
+                                }
+                                </h3>
+                            </div>
+                            <div className="card-body">
+                                {
+                                    Object.keys(record)[1]
+                                }
+                                :
+                                {
+                                    record[Object.keys(record)[1]]
+                                }
+                            </div>
+                            <div className="card-footer">
+                                <button className="btn btn-primary w-100"> View Details </button>
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
+        )
+     }
+}
+
+2. Conditional-Demo.jsx
+
+import { useEffect, useState } from "react"
+
+import { DynamicGrid } from "../../controlled-components/dynamic-grid";
+
+export function ConditionalDemo(){
+   
+    const [products] = useState([{Name:'Samsung TV', Price:50000}, {Name:'Mobile', Price:12000}]);
+    const [fields, setFields] = useState([]);
+    const [layout, setLayout] = useState('');
+
+    useEffect(()=>{
+
+          setFields(Object.keys(products[0]));
+
+    },[])
+
+    function handleLayoutChange(e){
+        setLayout(e.target.value);
+    }
+
+    return(
+        <div className="container-fluid">
+            <h2>Conditional Rendering</h2>
+            <div className="my-3 w-25">
+                <label className="fw-bold form-label">Select Layout</label>
+                <div>
+                <select onChange={handleLayoutChange} className="form-select">
+                    <option>Select Layout</option>
+                    <option value="grid">Grid</option>
+                    <option value="card">Card</option>
+                 </select>
+                </div>
+            </div>
+            <DynamicGrid layout={layout} caption="Product Details" fields={fields} records={products} />
+        </div>
+    )
+}

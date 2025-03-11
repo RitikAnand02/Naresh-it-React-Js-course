@@ -1,0 +1,228 @@
+Binding Boolean Types
+- Boolean type are defined with true or false.
+- React will not recommend to use Boolean with 0 & 1.
+		0 = false
+		1 = true
+- React can't show the Boolean value, it can just use the value.
+
+Syntax:
+	const  [stock] = useState(true);
+
+	<p>  {  (stock==true)?"true":"false" } </p>
+
+Undefined Type:
+- React will not display undefined value but it can use the type.
+- You can verify by using "undefined" or by using defined technique. 
+
+Syntax:
+	 const  [price] = useState();
+
+	 <p>  { (price) ? price : "not defined" } </p>				// good
+
+	<p>  { (price===undefined)? "not defined" : price } </p>      // not good
+
+Null Type 
+- Null is a type defined for values at runtime of application.
+- It is verified by using "null" keyword.
+
+Syntax:
+	const [ price ]  = useState(prompt('enter price'));
+
+	<p>  {  (price===null) ? "Not defined" : price }  </p>
+
+Note: Remove "<React.Strictmode>" from index.js to avoid compiling 2 times.
+	  [for development and production]
+
+Symbol Type:
+- It is a primitive JavaScript type.
+- It is used to configure hidden properties. 
+- Hidden property is not displayed over iterations, but accessible individually. 
+
+Syntax:
+	var [id] = Symbol();
+
+	var product = {
+	     [id] : 1,
+	     Name: "TV"
+	 }
+
+					     Non Primitive Types
+- They a mutable types
+- They are stored in memory heap
+- They don't have any fixed range for value.
+- Value range varies according to memory available.
+- JavaScript non-primitive types
+	a) Array
+	b) Object
+	c) Map / WeakMap
+
+Arrays in React:
+- Array configuration is same as in JavaScript.
+- All array methods are used similarly in React.
+	pop()		indexOf()
+	push()		lastIndexOf() etc..
+	shift()
+	unshift()
+	forEach()
+	map()
+	find()
+	filter()
+	slice()
+
+Syntax:
+	  const  [values] = useState([ ]);
+	  const  [values] = useState(new Array());
+
+	  values.map(function(value) { })		// not recommended 
+
+	  values.map(value => <element> </element>)
+	
+	  values.map(value => { <element> </element> })	// invalid
+
+Ex:
+data-binding.jsx
+
+import { useState } from "react"
+
+export  function DataBinding()
+{
+   
+    var [categories] = useState(['All','Electronics', 'Footwear', 'Fashion']);
+
+    return(
+        <div className="container-fluid">
+           <h3>Categories</h3>
+           <nav className="bg-danger btn-group">
+              {
+                categories.map(category=><button className="btn btn-danger">{category}</button>)
+              }
+           </nav>
+           <ol>
+             {
+                categories.map(category=> <li>{category}</li>)
+             }
+           </ol>
+           <select>
+              {
+                 categories.map(category=> <option>{category}</option> )
+              }
+           </select>
+           
+        </div>
+    )
+}
+
+Note: If any element is repeating in JSX, then every repeating element must have a unique key.
+
+Syntax:
+		{
+		  categories.map((category,index)=> <li key={index}> {category} </li>
+		}
+
+		{
+		  categories.map( category => <option key={category}> {category} </option>
+		}
+
+Ex:
+data-binding.jsx
+
+import { useState } from "react"
+
+export  function DataBinding()
+{
+   
+    var [categories] = useState(['All','Electronics', 'Footwear', 'Fashion']);
+
+    return(
+        <div className="container-fluid">
+           <h3>Categories</h3>
+           <nav className="bg-danger btn-group">
+              {
+                categories.map((category,index)=><button key={index} className="btn btn-danger">{category}</button>)
+              }
+           </nav>
+           <ol>
+             {
+                categories.map(category=> <li key={category}>{category}</li>)
+             }
+           </ol>
+           <select>
+              {
+                 categories.map(category=> <option key={category}>{category}</option> )
+              }
+           </select>
+           
+        </div>
+    )
+}
+
+
+Ex:
+import { useState } from "react"
+
+export  function DataBinding()
+{
+   
+    const [sales] = useState([45000, 68000, 32000, 78000, 35000]);
+
+    return(
+        <div className="container-fluid">
+            <h3>Sales above 40k</h3>
+            <ol>
+                {
+                    sales.filter(value=> value>40000).map(item=> <li key={item}>{item}</li>).reverse().sort()
+                }
+            </ol>
+        </div>
+    )
+}
+
+
+
+Object Type [JSON]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

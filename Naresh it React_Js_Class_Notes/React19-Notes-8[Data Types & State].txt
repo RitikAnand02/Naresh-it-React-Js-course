@@ -1,0 +1,213 @@
+						    useState Hook
+- Hook is a function.
+- It is a predefined function provided by React library.
+- useState can configure a local state for component.
+- You can store any value in local state and use across requests. 
+
+Syntax:
+	     const [getter, setter] = useState();
+
+- Getter allows to read value from state.
+- Setter allows to assign value into state. 
+
+Ex:
+	  const [userName  , setUserName] = useState( "John" );
+
+	  <p>  {  userName   }  </p>
+
+	  setUserName("David");		// initializing memory
+	  setUserName = "David";		// assigning  - invalid 
+
+- State can handle any type of data.
+		
+		a) Primitive 
+		b) Non Primitive 
+
+- JavaScript Primitive Types
+
+		- number
+		- string
+		- Boolean
+		- undefined
+		- null
+		- symbol 
+		- bigint 
+
+FAQ's:
+1. Can we declare state with var or let keywords?
+A. Yes. But not recommended. 
+
+2. Why state is configured with "const"?
+A. State must be initialized for react component. The keywords var & let allows assignment. State can't be assigned it must be initialized. 
+
+3. If you declare state using const then how you can assign a new value?
+A. Const will not allow to assign, however we can change the constant by initializing memory for value.
+
+Syntax:
+			setter = value;			// invalid - const will not allow to assign
+			setter(value);			// valid - const initializes memory
+
+Binding Number Type:
+- Number type can be any one of the following
+		
+		Signed Integer		- 10
+		Unsigned Integer		   10
+		Floating Point			   3.5
+		Double				345.423
+		Decimal				2345.554592
+		Exponent				2e3
+		Hexadecimal 			0x3314
+		Octa					0o753
+		Binary				0b1010
+		Bigint 				994288182n
+
+- The formatting methods of JavaScript are same in React 
+			
+		toFixed()
+		toLocaleString()
+
+Syntax:
+	     const [value] = useState(450000.00);
+
+		{  value.toFixed(2)  }		
+		{  value.toLocaleString() }			450,000
+		{  value.toLocaleString('en-in') }		4,50,000
+		{  value.toLocaleString('en-in', { style: 'currency', currency: 'INR' })
+
+https://www.instagram.com/sharmatechgroup/
+
+Ex: 
+data-binding.jsx
+
+import { useState } from "react"
+
+export  function DataBinding()
+{
+
+    const [value] = useState(450000.00);
+
+    return(
+        <div className="container-fluid">
+            <h2>Data Binding</h2>
+            <p> value = {value.toLocaleString('en-in',{style:'currency', currency:'INR'})} </p>
+        </div>
+    )
+}
+
+- You can convert a numeric string into number by using following methods
+
+		a) parseInt()
+		b) parseFloat()
+
+- You can verify number type by using "isNaN()" [boolean] 
+
+Note: JSX will not allow any statements in Markup. You have to handle only with
+	 operators and functions. 
+
+Syntax:
+		<p>
+			{
+				if(condition) { } 		// invalid
+
+			}
+		</p>
+
+		<p>
+			{
+			  (condition)?true:false		// valid
+			}
+		</p>
+
+Ex:
+data-binding.jsx
+
+import { useState } from "react"
+
+export  function DataBinding()
+{
+
+    const [age] = useState("A");
+
+    return(
+        <div className="container-fluid">
+            <h2>Data Binding</h2>
+            <p>
+                {
+                    (isNaN(age))?'Age must be a number':age
+                }
+            </p>
+        </div>
+    )
+}
+
+
+
+
+
+
+
+
+
+Binding String Type:
+- JS string can be defined using 3 techniques
+
+	a) Double Quote		"  "
+	b) Single Quote		'   '
+	c) Backtick 			`  `
+
+- Backtick allows embedded expression.
+- Databinding expression of JavaScript string is "${ }".
+
+Syntax:
+	   const [str] = useState('text-danger');
+
+	  <h2  className={`border border-1 p-2 ${str}`}>
+
+Ex:
+data-binding.jsx
+
+import { useState } from "react"
+
+export  function DataBinding()
+{
+
+    const [validationClass] = useState('text-success')
+
+    return(
+        <div className="container-fluid">
+            <h2 className={`border border-2 text-center mt-2 p-2 ${validationClass}`}>Data Binding</h2>
+            
+        </div>
+    )
+}
+
+- All string formatting and manipulation methods are same as in JavaScript.
+
+		bold()
+		italics()
+		fontsize()
+		toUpperCase()
+		toLowerCase()
+		fontcolor() etc..
+
+		charAt(), charCodeAt()
+		indexOf(), lastIndexOf(),
+		substr(), slice(), substring()
+		replace(), replaceAll(), match()
+		trim(), split() etc..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,286 @@
+Ex: Carousel Demo
+-------------------------
+
+carousel-demo.jsx
+
+import axios from "axios";
+import { useEffect, useRef, useState } from "react"
+
+export function CarouselDemo(){
+
+
+    const [product, setProduct] = useState({id:0, title:'', price:0, description:'', image:'', rating:{rate:0, count:0}, category:''});
+    const [status, setStatus] = useState('');
+
+    let productId = useRef(1);
+    let thread = useRef(null);
+
+    function LoadProduct(id){
+        axios.get(`https://fakestoreapi.com/products/${id}`)
+        .then(response=>{
+             setProduct(response.data);
+        })
+    }
+
+    function LoadProductAuto(){
+        productId.current = productId.current + 1;
+        LoadProduct(productId.current);
+        // stop timer when product id = 20;
+    }
+
+    useEffect(()=>{
+         LoadProduct(1);
+    },[])
+
+    function NextClick(){
+        productId.current = productId.current + 1;
+        LoadProduct(productId.current);
+        // if id=20 then set end of show and set id = 20;
+    }
+
+    function PreviousClick(){
+        productId.current = productId.current - 1;
+        LoadProduct(productId.current);
+        // if id=0 then set id=1;
+    }
+
+    function handleSeekbarChange(e){
+        productId.current = e.target.value;
+        LoadProduct(productId.current);
+    }
+
+    function handlePlayClick(){
+        thread.current = setInterval(LoadProductAuto,5000);
+        setStatus('Slide Show Playing');
+    }
+    function handlePauseClick(){
+        clearInterval(thread.current);
+        setStatus('Slide Show Paused');
+    }
+
+
+    return(
+        <div className="container-fluid d-flex justify-content-center">
+            <div className="card m-4 p-4 w-50">
+                <div className="card-header text-center" style={{height:'70px'}}>
+                    {product.title}
+                    <div className="fw-bold">{status}</div>
+                </div>
+                <div className="card-body row">
+                    <div className="col-1 d-flex flex-column justify-content-center align-items-center">
+                        <button onClick={PreviousClick} className="btn btn-dark bi bi-chevron-left"></button>
+                    </div>
+                    <div className="col-10 position-relative">
+                        <div className="position-absolute badge bg-danger p-2 fs-5 text-white rounded rounded-circle end-0 top-0">
+                            {product.price.toLocaleString('en-us', {style:'currency', currency:'USD'})}
+                        </div>
+                        <img height="300" src={product.image} width="100%" />
+                    </div>
+                    <div className="col-1 d-flex flex-column justify-content-center align-items-center">
+                    <button onClick={NextClick} className="btn btn-dark bi bi-chevron-right"></button>
+                    </div>
+                </div>
+                <div className="card-footer text-center">
+                    <input onChange={handleSeekbarChange} min={1} max={20} type="range" value={productId.current} className="form-range" />
+                    <div className="my-2">
+                        <button onClick={handlePlayClick} className="btn btn-primary bi bi-play"></button>
+                        <button onClick={handlePauseClick} className="btn btn-warning bi bi-pause mx-2"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+Ex:
+Time Ticking
+
+import { useEffect, useRef, useState } from "react"
+
+export function TimeoutDemo(){
+
+    const [timer, setTimer] = useState();
+ 
+ 
+    function Clock(){
+        var now = new Date();
+        setTimer(now.toLocaleTimeString());
+    }
+
+    useEffect(()=>{
+        setInterval(Clock,1000);
+    },[])
+
+    return(
+        <div className="container-fluid text-center">
+            <h1 className="mt-3">{timer}</h1>
+        </div>
+    )
+}
+
+
+Task : Try designing a stop watch.
+
+
+import { useState } from "react"
+
+
+export function StopWatch(){
+
+
+    const [ms, setMs] = useState(0);
+
+    const [sec, setSec] = useState(0);
+    const [min, setMin] = useState(0);
+    const [hrs, setHrs] = useState(0);
+
+    const [btnText, setBtnText] = useState('Start');
+
+    var count = 100;
+    var seconds = 0;
+    function Counter(){
+        count++;
+        if(count===900){
+            count = 100;
+            seconds++;
+            setSec(seconds);
+        }
+        setMs(count);
+    }
+
+    function handleStartClick(){
+        setInterval(Counter,1);
+        setBtnText((btnText==='Start'?'Stop':'Start'));
+    }
+
+    return(
+        <div className="container-fluid d-flex justify-content-center">
+           
+           <div>
+           <div className="mt-4 border border-1 border-dark row p-2 fs-4 fw-bold"   style={{height:'60px', width:'600px'}}>
+                <div className="col">
+                    {hrs} hrs
+                </div>
+                <div className="col">
+                    {min} min
+                </div>
+                <div className="col">
+                    {sec} sec
+                </div>
+                <div className="col">
+                    {ms} ms
+                </div>
+            </div>
+              <button onClick={handleStartClick} className="btn btn-primary mt-4">{btnText}</button>
+           </div>
+           
+        </div>
+    )
+}
+
+Summary
+- setTimeout()
+- clearTimeout()
+- setInterval()
+- clearInterval()
+
+                              Touch Events
+onTouchStart()
+onTouchEnd()
+onTouchMove()
+
+Ex:
+import { useState } from "react"
+
+
+export function TouchDemo(){
+    const [msg, setMsg] = useState('');
+
+
+    function handleTouch(e) {
+        setMsg(e.target.alt);
+    }
+
+    return(
+        <div className="container-fluid">
+             <img onTouchStart={handleTouch} alt='iPhone Green - 128 GB &#8377;69999' src="iphone-green.jpg"  width="200" height="300"/>
+             <img onTouchStart={handleTouch} alt='iPhone white - 256 GB &#8377;74999' src="iphone-white.jpg"  width="200" height="300"/>
+             <h2>{msg}</h2>
+        </div>
+    )
+}
+
+
+Summary:
+1. Mouse Events
+    onMouseOver
+    onMouseOut
+    onMouseDown
+    onMouseUp
+    onMouseMove
+2. Keyboard Events
+    onKeyup
+    onKeydown
+    onKeypress
+3. Button Events
+    onClick
+    onDoubleClick
+    onContextMenu
+
+4. Clipboard Events
+    onCut
+    onCopy
+    onPaste
+
+5. Element State Events
+    onChange
+    onFocus
+    onBlur
+
+6. Touch Events
+    onTouchStart
+    onTouchEnd
+    onTouchMove
+
+7. Timer Events
+    setTimeout()
+    clearTimeout()
+    setInterval()
+    clearInterval()
+
+8. Form Events
+    onSubmit
+    onReset
+
+  - Form is a generic element that provides submit and reset actions by default.
+  - If you want any functionality to trigger on submit and reset then you can configure custom form events.
+
+Syntax:
+        <form  onSubmit={ }   onReset={ }>
+
+        </form>
+
+Ex:
+import { useState } from "react"
+
+
+export function TouchDemo(){
+   
+
+    function handleSubmit(e){
+        e.preventDefault();
+        alert('Form data posted to server');
+    }
+
+    return(
+        <div className="container-fluid">
+            <form onSubmit={handleSubmit}>
+                <dl>
+                    <dt>User Name</dt>
+                    <dd><input type="text" name="UserName" /></dd>
+                </dl>
+                <button>Submit</button>
+            </form>
+        </div>
+    )
+}

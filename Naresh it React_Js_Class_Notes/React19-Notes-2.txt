@@ -1,0 +1,91 @@
+Summary
+- What is React?
+- Difference between React & Angular
+- Why we need React?
+- What are the challenges in modern web development?
+	Unified UX
+	Fluid UX
+	Loosely Coupled and Extensible 
+- What is solution?
+	SPA
+	PWA
+- Can we build SPA using JavaScript & jQuery?
+   Yes
+
+
+
+
+FAQ: What are the issues with JavaScript & jQuery?
+Ans:
+	- JS & jQuery use lot of DOM manipulations 
+	- They are slow & heavy on application
+	- It requires to use lot of Ajax explicitly.
+
+
+Features of React JS:
+1. React uses Virtual DOM.
+2. It is modular.
+3. It is light weight and faster.
+4. Loosely coupled & extensible 
+5. It is component based.
+6. Easy to reuse and extend. 
+7. It is easy for mantainability  and testability.
+
+Issue with React:
+- Lot of GAP's.
+- Lot of 3rd party library are required
+
+
+FAQ's:
+1. What is DOM?
+A. It is a hierarchy of elements in page.
+    Browser engine presents content in a hierarchical order by using HTML parsing.
+
+2. HTML Parsing
+A.
+Markup=>Bytes => Chars => Tokens => Nodes => DOM => Render => Layout => Paint 
+
+3. Browser Architecture
+	- User Interface
+	- UI Backend
+	- Browser Engine
+	- Rendering Engine
+	- JavaScript Interpreter 
+	- Networking 
+	- Data Persistence 
+
+4. Browser Engines 
+	- V8
+	- Chakra 
+	- Chromium 
+	- Webkit
+	- Gecko
+	- Spider Monkey 
+
+5. What is Shadow DOM?
+A. It is a hierarchy of elements in a component. HTML have various components like
+		<input type="date">
+		<input type="email">
+		<input type="number">
+		<input type="range">  
+		etc..
+
+6. What is Virtual DOM?
+A. It is a copy of DOM in browser memory. 
+    Page updates virtual and reflects output to user. However it is updated into actual 
+    DOM later. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,175 @@
+Controlled Components
+- Components are categorized into various types
+    a) Uncontrolled
+    b) Controlled
+    c) Higher Order etc..
+- Uncontrolled components are absolute components, with a specific design and functionality. They are independent and not dependent on other components in design.
+
+- Controlled components are dependent on the values from other components. You can customize according to the requirements.
+
+- Components can be controlled by using "Props" (Properties).
+
+Syntax:
+        function Component(props)
+        {
+            return(
+                <div> </div>
+            )
+        }
+
+- Every component "Props" is object type, with key and value collection
+
+Syntax:
+        function  Component(props)
+        {
+            return(
+                <div>  { props.key } </div>
+            )
+        }
+
+- Every key or property is a required property. You can ignore using optional implementation.
+
+          <Component   key=value    key=value  />
+
+Ex:
+1. Add a new folder  "controlled-components"
+
+2. Add a new file  into folder   "navbar.jsx"
+
+export function Navbar(props){
+    return(
+        <nav className={`d-flex my-2 justify-content-between border border-1 p-2 ${props.Theme}`}>
+            <div>
+                <span className="fw-bold fs-4">{props.BrandTitle}</span>
+            </div>
+            <div>
+                {
+                    props.MenuItems.map(item=><span key={item} className="mx-3">{item}</span>)
+                }
+            </div>
+            <div className={`${props.showSignin}`}>
+                <button className={`${props.btnTheme}`}>Sign In</button>
+            </div>
+        </nav>
+    )
+}
+
+3. You can access from any component
+
+hook-form-demo.jsx
+
+import { useForm } from "react-hook-form";
+import { Navbar } from "../../controlled-components/navbar";
+
+export function HookFormDemo(){
+
+    const {register, handleSubmit, formState:{errors}} = useForm();
+
+    const submit = (values)=>{
+        console.log(values);
+    }
+
+    return(
+        <div className="container-fluid">
+            <header>
+           
+                <Navbar showSignin='d-none' btnTheme='btn btn-light' Theme="bg-dark text-white" BrandTitle="Shopper."  MenuItems={['Home', 'Shop', 'Pages', 'Blog', 'Docs']} />
+                <Navbar btnTheme='btn btn-warning' Theme="bg-primary text-white" BrandTitle="Amazon" MenuItems={['Electronics', 'Fashion', 'Footwear']} />
+            </header>
+            <h2>Register User</h2>
+            <form onSubmit={handleSubmit(submit)} >
+                <dl>
+                    <dt>User Name</dt>
+                    <dd><input type="text" name="UserName" {...register("UserName", { required:true, minLength:4 })} /></dd>
+                    <dd className="text-danger">
+                        {(errors.UserName?.type==="required")?<span>User Name Required</span>:<span></span> && (errors.UserName?.type==="minLength")?<span>Name too short</span>:<span></span>}
+                    </dd>
+                    <dt>Mobile</dt>
+                    <dd><input type="text" name="Mobile" {...register("Mobile", { required:true, pattern:/\+91\d{10}/ })} /></dd>
+                    <dd className="text-danger">
+                        {(errors.Mobile?.type==="required")?<span>Mobile Required</span>:<span></span> && (errors.Mobile?.type==="pattern")?<span>Invalid Mobile</span>:<span></span> }
+                    </dd>
+                </dl>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    )
+}
+
+Ex:
+controlled-components
+
+data-grid.jsx
+
+export function DataGrid(props){
+    return(
+        <div>
+            <table className={`table caption-top table-hover ${props.theme}`}>
+                <caption>{props.caption}</caption>
+                <thead>
+                    <tr>
+                        {
+                            props.fields.map(field=><th key={field}>{field} <button className="btn bi bi-sort-alpha-down"></button> </th>)
+                        }
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        props.records.map(record=>
+                            <tr key={record}>
+                                {
+                                    Object.keys(record).map(key=><td key={key}>{record[key]}</td>)
+                                }
+                                <td>
+                                    <button className="btn btn-warning bi bi-pen-fill"></button>
+                                    <button className="btn btn-danger bi bi-trash-fill mx-2"></button>
+                                </td>
+                            </tr>
+                        )
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>
+                            <ul className="pagination">
+                                <li className="page-item"><a className="page-link"> &laquo;</a></li>
+                                <li className="page-item"><a className="page-link"> 1</a></li>
+                                <li className="page-item"><a className="page-link"> 2</a></li>
+                                <li className="page-item"><a className="page-link"> 3</a></li>
+                                <li className="page-item"><a className="page-link"> &raquo;</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    )
+}
+
+
+components
+custom-demo.jsx
+
+import { useState } from "react";
+import { DataGrid } from "../../controlled-components/data-grid";
+
+
+export function CustomDemo(){
+
+
+    const [products, setProducts] = useState([
+        {Id:1, Name:'Samsung TV', Price:14300, Stock:'Available'},
+        {Id:2, Name:'Mobile', Price:24300, Stock:'Out of Stock'},
+        {Id:3, Name:'Watch', Price:4300, Stock:'Available'}
+    ]);
+
+    return(
+        <div className="container-fluid">
+            <h3>Grid-1</h3>
+            <DataGrid  caption="Employee Details" records={[{FirstName:'Raj', LastName:'Kumar', Designation:'Manager'},{FirstName:'Kiran', LastName:'Kumar', Designation:'Clerk'}]} fields={['First Name', 'Last Name', 'Designation']} />
+            <h3>Grid-2</h3>
+            <DataGrid records={products} caption="Product Details" fields={['Id', 'Name', 'Price', 'Stock']} />
+        </div>
+    )
+}

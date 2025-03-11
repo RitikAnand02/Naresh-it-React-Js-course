@@ -1,0 +1,185 @@
+ useState
+ -------------	
+- It configures a local state for component.
+- State allocates memory where you can store data and use it across requests.
+- State can handle any type of data
+    a) Primitive
+    b) Non Primitive
+- State is mutable.
+
+Syntax:
+    const [getter, setter] = useState(value);
+
+    setter(newValue);        // storing value
+
+    { getter }                // reading value
+
+
+                             useContext
+- Context is the memory allocated for a parent component, so that it is accessible to the child component that run within the context of parent.
+
+- The child component at any level of hierarchy inside parent can access the context.
+
+- Context is created explicitly by using "createContext()" method.
+
+Syntax:
+        let  contextName = createContext(null);
+
+        null  => expecting data at runtime
+
+- You can access and use context from any child element by using "useContext()" hookl.
+
+Syntax:
+        const   refName = useContext(contextName);
+
+- Context provides a scope, so that child components within the context scope can access the context memory.
+
+- Context scope is defined using DI mechanism.
+
+Syntax:
+        <ContextName   Provider={value}>
+
+                // context scope   <Child1 />
+
+        </ContextName>
+
+         <Child2 />            => It can't access context memory
+
+- Provider is a member of context service it uses the value and injects into the
+  child component.
+
+Syntax:
+        <ContextName.Provider    value={ }>
+
+             <Child />
+           
+        </ContextName.Provider>
+
+Ex:
+context-demo.jsx
+
+
+import { createContext, useContext, useState } from "react";
+
+let userContext = createContext(null);
+
+export function Level1(){
+
+    const username = useContext(userContext);
+
+    return(
+        <div className="m-4 p-4 bg-warning">
+            <h4>Level-1 - {username} </h4>
+            <Level2 />
+        </div>
+    )
+}
+
+export function Level2(){
+
+    const username = useContext(userContext);
+
+    return(
+        <div className="m-4 p-4 bg-danger">
+            <h4>Level-2 - {username}</h4>
+        </div>
+    )
+}
+
+
+export function ContextDemo(){
+    const [user, setUser] = useState('');
+
+    function handleNameChange(e){
+        setUser(e.target.value);
+    }
+
+    return(
+        <div className="container-fluid p-4 bg-dark text-white">
+            <h2>Parent Component - <input type="text" onChange={handleNameChange} placeholder="User Name" /></h2>
+            <userContext.Provider value={user}>
+               <Level1 />  
+            </userContext.Provider>
+        </div>
+    )
+}
+
+ 
+Ex: Amazon.jsx
+import axios from "axios";
+import { createContext, useContext, useEffect, useState } from "react"
+
+let SearchContext = createContext(null);
+
+
+export function MainComponent(){
+
+
+    const [products, setProducts] = useState([{id:0, title:'', image:''}]);
+
+    let searchTerm = useContext(SearchContext);
+
+    useEffect(()=>{
+        if(searchTerm===""){
+            axios.get(`https://fakestoreapi.com/products`)
+            .then(response=>{
+                 setProducts(response.data);
+            })
+        } else {
+            axios.get(`https://fakestoreapi.com/products/category/${searchTerm}`)
+            .then(response=>{
+                 setProducts(response.data);
+            })
+        }
+    },[searchTerm])
+
+    return(
+        <div className="p-4">
+            <div className="d-flex flex-wrap">
+                {
+                    products.map(product=>
+                        <div key={product.id} className="card p-2 m-2" style={{width:'100px'}}>
+                            <img src={product.image} height="100" />
+                        </div>
+                    )
+                }
+            </div>
+        </div>
+    )
+}
+
+
+export function Amazon(){
+
+    const [searchTerm, setSearchTerm] = useState('');
+    const [search, setSearch] = useState('');
+
+    function handleSearchChange(e){
+        setSearchTerm(e.target.value)
+    }
+    function handleSearchClick(){
+        setSearch(searchTerm);
+    }
+
+    return(
+        <div className="container-fluid">
+             <nav className="border d-flex justify-content-between   border-1 p-2">
+                <h2>Amazon</h2>
+                <div>
+                    <div className="input-group">
+                        <input type="text" onChange={handleSearchChange} className="form-control" placeholder="Search Amazon.in" />
+                        <button onClick={handleSearchClick} className="btn btn-warning bi bi-search"></button>
+                    </div>
+                </div>
+                <div>
+                    <button className="btn btn-warning bi bi-person-fill"> Sign In </button>
+                </div>
+             </nav>
+             <section className="mt-4">
+                 <SearchContext.Provider value={search}>
+                     <MainComponent />
+                 </SearchContext.Provider>
+             </section>
+        </div>
+    )
+}

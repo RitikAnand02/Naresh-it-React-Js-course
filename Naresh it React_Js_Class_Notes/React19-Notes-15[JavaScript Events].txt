@@ -1,0 +1,178 @@
+JavaScript Events
+----------------------------
+
+1. What is Event?
+     Observer
+2. What is Event Handler?
+3. What is Event Listener?
+4. What are Event Arguments?
+5. Default Event Arguments
+      this, event
+6. Custom Event Arguments
+
+Note: Event Listener can have only one default argument "event". However it provides
+      access to both event and element details.
+
+Syntax:
+     document.querySelector("button").addEventListener("click", (e)=>{
+       
+            // event details are accessible directly using event reference
+   
+              e.clientX, e.clientY, e.keyCode, e.ctrlKey..
+             
+               // element details are accessible by using "target" reference
+       
+              e.target.id, e.target.name, e.target.src, e.target.className ..
+
+     }
+
+Ex:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+   <script>
+      function bodyload(){
+         document.getElementById("btnInsert").addEventListener("click", (e)=>{
+               console.log(`
+                   X Position : ${e.clientX} \n
+                   Ctrl Key  : ${e.ctrlKey} \n
+                   Button Id : ${e.target.id} \n
+                   Button Name: ${e.target.name}
+               `);
+         })
+      }
+   </script>
+</head>
+<body onload="bodyload()">
+   <button id="btnInsert" name="Insert">Insert</button>
+</body>
+</html>
+
+7. What is Event Bubbling?
+            (or)
+    What is Event Propagation?
+
+A. Event Bubbling or Propagation is a mechanism where the child event can simulate the parent. It leads to propagation of events in a parent child bubble.
+
+8. How to prevent propagation of events?
+A. By using event argument method "stopPropagation()".
+
+Syntax:
+        function onChildEvent(e) {
+   
+             e.stopPropagation();
+
+        }
+       
+Ex:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+   <style>
+      nav {
+         border: 1px solid black;
+         padding: 20px;
+      }
+   </style>
+   <script>
+      function NavClick(){
+         alert("Navbar Clicked");
+      }
+      function SearchClick(e){
+         e.stopPropagation();
+         alert("Search Clicked");
+      }
+   </script>
+</head>
+<body>
+   <nav onclick="NavClick()">
+       <h2>Navbar</h2>
+       <button onclick="SearchClick(event)">Search</button>
+   </nav>
+</body>
+</html>
+
+9. How to disable the default action of element?
+A. By using the event argument method "preventDefault()".
+
+Syntax:
+        function FormSubmit(e)
+        {
+            e.preventDefault();
+        }
+
+Ex:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+   <script>
+      function FormSubmit(e){
+          e.preventDefault();
+          alert('Form Submitted to Server');
+      }
+   </script>
+</head>
+<body>
+    <form onsubmit="FormSubmit(event)">
+        User Name  : <input type="text" name="UserName"> <button>Submit</button>
+    </form>
+</body>
+</html>
+
+10. What are browser events?
+A.   All events of window object are used for elements, which are known as "Browser Events". They are classified into various groups
+
+        - Mouse Events
+        - Keyboard Events
+        - Button Events
+        - Clipboard Events
+        - Timer Events
+        - Touch Events
+        - Element State Events
+        - Form Events etc..
+
+                          React Events
+- React uses Virtual DOM.
+- React virtual DOM can't use the browser events.
+- React provides a library called "SyntheticEvents".
+- Synthetic Events are virtual DOM events that map to actual DOM.
+
+Syntax:
+    Developer writes synthetic event  "onClick" => It maps to actual event  "onclick"
+
+- SyntheticEvent  is the base for all events in React.
+- It handles all browser events using event map technique.
+- React SynthenticEvents includes
+   
+        Mouse Events
+        Keyboard Events
+        Clipboard Events
+        Button Events
+        Touch Events
+        Timer Events
+        Form Events etc..
+
+- React have support for various events but it can manage "Two-Way-Binding" only with "onChange".
+
+            <input type="text"  onChange={functionName} />
+            <select onChange={functionName}>
+
+- The delegate function can access element value by using default event argument.
+
+Syntax:
+         <input type="text"  onChange={GetName} />
+
+         function GetName(e)
+         {
+             e.target.value;    
+             e.keyCode;
+         }

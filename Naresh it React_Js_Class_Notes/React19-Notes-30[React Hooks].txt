@@ -1,0 +1,231 @@
+State Management & Conditional Rendering
+--------------------------------------------------------
+
+- Session Storage
+- Local Storage
+- Cookies [react-cookie]
+- CookiesProvider
+- useCookies()
+
+FAQ: How to configure a persistent cookie?
+Ans : Persistent cookie is a permanent cookie defined with expiry date & time.
+
+Syntax:
+        setCookie('name', value, { expires : new Date('yy-mm-dd hrs:min:sec') })
+
+
+FAQ: How to configure in-memory cookie?
+Ans:  If expires is not defined then the cookie is in-memory. [temporary]
+
+Syntax:
+        setCookie('name', value)
+
+Ex:
+1. Install  react-cookie
+
+        > npm install react-cookie --save
+
+
+2. Go to index.js
+
+import { ConditionalDemo } from './components/conditional-demo/conditional-demo';
+import { CookiesProvider } from 'react-cookie';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+ 
+   <CookiesProvider>
+        <ConditionalDemo/>
+   </CookiesProvider>
+ 
+);
+
+3. Conditional-Demo.jsx
+
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+
+export function ConditionalDemo(){
+   
+   
+    const [userName, setUserName] = useState('');
+    const [cookies, setCookie, removeCookie] = useCookies(['username']);
+
+    function handleUserName(e){
+        setUserName(e.target.value);
+    }
+
+    function handleSignInClick(){
+       
+        setCookie('username', userName, { expires: new Date('2025-03-09') });  
+       
+    }
+
+    function handleSignoutClick(){
+        removeCookie('username');
+    }
+
+
+    useEffect(()=>{
+       
+    },[])
+ 
+    return(
+        <div className="container-fluid">
+            <nav className="mt-4 p-2 border border-1 d-flex justify-content-between">
+                <div className="fs-3 fw-bold">YouTube</div>
+                    <div>
+                    {
+                        (cookies['username']===undefined)
+                        ?
+                        <div>
+                            <div className="input-group">
+                                <input type="text" onChange={handleUserName} placeholder="User Name" className="form-control" /> <button onClick={handleSignInClick} className="btn btn-warning">Sign In</button>
+                            </div>
+                        </div>
+                        :
+                        <div className="fs-4 fw-bold bi bi-person-fill"> {cookies['username']} <button className="btn btn-link mx-2" onClick={handleSignoutClick}>Signout</button> </div>
+                    }
+                    </div>
+            </nav>
+        </div>
+    )
+}
+
+Task:
+ - Create simple registration form with fields like
+    UserName, Age, Mobile, City
+ - Collect the form data using Formik library
+ - Save in local storage.
+ - Read data from local storage and display in component UI.
+
+Note: On submit click it must display status as saved.
+      Add a view button, on view click it must display saved data.
+
+Summary
+- Function Components
+- Components in React
+- Nested Components
+- Controlled Components
+- Uncontrolled Components
+- Data Binding
+- Style Binding
+- Class Binding
+- Event Binding
+- Conditional Rendering
+- State Management
+- Forms & Validations
+- API
+
+                         React Hooks
+- Hook is a service in React.
+- Service is a pre-defined business logic, which you can customize and implement according to the requirements.
+
+        values, functions => factories => services => application
+
+- Factory uses a "single call" mechanism, where an object is created for every request.
+- Service uses a "single ton" mechanism, where an object is create for first request and the same is used across multiple requests.
+- A service comprises of
+    a) Consumer
+    b) Provider
+    c) Injector
+- Consumer uses the service.
+- Provider locates the service in memory.
+- Injector injects the service into consumer location.
+- Service uses "DI" mechanism, which is "Dependency Injection".
+- It identifies the dependencies, locates them in memory and injects into component.
+- React allows to create custom hooks, which are custom services.
+
+Hook Rules:
+- Hook must be a function.
+- Its name must start with "use" prefix.
+- Its name must be in camel case.
+
+        useState
+        useEffect
+
+- It can't be void type function.
+- It must be configured with return.
+- It can be parameterized or parameter less.
+- You can't use hooks in class components.
+- Hook can't be defined in a closure.
+
+Syntax:
+    export function  useName(params)
+    {
+       return value;
+    }
+
+Ex:
+1. Add a new folder into SRC by name "hooks"
+
+2. Add a new file  "captcha.jsx"
+
+
+export function useCaptcha()
+{
+    var code = '';
+
+    code = `${Math.round(Math.random()*10)} ${Math.round(Math.random()*10)} ${Math.round(Math.random()*10)} ${Math.round(Math.random()*10)} ${Math.round(Math.random()*10)} ${Math.round(Math.random()*10)}`;
+
+    return code;
+}
+
+3. Register.jsx
+
+import { useState } from "react";
+import { useCaptcha } from "../../hooks/captcha";
+
+
+export function Register()
+{
+   
+    const [uname] = useState('John');
+    const [title] = useState('User Register');
+
+    let code = useCaptcha();
+
+    return(
+        <div className="d-flex justify-content-center align-items-center">
+            <form className="mt-4 w-25 p-4 alert alert-warning alert-dismissible border border-secondary rounded rounded-2">
+                <h3 className="bi bi-person-fill"> {title} </h3>
+                <button className="btn btn-close"></button>
+                <dl>
+                    <dt>User Name</dt>
+                    <dd><input type="text"  className="form-control" /></dd>
+                    <dt>Password</dt>
+                    <dd><input type="password" className="form-control"  /></dd>
+                    <dt>Email</dt>
+                    <dd><input type="email" className="form-control"  /></dd>
+                    <dt>Mobile</dt>
+                    <dd><input type="text" className="form-control"  /></dd>
+                    <dt>Verify Code <button className="btn bi bi-arrow-clockwise "></button> </dt>
+                    <dd>{code}</dd>
+                </dl>
+                <button className="btn btn-warning w-100">Register</button>
+            </form>
+        </div>
+    )
+}
+
+
+Ex: Custom Hook
+    fetch-api.jsx
+
+import { useEffect, useState } from "react";
+
+
+export function useFetch(url){
+    const [data, setData] = useState([]);
+    useEffect(()=>{
+        fetch(url).then(response=> response.json()).then(items=> setData(items));
+    },[url]);
+    return data;
+}
+
+
+component.jsx
+
+ let categories = useFetch('https://fakestoreapi.com/products/categories&#39;);
+
+React Built-in Hooks:

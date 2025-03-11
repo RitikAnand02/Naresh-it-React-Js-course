@@ -1,0 +1,180 @@
+Component in React Application
+1. Every component in react application comprises of 3 files
+		a) JSX
+		b) CSS
+		c) test.js
+
+2. ".jsx" is for designing the markup [presentation]. It also contains the application logic.
+3. ".css" comprises of styles.
+4. "test.js" or "spec.js" comprises of test cases, which are used to test the component functions and UI.
+
+					login.jsx
+					login.css
+					login.test.js
+
+5. CSS files are linked to components by using "import" statement. 
+
+					login.jsx
+
+	           import   './login.css';
+
+Note: Always use class & id selectors for styles in component. 
+	  Type selector applies effects to all elements across all components.
+
+Ex:
+1. Go to src folder and add a new folder by name "components".
+
+2. Add a new folder for "register".
+
+3. Add following files into register folder
+
+		register.jsx
+		register.css
+		register.test.js
+
+Ex: 
+register.jsx
+
+import './register.css';
+
+export function Register()
+{
+    return(
+        <div className="form-container">
+            <form className="form-register">
+                <h3>Register User</h3>
+                <dl>
+                    <dt>User Name</dt>
+                    <dd><input type="text" /></dd>
+                    <dt>Password</dt>
+                    <dd><input type="password" /></dd>
+                    <dt>Email</dt>
+                    <dd><input type="email" /></dd>
+                    <dt>Mobile</dt>
+                    <dd><input type="text" /></dd>
+                </dl>
+                <button>Register</button>
+            </form>
+        </div>
+    )
+}
+
+register.css
+
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.form-register {
+    border:1px solid gray;
+    padding: 20px;
+    box-shadow: 2px 2px 2px black;
+}
+
+Enable bootstrap for React application:
+1. Install bootstrap from terminal
+
+		> npm  install  bootstrap   bootstrap-icons --save
+
+2. Go to "index.js" in src folder
+
+  import  '../node_modules/bootstrap-icons/font/bootstrap-icons.css';
+  import  '../node_modules/bootstrap/dist/css/bootstrap.css';
+  import  bootstrap  from 'bootstrap';				// optional
+
+3. register.jsx
+
+
+
+export function Register()
+{
+    return(
+        <div className="d-flex justify-content-center align-items-center">
+            <form className="mt-4 w-25 p-4 alert alert-warning alert-dismissible border border-secondary rounded rounded-2">
+                <h3 className="bi bi-person-fill"> Register User</h3>
+                <button className="btn btn-close"></button>
+                <dl>
+                    <dt>User Name</dt>
+                    <dd><input type="text" className="form-control" /></dd>
+                    <dt>Password</dt>
+                    <dd><input type="password" className="form-control"  /></dd>
+                    <dt>Email</dt>
+                    <dd><input type="email" className="form-control"  /></dd>
+                    <dt>Mobile</dt>
+                    <dd><input type="text" className="form-control"  /></dd>
+                </dl>
+                <button className="btn btn-warning w-100">Register</button>
+            </form>
+        </div>
+    )
+}
+
+						  Data Binding
+- Data binding is the process of accessing data from source and binding to UI elements.
+- Data binding is classified into 2 types
+	a) One Way Binding
+	b) Two Way Binding
+
+- React supports "One way binding".
+- One way is secured and will not allow accidental changes in data from UI.
+- However you can implement "Two way binding" using explicit techniques. 
+- React uses a data binding expression "{  }".
+
+Syntax:
+		var  uname = "John";
+
+		<p> Hello !  { uname } </p>
+		
+		<input type="text"  value={uname} />
+
+Note: Don't use variable for storing data in a component. Variables are immutable. 
+	  It is always recommend to store data using "state" in component. 
+
+FAQ: What is state? Why we need state?
+Ans:
+	- Web applications use "http" as protocol.
+	- "http" is a stateless protocol.
+	- It can't remember data between pages. 
+	- It requires various state management techniques both client side & server side.
+
+React Component State:
+- Component are state less.
+- You have to configure state explicitly by using React hooks
+		a) useState
+		b) useContext
+		c) userReducer 
+		d) useMemo
+		e) useCallBack
+		f)  useRef
+
+useState  hook:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

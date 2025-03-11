@@ -1,0 +1,147 @@
+FAQ: How to send custom arguments using event handler?
+Ans:  Event handler requires to use a function that returns handler function.
+     The handler function can pass both default and custom arguments.
+
+Syntax:
+      <button onClick={ (event) => handleClick(event, 'your custom args') }>
+
+      function handleClick(e, ...args)
+      {
+
+      }
+
+Ex:
+import { useState } from "react"
+
+
+export function TouchDemo(){
+   
+
+    function handleButtonClick(e,...product){
+        var [id,name,stock,cities,rating] = product;
+        console.log(`X=${e.clientX}\nClassName=${e.target.className}`);
+        console.log(`id=${id}\nname=${name}\nstock=${stock}\ncities=${cities}\nrating=${rating.rating}`);
+    }
+   
+
+    return(
+        <div className="container-fluid">
+             <button onClick={(event)=> handleButtonClick(event, 1, 'TV', true, ['Delhi', 'Hyd'], {rating:4.5})} className="btn btn-primary mt-4" id="btnInsert">Insert</button>
+        </div>
+    )
+}
+
+                             React Forms
+- React supports only one-way binding.
+- Handling form interactions in React is challenging for developer, as it requires lot of explicit two-way bindings to implement.
+- It is difficult to collect data from "form" and submit to server.
+- React two way binding requires lot of event binding techniques to implement.
+- React allows to implement 3rd party form libraries that make form interactions easy and simplified.
+- The popular 3rd party form libraries are
+    a) Formik
+    b) React Hook Form
+    c) Kendo Form [Telerik]  etc..
+
+
+                         React Formik Library
+
+Features:
+- It provides built-in two-way-binding methods.
+- You have to attach to the form elements.
+- It provides built-in events that can access data from elements and submit to server.
+- It provides built-in security features that prevent XSRF & CORS.
+- It supports built-in validation.
+- You can define custom validation or use validation schemas.
+- It provides built-in components that makes the form design easy.
+
+1. Install Formik for your project
+
+        > npm  install  formik  --save
+
+2. Formik library provides "useFormik()" hook, which is used to configure a form.
+
+           const formik = useFormik({
+            initialValues: { },
+            onSubmit: () =>{ },
+            validate : ()=>{ },
+            validationSchema: ()=>{ },
+            enableReinitialize: true|false
+           })
+
+         initialValues        : It refers to the values that a form have to handle.
+                          It uses the form element "name".
+
+        onSubmit            : It collects the form values and submits to server.
+
+        validate            : It uses a function that can validate form values.
+                          It requires custom validation.
+
+        validationSchema    : It uses pre-defined validations.
+
+
+        enableReinitialize    : It allows to modify the initialized values.
+       
+
+3. Bind onChange for every element with formik.handleChange.
+
+        <input type="text"  onChange={formik.handleChange} />
+        <select onChange={formik.handleChange} />
+
+Note: Every form element Name must match with initialValues.
+
+        <input type="text" onChange={formik.handleChange} name="UserName">
+
+4. Form must use "onSubmit" bind with "formik.handleSubmit"
+
+        <form onSubmit={formik.handleSubmit}>
+
+
+react-form.jsx
+
+import { useState } from "react";
+import { useFormik } from "formik";
+
+
+export function ReactForm(){
+
+   
+    const formik = useFormik({
+        initialValues: {
+            UserName: '',
+            Mobile: '',
+            City: '',
+            Gender: ''
+        },
+        onSubmit: (values) => {
+            console.log(values);
+        }
+    })
+
+    return(
+        <div className="container-fluid">
+            <form onSubmit={formik.handleSubmit}>
+                <h3>Register User</h3>
+                <dl>
+                    <dt>User Name</dt>
+                    <dd><input type="text" onChange={formik.handleChange} name="UserName" /></dd>
+                    <dt>Mobile</dt>
+                    <dd><input type="text" name="Mobile" onChange={formik.handleChange}  /></dd>
+                    <dt>City</dt>
+                    <dd>
+                        <select name="City" onChange={formik.handleChange} >
+                            <option>Select City</option>
+                            <option>Delhi</option>
+                            <option>Hyd</option>
+                        </select>
+                    </dd>
+                    <dt>Gender</dt>
+                    <dd>
+                        <input onChange={formik.handleChange} type="radio" name="Gender" value="Male" /> <label>Male</label>
+                        <input onChange={formik.handleChange} type="radio" name="Gender" value="Female" /> <label>Female</label>
+                    </dd>
+                </dl>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    )
+}

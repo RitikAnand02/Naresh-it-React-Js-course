@@ -1,0 +1,288 @@
+JavaScript AJAX Techniques
+- Asynchronous JavaScript and XML.
+- It enables "Partial Post Back".
+- It allows to add new content into page without reloading the page.
+- Browser handle AJAX by using "XMLHttpRequest" object.
+
+Communication Specification in Service:
+1. SOAP
+2. REST
+3. JSON
+
+SOAP
+- Service Oriented Architecture Protocol
+- Service consumer sends an XML request.
+
+      <Products>
+         <Product>
+         <Category> Electronics </Category>
+         </Product>
+     </Products>
+
+- Service Provider sends an XML response.
+
+     <Products>
+        <Product>
+            <ProductId> 1 </ProductId>
+            <Name> Mobile </Name>
+            <Category> Electronics </Category>
+        </Product>
+        ....
+        ....
+    </Products>
+
+REST:
+- Representational State Transfer
+- Service consumer sends a simple query request.
+
+    https://sever.com/products?category=electronics
+
+- Service provider sends response in XML or JSON format.
+
+     [
+        {
+        ProductId: 1,
+        Name: "Mobile",
+        Category: "Electronics"
+        },
+        ...
+        ...
+    ]
+
+JSON:
+- JavaScript Object Notation
+- Service consumer sends an JSON request.
+   
+        {
+          Category: "Electronics"
+        }
+
+- Service provider sends an JSON response.
+
+        [
+          {   },
+          {   }
+        ]
+
+XMLHttpRequest:
+- It is a browser window object member.
+- It is the native Ajax method used by browser.
+- It "Sync" by default.
+- You have to explicitly make it "Async".
+- It returns response in XML, HTML or Text.
+- It requires explicit conversion methods to convert data into JSON.
+- It is not good in error handling.
+
+1. Create a new XMLHttpRequest object
+
+     var http = new XMLHttpRequest();
+
+2. Configure the request by using "open()" method
+
+    http.open("method-type", "url", async:boolean);
+
+    method-type        : GET, POST
+    Url                : API URL
+    async            : true / false
+
+3. Send the request into process
+
+    http.send();
+
+4. Execute the request in process by using "onreadystatechange" event.
+
+
+    http.onreadystatechange = function()  {
+
+    }
+
+5. Get response on ready state.
+
+     if (http.readyState===4)
+    {
+
+    }
+
+
+6. Response is returned by using following techniques
+
+        http.responseText
+        http.responseHTML
+        http.responseXML
+
+7. If your data is in JSON format then convert data by using "JSON.parse()".
+
+Ex:
+1. public/product.json
+
+{
+    "title": "Apple iPhone 16 (Green, 256 GB)",
+    "price": 79999,
+    "rating": {
+        "rate": 4.5,
+        "ratings": 15329,
+        "reviews": 3225
+    },
+    "offers": [
+        "Bank Offer5% Unlimited Cashback on Flipkart Axis Bank Credit CardT&C",
+
+        "Bank Offer10% off up to ₹750 on Canara Bank Credit and Credit EMI Transactions, on orders of ₹5,000 and aboveT&C",
+
+        "Bank Offer10% off up to ₹750 on DBS Bank Debit Card Transactions, on orders of ₹5,000 and aboveT&C",
+
+        "Special PriceGet extra ₹9901 off (price inclusive of cashback/coupon)T&C"
+    ],
+    "image": "iphone-green.jpg"
+}
+
+
+2. src/component/flipkart-mobile
+
+        flipkart-mobile.jsx
+
+import { useEffect, useState } from "react"
+
+
+export function FlipkartMobile()
+{
+
+    const [product, setProduct] = useState({title:'', price:0, rating:{rate:0, ratings:0, reviews:0}, offers:[], image:''});
+
+
+    function LoadProduct(){
+
+         var http = new XMLHttpRequest();
+
+         http.open("get", "product.json", true);
+
+         http.send();
+
+         http.onreadystatechange = function(){
+
+              if(http.readyState===4){
+                   setProduct(JSON.parse(http.responseText));
+              }
+
+         }
+
+    }
+
+    useEffect(()=>{
+
+        LoadProduct();
+
+    },[])
+
+
+    return(
+        <div className="container-fluid">
+            <div className="row mt-4">
+                <div className="col-3">
+                    <img src={product.image} width="100%" />
+                </div>
+                <div className="col-9">
+                    <div className="h4 my-2">{product.title}</div>
+                    <div>
+                        <span className="badge bg-success text-white">{product.rating.rate} <span className="bi bi-star-fill"></span> </span>
+                        <span className="text-secondary fw-bold"> {product.rating.ratings.toLocaleString()} ratings & {product.rating.reviews} reviews </span>
+                    </div>
+                    <div className="my-3">
+                        <div className="fs-2 fw-bold"> &#8377; {product.price.toLocaleString('en-in')}</div>
+                    </div>
+                    <div>
+                        <h5>Available Offers</h5>
+                        <ul className="list-unstyled">
+                            {
+                                product.offers.map(offer=><li className="bi bi-tag-fill my-3 text-success" key={offer}> <span className="text-secondary">{offer}</span> </li>)
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+JavaScript "fetch()" API:
+- Fetch is a promise of JavaScript.
+- It is async by default.
+- It is good in error handling.
+- It provides simplified approach for AJAX.
+
+Syntax:
+    fetch("url")
+    .then(function(response){
+        // response is in binary
+        // convert response into JSON
+    })
+    .then(function(data){
+
+    })
+    .catch(function(error){
+
+    })
+    .finally(function(){
+
+    })
+
+- It returns data in binary.
+- Explicit conversion is required.
+- It have CORS issues.
+- It have security issues. [XSRF, XSS]
+
+Ex: Fetch
+
+import { useEffect, useState } from "react"
+
+
+export function FlipkartMobile()
+{
+
+    const [product, setProduct] = useState({title:'', price:0, rating:{rate:0, ratings:0, reviews:0}, offers:[], image:''});
+
+
+    function LoadProduct(){
+
+          fetch("product.json")
+          .then(response=> response.json())
+          .then(product=> {
+              setProduct(product);
+          })
+
+    }
+
+    useEffect(()=>{
+
+        LoadProduct();
+
+    },[])
+
+
+    return(
+        <div className="container-fluid">
+            <div className="row mt-4">
+                <div className="col-3">
+                    <img src={product.image} width="100%" />
+                </div>
+                <div className="col-9">
+                    <div className="h4 my-2">{product.title}</div>
+                    <div>
+                        <span className="badge bg-success text-white">{product.rating.rate} <span className="bi bi-star-fill"></span> </span>
+                        <span className="text-secondary fw-bold"> {product.rating.ratings.toLocaleString()} ratings & {product.rating.reviews} reviews </span>
+                    </div>
+                    <div className="my-3">
+                        <div className="fs-2 fw-bold"> &#8377; {product.price.toLocaleString('en-in')}</div>
+                    </div>
+                    <div>
+                        <h5>Available Offers</h5>
+                        <ul className="list-unstyled">
+                            {
+                                product.offers.map(offer=><li className="bi bi-tag-fill my-3 text-success" key={offer}> <span className="text-secondary">{offer}</span> </li>)
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}

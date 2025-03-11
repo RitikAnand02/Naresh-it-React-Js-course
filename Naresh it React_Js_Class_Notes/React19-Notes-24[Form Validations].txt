@@ -1,0 +1,154 @@
+Form Validation
+- Validation is the process of verifying user input.
+- Validation is required to ensure that contradictory and unauthorized data is not get stored into database.
+- React Formik library allows to write custom validations and can also use validation schemas.
+- HTML 5 provides default validations for form elements, which include
+        a) required
+        b) minlength
+        c) min
+        d) max
+        e) step
+        f) email
+        g) url
+        h) pattern  etc..
+- You can disable the default form validations using "novalidate" attribute.
+
+        <form  novalidate>  </form>
+
+- It is required to disable default validations when you are writing custom validations.
+
+Formik Custom Validations:
+1. Create a function that takes form data and validates data.
+2. The validation function must return errors object.
+
+Syntax:
+        function ValidateUser(formData)
+        {
+
+                 var errors = { fieldname:' ' };
+
+           // your validation logic for every field;
+
+         return errors;
+         }
+
+3. Assign validation function to formik validation
+
+     const formik =  useFormik({
+           initialValues:  { },
+           validate: ValidateUser,
+           onSubmit: (values) => { }
+     })
+
+4. You can access and display validation errors in UI, by using "formik.errors"
+
+       { formik.errors.fieldname }
+
+Ex:
+form-demo.jsx
+
+import { useState } from "react";
+import { useFormik } from "formik";
+
+
+export function ReactForm(){
+
+    function ValidateUser(user){
+        var errors = {UserName:'', Age:'', Mobile:'', City:'', Gender:''};
+
+        if(user.UserName.length===0){
+            errors.UserName = 'User Name Required';
+        } else {
+            if(user.UserName.length<4){
+                errors.UserName = 'Name too short';
+            } else {
+                errors.UserName = '';
+            }
+        }
+
+        if(user.Mobile.length===0){
+            errors.Mobile = 'Mobile Required';
+        } else {
+            if(user.Mobile.match(/\+91\d{10}/)){
+                errors.Mobile = '';
+            } else {
+                errors.Mobile = 'Invalid Mobile';  
+            }
+        }
+
+        if(user.City==='-1'){
+            errors.City = 'Please select your city';
+        } else {
+            errors.City = '';
+        }
+
+        if(user.Gender===''){
+            errors.Gender = 'Please select a gender';
+        } else {
+            errors.Gender = '';
+        }
+
+        if(isNaN(user.Age)){
+            errors.Age = 'Age must be a number';
+        } else {
+            errors.Age = '';
+        }
+
+
+        return errors;
+    }
+   
+    const formik = useFormik({
+        initialValues: {
+            UserName: '',
+            Age: 0,
+            Mobile: '',
+            City: '',
+            Gender: ''
+        },
+        validate : ValidateUser,
+        onSubmit: (values) => {
+            console.log(values);
+        }
+    })
+
+    return(
+        <div className="container-fluid">
+            <form onSubmit={formik.handleSubmit}>
+                <h3>Register User</h3>
+                <dl>
+                    <dt>User Name</dt>
+                    <dd><input type="text" onChange={formik.handleChange} name="UserName" /></dd>
+                    <dd className="text-danger">{formik.errors.UserName}</dd>
+                    <dt>Age</dt>
+                    <dd><input type="text" name="Age" onChange={formik.handleChange} /></dd>
+                    <dd className="text-danger">{formik.errors.Age}</dd>
+                    <dt>Mobile</dt>
+                    <dd><input type="text" name="Mobile" onChange={formik.handleChange}  /></dd>
+                    <dd className="text-danger">{formik.errors.Mobile}</dd>
+                    <dt>City</dt>
+                    <dd>
+                        <select name="City" onChange={formik.handleChange} >
+                            <option value="-1">Select City</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Hyd">Hyd</option>
+                        </select>
+                    </dd>
+                    <dd className="text-danger">{formik.errors.City}</dd>
+                    <dt>Gender</dt>
+                    <dd>
+                        <input onChange={formik.handleChange} type="radio" name="Gender" value="Male" /> <label>Male</label>
+                        <input onChange={formik.handleChange} type="radio" name="Gender" value="Female" /> <label>Female</label>
+                    </dd>
+                    <dd className="text-danger">{formik.errors.Gender}</dd>
+                </dl>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    )
+}
+
+Formik Validation Schema:
+- Formik can use pre-defined validation schemas.
+- Validation Schema is a structured validation with pre-defined validation services.
+- Formik uses validation services from "Yup" library.

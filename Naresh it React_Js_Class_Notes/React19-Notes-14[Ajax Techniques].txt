@@ -1,0 +1,202 @@
+Ajax Techniques
+----------------------
+- XMLHttpRequest
+- fetch()
+- jQuery Ajax
+- axios
+
+                          Two Way Data Binding
+- React key feature is One Way Binding.
+- It allows to bind the data with UI elements.
+- It will not allow changes in data.
+- It is more secured.
+- To enable two-way-binding, it requires explicit actions to configure.
+- Actions are defined by using "Events".
+
+1. What is Event?
+A. Event is a message sent by sender to its subscriber in order to notify the change.
+    Event follows a "Delegate" mechanism, which is a function pointer mechanism.
+    Event uses a software design pattern called "Observer", which is a communication
+    pattern.
+
+2. What is Sender?
+A. Sender is trigger that identifies the changes.
+
+3. What is Subscriber?
+A. It defines the actions to perform when event triggers.
+
+Syntax:
+        function InsertClick() { }        => Subscriber
+
+        onclick="InsertClick()"        => Sender
+
+4. What is Event Handler?
+A. Every element can have an event handler, which defines the trigger and action.
+
+    onclick                    => Event
+    onclick="InsertClick()"        => Event Handler
+
+5. What is Event Listener?
+A. A listener is configured dynamically for elements in page. So that it can trigger
+    a functionality dynamically. [runtime]
+
+Syntax:
+       document.querySelector("button").addEventListener("eventName", function(){
+
+       })
+
+FAQ: What is difference between onclick & click?
+Ans :  onclick is an handler name.
+      click is a listener name.
+
+Syntax:
+      document.getElementById("button").addEventListener("click", ()=>{});
+
+Ex:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+   <script>
+      function InsertClick(){
+         document.write("Inserted..");
+      }
+      function bodyload(){
+         var btn = document.createElement("button");
+         btn.innerHTML = "Update";
+         btn.addEventListener("click",()=>{
+             document.write("Updated..");
+         })
+         document.querySelector("body").appendChild(btn);
+
+         document.getElementById("btnDelete").addEventListener("click",()=>{
+             document.write("Deleted..");
+         })
+
+      }
+   </script>
+</head>
+<body onload="bodyload()">
+   <button id="btnDelete">Delete</button>
+   <button onclick="InsertClick()">Insert</button>
+</body>
+</html>
+
+5. What are Event Arguments?
+A. Every arguments refer to payload.  
+    Payload refers to data carried from one location to another.
+
+6. What are JavaScript Event Arguments?
+A. JavaScript event arguments transport information about element and event.
+     Elements information includes details like:        
+        a) id
+        b) name
+        c) value
+        d) src
+        e) href etc..
+      Event information includes details like:
+        a) clientX
+        b) clientY
+        c) keycode
+        e) charCode
+        f) which etc..
+      JavaScript allows default arguments and custom arguments.
+
+7. What are JavaScript default arguments?
+A. this & event.
+
+        this        : It contains information about element
+        event    : It contains information about event
+
+Ex: this
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+   <script>
+      function Player(button){
+         switch(button.name){
+             case "Play":
+               document.querySelector("p").innerHTML = "Playing..";
+               break;
+               case "Pause":
+               document.querySelector("p").innerHTML = "Paused..";
+               break;
+               case "Stop":
+               document.querySelector("p").innerHTML = "Stopped..";
+               break;
+         }
+      }
+   </script>
+</head>
+<body>
+   <button onclick="Player(this)" name="Play">Play</button>
+   <button onclick="Player(this)" name="Pause">Pause</button>
+   <button onclick="Player(this)" name="Stop">Stop</button>
+   <p></p>
+</body>
+</html>
+
+Ex:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+   <script>
+      function LinkClick(e, label){
+          if(e.ctrlKey){
+              window.open('https://www.amazon.in','Amazon&#39;);
+          }
+          console.log(label.title);
+      }
+   </script>
+</head>
+<body>
+    <label onclick="LinkClick(event, this)" title="Ctrl+Click to follow link">https://www.amazon.in</label&gt;
+</body>
+</html>
+
+8. What are Custom arguments?
+A. JavaScript event allows to send any custom arguments, which is user defined data.
+     It can be any type of data:
+    a) Primitive
+    b) Non Primitive
+
+Syntax:
+        <button onclick="DetailsClick(1, 'TV', {rate:4.3}, ['Delhi', 'Hyd'])">
+
+        function DetailsClick(...product)
+        {
+        }
+
+Ex:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+   <script>
+      function DetailsClick(obj, e, ...product){
+         var [id, name, rating] = product;
+         document.write(`
+               Button Id : ${obj.id} <br>
+               X Position: ${e.clientX} <br>
+               Product Id : ${id} <br>
+               Name : ${name} <br>
+               Rating : ${rating.rate}
+         `);
+      }
+   </script>
+</head>
+<body>
+   <button onclick="DetailsClick(this, event, 1, 'TV', {rate:4.5})" id="btnDetails">Details</button>
+</body>
+</html>

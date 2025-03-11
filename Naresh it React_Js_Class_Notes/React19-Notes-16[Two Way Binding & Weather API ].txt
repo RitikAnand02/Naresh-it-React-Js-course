@@ -1,0 +1,150 @@
+Note: To handle two-way binding every form element must be configured with      
+      "onChange". If onChange is not defined then React 18x version marks it as
+       "read-only".
+
+Ex:
+form-demo.jsx
+
+import { useState } from "react"
+
+export function FormDemo()
+{
+    const [product, setProduct] = useState({Name:'TV', Price:0, City:'Delhi', Stock:true});
+
+    function handleNameChange(e){
+        setProduct({
+            Name: e.target.value,
+            Price: product.Price,
+            City: product.City,
+            Stock: product.Stock
+        })
+    }
+    function handlePriceChange(e){
+        setProduct({
+            Name: product.Name,
+            Price: parseFloat(e.target.value),
+            City: product.City,
+            Stock: product.Stock
+        })
+    }
+    function handleCityName(e){
+        setProduct({
+            Name: product.Name,
+            Price: product.Price,
+            City: e.target.value,
+            Stock: product.Stock
+        })
+    }
+    function handleStockChange(e){
+        setProduct({
+            Name: product.Name,
+            Price: product.Price,
+            City: product.City,
+            Stock: e.target.checked
+        })
+    }
+
+    function handleSubmitClick(){
+        console.log(product);
+    }
+
+    return(
+        <div className="container-fluid">
+            <div>
+                <h3>Register Product</h3>
+                <dl>
+                    <dt>Product Name</dt>
+                    <dd><input type="text" value={product.Name} onChange={handleNameChange} /></dd>
+                    <dt>Price</dt>
+                    <dd><input type="number" value={product.Price} onChange={handlePriceChange} /></dd>
+                    <dt>City</dt>
+                    <dd>
+                        <select value={product.City} onChange={handleCityName}>
+                            <option>Select City</option>
+                            <option>Delhi</option>
+                            <option>Hyd</option>
+                        </select>
+                    </dd>
+                    <dt>Stock</dt>
+                    <dd><input type="checkbox" checked={product.Stock} onChange={handleStockChange} /> <label>Available</label> </dd>
+                </dl>
+                <button onClick={handleSubmitClick}>Submit</button>
+            </div>
+        </div>
+    )
+}
+
+Ex: Weather API
+
+1. Visit  
+    https://openweathermap.org/api
+
+2. Register a new account [free]
+
+3. Login with registered account and copy your API key and save in any text document.
+
+4. Go to Current Weather data in "API" category
+
+5. Select  "Built-in API request by City Name".
+
+https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+
+Ex:
+weather.jsx
+
+import axios from "axios";
+import { useState } from "react";
+
+
+export function Weather(){
+
+
+    const url = 'https://api.openweathermap.org/data/2.5/weather&#39;;
+    const api_key = '1318ca6725c69160d346c41fc0612596';
+
+    const [cityName, setCityName] = useState('');
+    const [weatherData, setWeatherData] = useState({name:'', main:{temp:0}, weather:[{description:''}]})
+
+    function handleCityChange(e){
+        setCityName(e.target.value);
+    }
+
+    function handleSearchClick(){
+
+        // axios.get(`url?q=${cityName}&appid=${api_key}`);
+
+        axios.get(url, {params:{
+             q: cityName,
+             appid: api_key,
+             units:'metric'
+        }})
+        .then(response=>{
+            setWeatherData(response.data);
+            console.log(response.data);
+        })
+    }
+
+    return(
+        <div className="container-fluid">
+            <div className="mt-4 d-flex justify-content-center">
+                <div className="w-50">
+                    <div className="input-group">
+                        <input type="text" onChange={handleCityChange} placeholder="Enter City Name" className="form-control" />
+                        <button onClick={handleSearchClick} className="bi bi-search btn btn-warning"></button>
+                    </div>
+                    <div className="mt-4">
+                        <h2>{weatherData.name} - {weatherData.weather[0].description.toUpperCase()} </h2>
+                        <p className="fs-4">{Math.round(weatherData.main.temp)} &deg; C <span className="bi bi-sun"></span> </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+Events
+- Mouse Events
+- Keyboard Events
+- Button Events
+- Clipboard Events
+etc..

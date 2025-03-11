@@ -1,0 +1,105 @@
+ useReducer
+-----------------
+
+- Every web application uses a "global state", which is known as application state.
+- It allows to store data and make it available from application start to end.
+- Application state is accessible to all sessions.
+- It is difficult to debug and predict application memory.
+- "useReducer" hook provides access to application memory, which is predictable and debuggable.
+- You can use JavaScript library "Redux" to configure and implement global state in large scale applications.
+- Reducer requires following components
+    a) Store
+    b) State
+    c) UI
+    d) Reducer
+
+- Store is the location where data is kept.
+- State allows to access data from store and display in UI.
+- UI refers to component user interface where we use the global data.
+- Reducer identifies the actions performed on data and updates into store.
+
+Implementation:
+1. Create initial state that refers to "store".
+
+       let  initialState = {
+            key: value,
+            key: value [any type]
+       }
+
+2. Create a reducer function to identify the action and update the data.
+
+      function  reducer(state, action)
+      {
+        switch(action.type)
+        {
+          case "type1":
+            actions;  // updating the data into store
+            break;
+        }
+      }
+
+
+3. Components use the reducer function by using  "userReducer()" hook.
+
+    const [state, dispatch] = useReducer(reducer, initialState);
+
+    dispatch({type: 'actionName'})
+
+Ex:
+reducer-demo.jsx
+
+
+import { useReducer } from "react";
+
+let initialState = {
+    ViewersCount: 0,
+}
+
+function reducer(state, action){
+    switch(action.type){
+         case "join":
+            return {ViewersCount: state.ViewersCount + 1 };
+         case "exit":
+            return {ViewersCount: state.ViewersCount - 1 };
+    }
+}
+
+
+export function ReducerDemo(){
+
+
+    const [state, dispatch] = useReducer(reducer, initialState);
+
+    function JoinClick(){
+        dispatch({type: 'join'});
+    }
+    function ExitClick(){
+        dispatch({type:'exit'});
+    }
+
+    return(
+        <div className="container-fluid">
+            <div className="card mt-4 w-50">
+                <div className="card-header">
+                    <iframe src="https://www.youtube.com/embed/uspNXYdKEh8&quot; width="100%" height="300"></iframe>
+                </div>
+                <div className="card-body text-center">
+                    <h4>Core Java Streaming Live..</h4>
+                    <h5> <span className="bi bi-eye"></span> [{state.ViewersCount}] Viewers</h5>
+                </div>
+                <div className="card-footer text-center">
+                    <button onClick={JoinClick} className="bi bi-door-open btn btn-warning"> Join </button>
+                    <button onClick={ExitClick} className="bi bi-door-closed btn btn-danger mx-2">Exit</button>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+Summary
+- useState
+- useContext
+- userReducer
+- useMemo
+- useRef
+- useCallback

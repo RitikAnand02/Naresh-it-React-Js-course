@@ -1,0 +1,91 @@
+    						  Timer Events
+						-------------------
+setTimeout()					
+clearTimeout()
+setInterval()
+clearInterval()
+
+setTimeout():
+- It is a timer event used to handle "debounce" in application.
+- Bounce is a mechanism where every task is released into process immediately from memory.
+- Debounce allows to lock the task in memory for a specific duration.
+
+Syntax:
+       setTimeout(function(){ }, interval);
+
+
+clearTimeout():
+- It is used to clear the task from memory before released into process.
+- It requires a memory reference of task to clear from memory.
+
+Syntax:
+        clearTimeout(ref_name);
+
+
+                        React "useRef()" hook
+                        ------------------------------
+- React 18x version introduced a new hook "useRef()".
+- It is used to configure a reference memory, which is native to the process.
+- It allocates memory and stores data, so that it can be used by the process.
+- The data in reference memory is not intended to present (UI). It is intended to use in the background process.
+
+Syntax:
+        let  thread = useRef(null);
+       
+        thread.current = value / function;
+
+        setTimeout(thread.current);
+
+Ex:
+timeout-demo.jsx
+
+import { useRef, useState } from "react"
+
+export function TimeoutDemo(){
+
+    const [msg, setMsg] = useState('');
+    let thread = useRef(null);
+
+    function Msg1(){
+        setMsg('10% Volume Increased');
+    }
+    function Msg2(){
+        setMsg('50% Volume Increased');
+    }
+    function Msg3(){
+        setMsg('100% Volume Increased');
+    }
+
+   
+
+    function handleShowClick(){
+        setTimeout(Msg1, 3000);
+        thread.current = setTimeout(Msg2, 6000);
+        setTimeout(Msg3,10000);
+    }
+    function handleMuteClick(){
+        clearTimeout(thread.current);
+    }
+
+    return(
+        <div className="container-fluid text-center">
+            <button className="my-4 btn btn-primary bi bi-volume-up" onClick={handleShowClick}></button>    
+            <button onClick={handleMuteClick} className="my-4 mx-2 btn btn-danger bi bi-volume-mute">50%</button>
+            <p>{msg}</p>
+        </div>
+    )
+}
+
+setInterval()
+- It is used to handle "throttle".
+- Throttle is a mechanism of executing specified task repeatedly until removed from memory.
+- It loads task into memory and releases a copy of task into process.
+
+Syntax:
+           setInterval(function(){},interval);
+
+clearInterval()
+- It removes the task from memory, that is loaded using setInterval().
+
+Syntax:
+        clearInterval(ref_name);

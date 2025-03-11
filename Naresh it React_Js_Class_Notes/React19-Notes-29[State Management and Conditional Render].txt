@@ -1,0 +1,180 @@
+Client Side State Management Techniques:
+1. Session Storage
+- It is temporary storage.
+- It is memory allocated for a page in browser.
+- It is deleted automatically when user closes browser tab or window.
+- It is accessible only from the same tab where it is allocated.
+- It is not accessible across tabs.
+
+Syntax:
+        sessionStorage.setItem("key", value);
+        sessionStorage.getItem("key");
+        sessionStorage.removeItem("key");
+        sessionStorage.clear()
+
+Ex:
+conditional-demo.jsx
+
+import { useEffect, useState } from "react"
+
+
+
+export function ConditionalDemo(){
+   
+   
+    const [userName, setUserName] = useState('');
+
+    function handleUserName(e){
+        setUserName(e.target.value);
+    }
+
+    function handleSignInClick(){
+        sessionStorage.setItem("username", userName);
+        window.location.reload();
+       
+    }
+
+    function handleSignoutClick(){
+        sessionStorage.removeItem("username");
+        window.location.reload();
+    }
+
+
+    useEffect(()=>{
+       
+    },[])
+ 
+    return(
+        <div className="container-fluid">
+            <nav className="mt-4 p-2 border border-1 d-flex justify-content-between">
+                <div className="fs-3 fw-bold">YouTube</div>
+                <div>
+                   {
+                     (sessionStorage.getItem("username")===null)
+                     ?
+                     <div>
+                        <div className="input-group">
+                            <input type="text" onChange={handleUserName} placeholder="User Name" className="form-control" /> <button onClick={handleSignInClick} className="btn btn-warning">Sign In</button>
+                        </div>
+                     </div>
+                     :
+                     <div className="fs-4 fw-bold bi bi-person-fill"> {sessionStorage.getItem("username")} <button className="btn btn-link mx-2" onClick={handleSignoutClick}>Signout</button> </div>
+                   }
+                </div>
+            </nav>
+        </div>
+    )
+}
+
+2. Local Storage
+- It is permanent storage.
+- It allocates memory for page, which is accessible across tabs.
+- It is not deleted even when a browser closed.
+- You have to delete explicitly from browser memory.
+
+Syntax:
+        localStorage.setItem("key", value);
+                     .getItem("key");
+                     .removeItem("key");
+                     .clear();
+
+Ex:
+conditional-demo.jsx
+
+import { useEffect, useState } from "react"
+
+
+
+export function ConditionalDemo(){
+   
+   
+    const [userName, setUserName] = useState('');
+
+    function handleUserName(e){
+        setUserName(e.target.value);
+    }
+
+    function handleSignInClick(){
+        localStorage.setItem("username", userName);
+        window.location.reload();
+       
+    }
+
+    function handleSignoutClick(){
+        localStorage.removeItem("username");
+        window.location.reload();
+    }
+
+
+    useEffect(()=>{
+       
+    },[])
+ 
+    return(
+        <div className="container-fluid">
+            <nav className="mt-4 p-2 border border-1 d-flex justify-content-between">
+                <div className="fs-3 fw-bold">YouTube</div>
+                <div>
+                   {
+                     (localStorage.getItem("username")===null)
+                     ?
+                     <div>
+                        <div className="input-group">
+                            <input type="text" onChange={handleUserName} placeholder="User Name" className="form-control" /> <button onClick={handleSignInClick} className="btn btn-warning">Sign In</button>
+                        </div>
+                     </div>
+                     :
+                     <div className="fs-4 fw-bold bi bi-person-fill"> {localStorage.getItem("username")} <button className="btn btn-link mx-2" onClick={handleSignoutClick}>Signout</button> </div>
+                   }
+                </div>
+            </nav>
+        </div>
+    )
+}
+
+3. Cookies
+- Cookie is a simple text document.
+- Client details can be stored in a cookie.
+- Cookie is appended into browser memory or client HDD. (Hard Disk Drive)
+- Hence cookies are classified into 2 types
+        a) In-memory cookie
+        b) Persistent cookie
+- In Memory cookie is a temporary cookie. It is deleted when browser closed.
+  It is accessible across tabs.
+
+- Persistent cookie is a permanent cookie, You can set expiry date & time for cookie. So that it is deleted from memory automatically after expiry date & time.
+
+- JavaScript can configure cookies by using "DOM" object "document".
+
+        document.cookie = "name=value; expires=dateTime";
+
+- React have "react-cookie" library that can manage cookies client side with virtual DOM.
+
+- Cookie library is not a native library of React. It is a 3rd party library.
+
+1. Install Cookie library
+
+        > npm  install  react-cookie --save
+
+2. Import Cookie Provider into "index.js" and configure for your startup component.
+
+    import { CookiesProvider } from 'react-cookie';
+
+    <CookiesProvider>
+        <YourComponent />
+    </CookiesProvider>
+
+3. Configure and manipulate cookie by using "useCookies()" hook.
+
+     import  { useCookies  }  from  "react-cookie";
+
+
+    const [cookies, setCookie, removeCookies] = useCookies(['cookieName']);
+
+    setCookie('cookieName', value);        // set a cookie
+    removeCookies('cookieName');        // remove cookie from memory
+    cookies['cookieName'];                // read cookie from memory
+
+4. You can set persistent cookie by using expiry
+
+    setCookie('cookieName', value, { expires : daysNumber });

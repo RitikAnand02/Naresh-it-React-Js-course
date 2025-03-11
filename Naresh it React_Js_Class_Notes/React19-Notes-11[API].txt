@@ -1,0 +1,197 @@
+React Application
+Components
+Data Binding
+- One Way Binding
+- How to binding different data types?
+- useState()
+
+Set State:
+- State is configured while creating component. 
+- You can't set a new value into state while creating component.
+- You can only initialized a value.
+- Every component have a mount phase. [load phase]
+- You can initialize new values or set new values into state while mounting component.
+- Component mount phase is defined using "useEffect()" hook.
+
+Syntax:
+		useEffect(()=>{
+
+	
+		},[ dependencies ])
+
+- Dependencies specify when to load the component again. 
+
+Ex:
+data-binding.jsx
+
+import { useState, useEffect } from "react";
+import moment from "moment";
+
+export  function DataBinding()
+{
+    
+    const [productName, setProductName] = useState('TV');
+    const [price, setPrice] = useState(0);
+    
+    useEffect(()=>{
+
+        setProductName('Samsung TV');
+        setPrice(5000.44);
+
+    },[])
+
+    
+
+    return(
+        <div className="container-fluid">
+           <p>
+              Product Name : {productName} <br />
+              Price : {price}
+           </p>
+        </div>
+    )
+}
+						     Working with API's 
+
+FAQ: What is distributed computing?
+Ans:   Distributed computing allows communication between two applications running 	  
+	  on two different machines.
+
+	  It also allows communication between two different objects of two different 	 
+	  applications running in different process of same machine.
+
+FAQ: What are the various distributed computing technologies?
+Ans:
+		CORBA	[Common Object Request Broken Architecture]   14 languages 
+		DCOM	[Distribute Component Object Model]   - Visual Basic 
+		RMI		[Remote Method Invocation]  - J2EE
+		EJB		[Enterprise Java Beans]		- Java
+		Webservice   						- all technologies 
+		Remoting							- .NET 
+
+Note: The most popular distributed computing technology used across all languages is
+	 Webservice. However it have issues for modern web, hence the alternative is API.
+
+FAQ: What is API?
+Ans:  - Application Programming Interface
+	 - It handles communication between applications in distributed architecture. 
+	 - It can run on any protocol.
+	 - It can run on any server.
+	 - It uses XML & JSON communication.
+
+Ex:
+1. Add a new file into public folder 
+		"products.json"
+[
+    {
+        "Name": "Samsung TV",
+        "Price": 45000.44
+    },
+    {
+        "Name": "Mobile",
+        "Price": 12000.43
+    }, 
+    {
+        "Name":"Watch",
+        "Price": 5000.55
+    }
+]
+
+2. Data-binding.jsx
+
+import { useState, useEffect } from "react";
+import moment from "moment";
+
+export  function DataBinding()
+{
+    
+    const [products, setProducts] = useState([]);
+   
+    function LoadData(){
+
+        var http = new XMLHttpRequest();
+        http.open("get","products.json",true);
+        http.send();
+
+        http.onreadystatechange = function(){
+
+            if(http.readyState===4){
+                 setProducts(JSON.parse(http.responseText));
+            }
+
+        }
+
+    }
+
+    
+    useEffect(()=>{
+
+        LoadData();
+
+    },[])
+
+    
+
+    return(
+        <div className="container-fluid">
+            <h2>Products</h2>
+            <table className="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        products.map(product=> <tr key={product}>
+                            <td>{product.Name}</td>
+                            <td>{product.Price}</td>
+                        </tr>)
+                    }
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
+JavaScript Ajax
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,179 @@
+Summary
+- Features of React
+	Virtual DOM [DOM, Shadow DOM, Virtual DOM]
+	Modular
+	Loosely Coupled & Extensible 
+	Component Based
+- Issues with React
+Setup Environment for React:
+1. Your PC must have OS windows 8x, Mac, Linux etc.
+
+2. Download and Install "Node JS" on your PC.
+
+		https://nodejs.org/en
+ 
+    - Node JS is required to build servers, web apps, scripts & command line tools.
+    - Node JS provides a package manager called NPM.
+		[ Yarn, Bower, Grunt, Compose, Ruby Gems, NuGet ]
+    
+3. Check the version of Node & NPM from command prompt
+
+	C:\> node  -v
+	C:\> npm   -v
+
+    Note: Make sure that the node version is 18x and higher &
+	      npm version is 8x and higher.
+
+4. Download and Install "Visual Studio Code" editor
+
+	https://code.visualstudio.com/
+
+     - VS code provides an IDE [Integrated Development Environments] for building,
+	debugging, testing and deploying apps. 
+
+5. Add Extensions to VS Code editor
+
+	- Live Server
+	- VS-Code Icons
+	- IntelliSense for CSS class names in HTML
+
+Create a new Web Application:
+1. Create a new folder for your project
+
+		D:\web-app
+
+2. Open your project folder in VS Code
+
+3. Setup the file system for Web Application
+
+	a) Generate package.json
+	     - Open Terminal & run the command
+	
+			> npm init  -y
+	
+	     - package.json comprises of project meta data.
+	
+	b) Add "README.md"  into project
+
+	    - It is a help document designed by developers for developers.
+
+	c) Add  ".gitignore", It is required for publishing on GIT and ignoring specific set
+	    of resources.
+
+	d) Add folders
+			- public		: It comprises of static resources [html, images, docs..]
+			- src			: It comprises of dynamic resources [.css, .js, .ts, .scss..]
+
+	e) Add following pages into public folder
+	
+			- index.html
+			- home.html
+
+
+Setup React for your web application:
+
+1. Setup library using CDN for legacy React [up to 17x]
+
+     - React in page requires following libraries 
+		a) React			[Core Library]
+		b) React DOM		[Virtual DOM Library]
+		c) Babel			[Compiler]
+
+     - React libraries you can get from  "https://legacy.reactjs.org/"
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+	- Babel library you can get from  "https://babeljs.io/"
+
+		https://babeljs.io/docs/babel-standalone
+
+	- Copy the babel @standalone library
+
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+</head>
+<body>
+    <h2>Index Page</h2>
+    React is in <a href="./home.html">Home</a> page.
+</body>
+</html>
+
+
+home.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        ReactDOM.render("Welcome to React", document.getElementById("root"));
+    </script>
+</head>
+<body>
+    <h2>Home</h2>
+    <noscript>Please enable JavaScript on your browser.</noscript>
+    <div id="root"></div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

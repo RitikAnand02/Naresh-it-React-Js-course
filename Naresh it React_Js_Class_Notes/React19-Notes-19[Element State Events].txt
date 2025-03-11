@@ -1,0 +1,181 @@
+Mouse Events
+--------------------
+    onMouseOver
+    onMouseOut
+    onMouseDown
+    onMouseUp
+    onMouseMove
+Keyboard Events
+    onKeyUp
+    onKeyDown
+    onKeyPress [Deprecated]
+Button Events
+    onClick
+    onDoubleClick  [ondblclick]
+    onContextMenu
+
+FAQ: How to disable right click in page?
+Ans:  You can disable any JavaScript event, by using a function that returns "false".
+
+      <body oncontextmenu="return false">
+     
+       document.contextmenu = function() {
+        return false;
+       }
+
+Ex:
+
+export function ButtonDemo(){
+
+    function handleDoubleClick(){
+        window.open('iphone-green.jpg','Iphone','width=300 height=400');
+    }
+    function handleContextMenu(){
+        document.oncontextmenu = function(){
+             alert('Right Click Disabled on this page');
+             return false;
+        }
+    }
+
+    return(
+        <div className="container-fluid" onContextMenu={handleContextMenu} >
+            <h2>Right Click not allowed</h2>
+            <img src="iphone-green.jpg" onDoubleClick={handleDoubleClick} width="100" height="100" />
+            <p>Double Click to view large</p>
+        </div>
+    )
+}
+
+Element State Events:
+    onChange
+    onFocus
+    onBlur
+   
+- React "Two Way Binding" is handled by using "onChange" event.
+- Blur defines actions to perform when element lost focus.
+
+Ex:
+import { useState } from "react"
+
+export function ButtonDemo(){
+
+    const [tip, setTip] = useState('');
+    const [userName, setUserName] = useState('');
+
+    function handleFocus(){
+        setTip('Name in Block Letters');
+    }
+    function handleBlur(){
+        setTip('');
+        setUserName(userName.toUpperCase());
+    }
+
+    function handleChange(e){
+        setUserName(e.target.value);
+    }
+
+    return(
+        <div className="container-fluid">
+            <h2>Register User</h2>
+            <dl>
+                <dt>User Name</dt>
+                <dd><input type="text" value={userName} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} /></dd>
+                <dd>{tip}</dd>
+            </dl>
+        </div>
+    )
+}
+
+Ex: EMI Calculator
+
+emi-calculator.jsx
+
+import { useState } from "react"
+
+export function EmiCalculator(){
+
+
+    const [principle, setPrinciple] = useState(100000);
+    const [years, setYears] = useState(1);
+    const [rate, setRate] = useState(10.45);
+    const [emi, setEMI] = useState(0);
+
+    function handlePrincipleChange(e){
+        setPrinciple(e.target.value);
+    }
+
+    function handleYearChange(e){
+        setYears(e.target.value);
+    }
+
+    function handleRateChange(e){
+        setRate(e.target.value);
+    }
+   
+    function handleCalculateClick(){
+
+            var P = principle;
+            var r = rate/12/100;
+            var n = years * 12;
+            var EMI = P * r * (Math.pow(1+r,n)) / (Math.pow(1+r,n)) - 1;
+
+            setEMI(EMI);
+
+    }
+
+    return(
+        <div className="container-fluid bg-secondary">
+            <h3 className="text-center mt-3 text-white">Personal Loan EMI Calculator</h3>
+            <div className="p-4 m-4 bg-light border border-1 border-dark">
+                <div className="row my-4">
+                    <div className="col">
+                        Amount you need &#8377; <input type="text" value={principle} />
+                    </div>
+                    <div className="col">
+                        for <input type="text" size="2" value={years} /> years
+                    </div>
+                    <div className="col">
+                        Interest Rate <input type="text" size="2" value={rate} /> %
+                    </div>
+                </div>
+                <div className="row my-4">
+                    <div className="col">
+                        <input type="range" onChange={handlePrincipleChange} min={100000} max={500000} value={principle} className="form-range" />
+                        <span> &#8377; 1,00,000</span>
+                        <span className="float-end"> &#8377; 5,00,000</span>
+                    </div>
+                    <div className="col">
+                        <input type="range" onChange={handleYearChange} min={1} max={5} value={years} className="form-range" />
+                        <span>1</span>
+                        <span className="float-end"> 5 </span>
+                    </div>
+                    <div className="col">
+                        <input type="range" onChange={handleRateChange} min={10.45} max={18.45} value={rate} className="form-range" />
+                        <span> 10.45%</span>
+                        <span className="float-end"> 18.45% </span>
+                    </div>
+                </div>
+                <div className="row my-4">
+                    <div className="col text-end">
+                            <button onClick={handleCalculateClick} className="btn btn-primary">Calculate</button>
+                    </div>
+                </div>
+                <div className="row my-4">
+                    <div className="col">
+                        <p className="text-center"> Your Monthly EMI is <span className="fw-bold fs-4 text-primary">{Math.round(emi).toLocaleString('en-in', {style:'currency', currency:'INR'})} </span> for next {years * 12} months.  </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+Clipboard Events:
+
+    onCut
+    onCopy
+    onPaste
+
+- Clipboard is temporary memory of your PC.
+- The content that you copy or cut is kept on clipboard.
+- You can disable clipboard event with a function that "return false".

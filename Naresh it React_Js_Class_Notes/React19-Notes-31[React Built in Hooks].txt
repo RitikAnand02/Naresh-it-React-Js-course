@@ -1,0 +1,121 @@
+Hooks in React
+-------------------
+
+- Rules
+- Service
+- Service Provider
+- Service Consumer
+- Injector
+- Single ton
+- DI
+- Custom Hooks
+
+Task:
+1. Create a custom hook for converting and display text in Title Case.
+
+            useTitleCase()
+
+            useTitleCase('welcome to react');
+       
+        O/P:        Welcome To React
+
+2. Create a custom hook for sorting the data.
+
+            useSort(list, reverse:bool)
+
+            useSort(["C","A", "B" ], true);        // C, B, A
+            useSort(["C", "A", "B"]);            // A, B, C
+
+FAQ: Can JavaScript function overload?
+Ans:  No. JavaScript will not support function overloading.
+
+        function add(a, b) {
+            return a + b;
+        }
+   
+        function add(a,b,c) {
+            return a + b + c;
+        }
+       
+        add(10, 20, 30);
+        add(10, 20);        // c = undefined
+
+
+Solution: You have to implement various technique to configure pseudo overload.
+
+1. You can use "default" parameters in function.
+
+Syntax:
+        function Name(param=value)
+        {
+        }
+        Name();        // default value
+        Name(value);    // uses value
+
+Ex:
+<script>
+    function Product(name="TV", price=4000){
+       document.write(`Name=${name}<br>Price=${price}<br>`);
+    }
+    Product();
+    Product("Samsung TV");
+    Product("Mobile", 12000);
+</script>
+
+2. You can use JavaScript  "arguments.length" property
+
+Syntax:
+        function Name(param1, param2,..)
+        {
+             if(arguments.length===0)
+            {
+            }
+             else if(argument.length===1)
+              {
+              }
+             else{
+            }
+        }
+Ex:
+<script>
+    function Product(name, price){
+        if(arguments.length===0){
+           document.write(`Name and Price are expected<br>`);
+        }else if(arguments.length===1){
+           document.write(`Name=${name}<br>`);
+        } else {
+          document.write(`Name=${name}<br>Price=${price}<br>`);
+        }
+    }
+    Product();
+    Product("Mobile");
+    Product("Samsung TV", 60000);
+</script>
+
+                             React Built-in Hooks
+1. useEffect
+- It is a hook used to configure actions to perform while mounting and unmounting component.
+
+    Syntax:
+        useEffect(()=>{
+
+            // on mount
+
+            return ()=>{
+                // on unmount
+             }
+
+        },[dependencies])
+
+- Every component mounts once for a request.
+- If you want the component to mount again then you have to configure the dependencies.
+- Dependencies is an array, hence you can have multiple dependencies.
+
+FAQ: Can a component have multiple mount and unmount actions?
+Ans: Yes.
+
+FAQ: Can we have multiple useEffect in component?
+Ans: Yes.
+
+FAQ: Why you need multiple useEffect?
+Ans:  To handle conditional render.

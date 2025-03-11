@@ -1,0 +1,101 @@
+						     React 19x
+- HTML, CSS, JavaScript, Bootstrap
+
+1. What is React?
+A. React is a JavaScript library used to build UI for web and native applications.
+
+2. Can we build any application using React?
+A. No. It requires frameworks like
+		a) Next.js
+		b) Remix
+		c) Gatsby 
+		d) Expo (Mobile Native Apps)
+
+
+3. What are the languages used for React?
+A. JavaScript, Typescript.
+
+
+4. What is difference between React & Angular?
+A. React is a library.
+    Angular is a framework.
+
+5. Where React is recommended?
+A. If your application in Backend is enabled with lot of frameworks and you want only a good UI for application, then it is recommended to use React.
+
+6. Where Angular is used?
+A. If application is using limited backend frameworks and they need both front end and backend enabled with framework to control application flow, then Angular is recommended. 
+
+7. What is difference between React & React JS?
+A. Both are same.  [Modern name is React]
+
+
+8. Why we need technologies like Angular & React?
+A. TO build SPA & PWA
+
+
+9. What are the challenges in modern web development?
+A. 
+	a) Unified UX
+	  	- Application must have same experience across devices.
+		- Mobile users must get access to everything. 
+
+	b) Fluid UX
+		- User stays on one page and gets access to everything from the page.
+		- It is a SPA [Single Page Application].
+
+	c) Loosely Coupled & Extensible 
+		- Allows to build new features outside the scope and integrate into application
+		  without leading to catastrophic failures. 
+
+10. What is the solution?
+A. Better build "SPA" & "Progressive Web Application" [PWA].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

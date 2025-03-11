@@ -1,0 +1,353 @@
+Style Binding
+
+- It is a technique of configuring inline styles for JSX elements dynamically.
+- Styles in JSX are defined by using "style" property.
+- It is an object type with key & value reference.
+- Key is a style attribute defined in Camel Case.
+- Value is always a string.
+
+Syntax: HTML
+
+    <h2  style="color:red; background-color:yellow; border:1px solid black">
+
+Syntax: JSX
+   
+    <h2  style={ { color:'red', backgroundColor:'yellow', border:'1px solid black' } }>
+
+Ex:
+weather.jsx
+
+import axios from "axios";
+import { useState } from "react";
+
+
+export function Weather(){
+
+
+    const url = 'https://api.openweathermap.org/data/2.5/weather&#39;;
+    const api_key = '1318ca6725c69160d346c41fc0612596';
+
+    const [cityName, setCityName] = useState('');
+    const [weatherData, setWeatherData] = useState({name:'', main:{temp:0}, weather:[{description:''}]})
+
+    function handleCityChange(e){
+        setCityName(e.target.value);
+    }
+
+    function handleSearchClick(){
+
+        // axios.get(`url?q=${cityName}&appid=${api_key}`);
+
+        axios.get(url, {params:{
+             q: cityName,
+             appid: api_key,
+             units:'metric'
+        }})
+        .then(response=>{
+            setWeatherData(response.data);
+            console.log(response.data);
+        })
+    }
+
+    return(
+        <div className="container-fluid">
+            <div className="mt-4 d-flex justify-content-center">
+                <div className="w-50">
+                    <div className="input-group">
+                        <input type="text" onChange={handleCityChange} placeholder="Enter City Name" className="form-control" />
+                        <button onClick={handleSearchClick} className="bi bi-search btn btn-warning"></button>
+                    </div>
+                    <div style={{marginTop:'50px', boxShadow:'2px 2px 2px black', padding:'20px', border:'1px solid black', textAlign:'center'}}>
+                        <h2>{weatherData.name} - {weatherData.weather[0].description.toUpperCase()} </h2>
+                        <p className="fs-4">{Math.round(weatherData.main.temp)} &deg; C <span className="bi bi-sun"></span> </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+Ex: Change Color
+
+import axios from "axios";
+import { useState } from "react";
+
+
+export function Weather(){
+
+
+    const url = 'https://api.openweathermap.org/data/2.5/weather&#39;;
+    const api_key = '1318ca6725c69160d346c41fc0612596';
+
+    const [cityName, setCityName] = useState('');
+    const [weatherData, setWeatherData] = useState({name:'', main:{temp:0}, weather:[{description:''}]});
+   
+
+    function handleCityChange(e){
+        setCityName(e.target.value);
+    }
+
+    function handleSearchClick(){
+
+        // axios.get(`url?q=${cityName}&appid=${api_key}`);
+
+        axios.get(url, {params:{
+             q: cityName,
+             appid: api_key,
+             units:'metric'
+        }})
+        .then(response=>{
+            setWeatherData(response.data);
+            console.log(response.data);
+        })
+    }
+
+    return(
+        <div className="container-fluid">
+            <div className="mt-4 d-flex justify-content-center">
+                <div className="w-50">
+                    <div className="input-group">
+                        <input type="text" onChange={handleCityChange} placeholder="Enter City Name" className="form-control" />
+                        <button onClick={handleSearchClick} className="bi bi-search btn btn-warning"></button>
+                    </div>
+                    <div style={{marginTop:'50px', boxShadow:'2px 2px 2px black', padding:'20px', border:'1px solid black', textAlign:'center', backgroundColor:`${(weatherData.weather[0].description==='mist')?'lightcyan':'#000044'}`, color:'white'}}>
+                        <h2>{weatherData.name} - {weatherData.weather[0].description.toUpperCase()} </h2>
+                        <p className="fs-4">{Math.round(weatherData.main.temp)} &deg; C <span className="bi bi-sun"></span> </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+Ex: Change Image
+
+import axios from "axios";
+import { useState } from "react";
+
+
+export function Weather(){
+
+
+    const url = 'https://api.openweathermap.org/data/2.5/weather&#39;;
+    const api_key = '1318ca6725c69160d346c41fc0612596';
+
+    const [cityName, setCityName] = useState('');
+    const [weatherData, setWeatherData] = useState({name:'', main:{temp:0}, weather:[{description:''}]});
+   
+
+    function handleCityChange(e){
+        setCityName(e.target.value);
+    }
+
+    function handleSearchClick(){
+
+        // axios.get(`url?q=${cityName}&appid=${api_key}`);
+
+        axios.get(url, {params:{
+             q: cityName,
+             appid: api_key,
+             units:'metric'
+        }})
+        .then(response=>{
+            setWeatherData(response.data);
+            console.log(response.data);
+        })
+    }
+
+    return(
+        <div className="container-fluid">
+            <div className="mt-4 d-flex justify-content-center">
+                <div className="w-50">
+                    <div className="input-group">
+                        <input type="text" onChange={handleCityChange} placeholder="Enter City Name" className="form-control" />
+                        <button onClick={handleSearchClick} className="bi bi-search btn btn-warning"></button>
+                    </div>
+                    <div style={{marginTop:'50px', boxShadow:'2px 2px 2px black', padding:'20px', border:'1px solid black', textAlign:'center', backgroundImage:`url(${(weatherData.weather[0].description==='mist')?'mist.jpg':'smoke.jpg'})` , color:'white', backgroundSize:'cover'}}>
+                        <h2>{weatherData.name} - {weatherData.weather[0].description.toUpperCase()} </h2>
+                        <p className="fs-4">{Math.round(weatherData.main.temp)} &deg; C <span className="bi bi-sun"></span> </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+                             Class Binding
+- It is a technique of binding CSS classes to JSX elements.
+- A CSS class comprises of set of styles defined by using a class name.
+- You can apply the class dynamically to JSX elements using "className" property.
+
+Syntax:
+     <h2 className='css_class_name'>
+     <h2 className={ (condition)?' ' : ' ' }>
+ 
+Ex:
+import { useState } from "react"
+
+
+export function ClassBinding(){
+
+
+    const [theme, setTheme] = useState('border border-2 p-4 rounded');
+    const [btnTheme, setbtnTheme] = useState('btn btn-dark w-100');
+
+    function handleThemeChange(e){
+        if(e.target.checked){
+            setTheme('border border-2 p-4 rounded bg-dark text-white');
+            setbtnTheme('btn btn-warning w-100');
+        } else {
+            setTheme('border border-2 p-4 rounded');
+            setbtnTheme('btn btn-dark w-100');
+        }
+    }
+
+    return(
+        <div className="container-fluid d-flex justify-content-center">
+            <div className="mt-4">
+                <form className={theme}>
+                    <div className="form-switch">
+                        <input type="checkbox" onChange={handleThemeChange} className="form-check-input" /> <label> Dark Theme </label>
+                    </div>
+                    <h3 className="bi bi-person-fill"> User Login </h3>
+                    <dl>
+                        <dt>User Name</dt>
+                        <dd><input type="text" className="form-control" /></dd>
+                        <dt>Password</dt>
+                        <dd><input type="password" className="form-control" /></dd>
+                    </dl>
+                    <button className={btnTheme}>Login</button>
+                </form>
+            </div>
+        </div>
+    )
+}
+
+
+
+
+
+Mouse Event Binding
+    onMouseOver
+    onMouseOut
+    onMouseDown
+    onMouseUp
+    onMouseMove
+
+Ex:
+1. Add a new JSON file in public folder
+
+        mobiles.json
+[
+    {
+        "img_src": "m1.jpg"
+    },
+    {
+        "img_src": "m2.jpg"
+    },
+    {
+        "img_src": "m3.jpg"
+    }
+   
+]
+
+2. Add component files
+     mouse-demo.css
+
+
+.col-1 img {
+    border: 2px solid gray;
+    padding: 5px;
+}
+.col-1 img:hover {
+    border : 2px solid blue;
+    cursor: grab;
+}
+
+    mouse-demo.jsx
+
+import axios from "axios";
+import { useEffect, useState } from "react";
+import './mouse-demo.css';
+
+
+export function MouseDemo(){
+
+    const [images, setImages] = useState([{img_src:''}]);
+    const [previewImage, setPreviewImage] = useState('m1.jpg');
+
+    useEffect(()=>{
+
+            axios.get('mobiles.json')
+            .then(response=>{
+                setImages(response.data);
+            })
+
+    },[])
+
+    function handleMouseOver(e){
+        setPreviewImage(e.target.src);
+    }
+
+    return(
+        <div className="container-fluid">
+            <div className="row">
+                <div className="col-1">
+                    {
+                        images.map(image=>
+                            <div key={image} className="my-4">
+                                <img onMouseOver={handleMouseOver} src={image.img_src}  width="100" height="100"/>
+                            </div>
+                        )
+                    }
+                </div>
+                <div className="col-11 ps-4 mt-4">
+                    <img height="400" src={previewImage} width="300" />
+                </div>
+            </div>
+        </div>
+    )
+}
+
+Ex: Mouse Animation
+
+mouse-animation.css
+
+
+@keyframes Spin {
+    from {
+        transform: rotate(0deg) scale(1);
+    }
+    to {
+        transform: rotate(360deg) scale(2);
+    }
+}
+.react-logo {
+    animation-name: Spin;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+mouse-animation.jsx
+
+import { useState } from 'react';
+import './mouse-animation.css';
+
+export function MouseAnimation(){
+
+    const [animationSpeed, setAnimationSpeed] = useState('5s');
+
+    function handleMouseOver(){
+        setAnimationSpeed('1s');
+    }
+    function handleMouseout(){
+        setAnimationSpeed('5s');
+    }
+
+    return(
+        <div className="container-fluid d-flex bg-dark justify-content-center align-items-center" style={{height:'100vh'}}>
+            <img onMouseDown={handleMouseOver} onMouseUp={handleMouseout} style={{animationDuration:animationSpeed}} className='react-logo' src='logo192.png' />
+        </div>
+    )
+}
