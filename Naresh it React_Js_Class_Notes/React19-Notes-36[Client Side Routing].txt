@@ -1,0 +1,132 @@
+Client Side Routing
+
+- React uses "react-router-dom" library for configuring client side routes.
+- Router DOM library is not a native library of react.
+- The popular Router DOM versions
+
+        V5            up to React 17
+        V6            React 18
+        V7            React 18 & 19
+
+- V6 & V7 are complete re-write of router-dom.
+
+1. Install React Router DOM library for project
+
+    >npm install react-router-dom --save
+    >npm install react-router-dom@6.30.0  --save   [old version]
+    >npm install react-router-dom@latest --save
+
+2. Router DOM provides following components
+
+    <BrowserRouter>
+    <Routes>
+    <Route>
+    <Outlet>
+    <Link>
+
+   - BrowserRouter is responsible for configuring virtual DOM routes and translate into
+     actual DOM. React routing for SPA must be within the scope of BrowserRouter.
+   
+      Syntax:
+            <BrowserRouter>
+
+                .... all your route configurations ...
+
+            </BrowserRouter>
+
+   - Routes is a collection of individual routes defined for application. It configures
+     a router table.
+
+Syntax:
+
+        <BrowserRouter>
+
+            <Routes>
+                ... all routes ...
+            </Routes>
+
+        </BrowserRouter>
+
+    - Route component is responsible for configuring individual route. A route defines
+      the request path and component to render.
+
+Syntax:
+        <BrowserRouter>
+            <Routes>
+                <Route  path=""   element={ } />
+                    <Route  path=""   element={ } />
+            </Routes>
+        </BrowserRouter>
+
+       - Link is a component used to configure a hyperlink that navigates user to specified
+     route path.
+
+Syntax:
+        <Link  to="home">  Home </Link>
+        <Link  to={route_path_name}>  Text | Image </Link>
+
+    - Outlet is a component that defines the location in page where the resulting
+      markup must render. It is mostly used in nested and child routes.
+
+Syntax:
+        <main>
+            <Outlet />
+        </main>
+
+Wild Card Routes:
+- Application sends the request content as response.
+- If client request is not specific or invalid then you can send a customized response using wild card routes.
+
+     path="/"         It refers to component that will render when user is not
+                 requesting any specific. [default render]
+
+    path="*"        It refers to component that renders when requested path not
+                found.
+Ex:
+
+app.js
+
+import logo from './logo.svg';
+import './App.css';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { Login } from './login';
+import { Weather } from './components/weather/weather';
+
+function App() {
+  return (
+    <div className="App">
+        <BrowserRouter>
+          <header className='d-flex border border-2 border-secondary my-2 mx-2 justify-content-between p-3'>
+             <div className='fs-4 fw-bold'>Shopper.</div>
+             <nav className='d-flex btn-group bg-primary align-items-center'>
+                <span> <Link className='btn btn-primary' to='home'>Home</Link> </span>
+                <span className='mx-3'> <Link className='btn btn-primary' to='men'>Mens' Fashion</Link> </span>
+                <span> <Link className='btn btn-primary' to='women'>Women Fashion</Link> </span>
+                <span className='mx-3'> <Link className='btn btn-primary' to='kids'>Kids Fashion</Link> </span>
+             </nav>
+             <div>
+                <span> <Link to='weather'><span className='bi bi-clouds'></span></Link> </span>
+                <span> <Link to='login'><span className='bi bi-person-fill mx-3'></span></Link> </span>
+                <span  className='bi bi-cart4'></span>
+             </div>
+          </header>
+          <section className='mt-4 p-4'>
+              <Routes>
+                   <Route path='/' element={<div><h4>Online Shopping</h4><p>30% OFF on all fashion accessories</p></div>} />
+                   <Route path='home' element={<div><h4>Online Shopping</h4><p>30% OFF on all fashion accessories</p></div>} />
+                   <Route path='men' element={<div><h4>Men's Fashion</h4><img src='men-fashion.jpg' width='200' height='300'/></div>} />
+                   <Route path='women' element={<div><h4>Women's Fashion</h4><img src='women-fashion.jpg' width='200' height='300'/></div>} />
+                   <Route path='kids' element={<div><h4>Kid's Fashion</h4><img src='kids-fashion.jpg' width='200' height='300'/></div>} />
+                   <Route path='login' element={<Login/>} />
+                   <Route path='weather' element={<Weather />} />
+                   <Route path='*' element={<div><h4 className='text-danger'>Not Found</h4><code className='text-warning'>The requested path Not found</code></div>} />
+              </Routes>
+          </section>
+        </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;
+
+Note: In index.js set <App/> as startup

@@ -6071,8 +6071,949 @@ Summary
 - useRef
 - useCallback
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   useRef()
+---------------
+
+- It configures a reference memory where you can store a value or function.
+- The reference memory allocates thread for value or task.
+- Thread is intended to run the task or keep value in background process.
+- The thread function or value is not intended for rendering in UI.
+
+Syntax:
+        const  thread = useRef(null);
+
+        thread.current = value;
+        thread.current = () =>{ }
+   
+- You can access with reference of "current" property.
+
+FAQ: What are the techniques required for handling interactions faster that normal?
+Ans:   a) You can use JavaScript promises.
+      b) You can implement async and await for functions.
+
+FAQ: What is difference between callback and promise?
+Ans:  Callback uses "Synchronous" technique to handle interactions.
+      Promise uses "Asynchronous" technique.
+
+FAQ: What is sync?
+Ans:  It is a blocking technique where all other tasks in process are blocked while
+     performing the given task.
+
+Ex: Callback
+<script>
+    function FetchData(url, success, failure){
+          if(url==="fakestore"){
+              success([{Name:'TV', Price:13000}, {Name:'Mobile', Price:12000}]);
+          } else {
+              failure('Unable to Fetch - Invalid URL');
+          }
+    }
+    FetchData(
+       prompt("Enter URL"),
+       function(response){
+         console.log(response);
+       },
+       function(error){
+          console.log(error);
+       }
+    )
+</script>
+
+FAQ: What is async?
+Ans:  It is an unblocking technique that performs all task simultaneously at the same      
+     time. It allows to run the task in background.
+
+Ex: Promise
+
+<script>
+     var FetchData = new Promise(function(resolve, reject){
+           var url = prompt("Enter Url");
+           if(url==="fakestore"){
+               resolve([{Name:'TV', Price:23000}, {Name:'Mobile', Price:12000}]);
+           } else {
+               reject('Invalid URL - Unable to Fetch Data');
+           }
+     })
+     FetchData.then(function(response){
+         console.log(response);
+     })
+     .catch(function(error){
+         console.log(error);
+     })
+     .finally(function(){
+         console.log('Request End');
+     })
+</script>
+
+Ex: Promise
+
+<script>
+  var FetchData = new Promise(function(resolve, reject){
+        var url = prompt("Enter Url");
+        if(url==="fakestore"){
+            resolve([{Name:'TV', Price:23000}, {Name:'Mobile', Price:12000}]);
+        } else {
+            reject('Invalid URL - Unable to Fetch Data');
+        }
+  })
+  FetchData
+  .then(function(response){
+      var now = new Date();
+      console.log(now.getMilliseconds());
+      console.log(response);
+     
+  })
+  .then(function(){
+       var now = new Date();
+      console.log(now.getMilliseconds());
+      console.log('Data is ready to display');
+  })
+  .then(function(){
+      var now = new Date();
+      console.log(now.getMilliseconds());
+      console.log('Data displayed successfully..');
+  })
+  .catch(function(error){
+      console.log(error);
+  })
+  .finally(function(){
+      console.log('Request End');
+  })
+</script>
+
+Ex: async & await
+<script>
+
+    async function GetData()
+    {
+        return await [{Name:'TV'},{Name:'Mobile'}];
+    }
+
+   
+    GetData().then(function(data){
+        console.log(data);
+    })
+
+</script>
+
+Ex: Async & Await
+
+<script>
+    fetch("https://fakestoreapi.com/products&quot;)
+    .then(async function(response){
+        return await response.json();
+    })
+    .then(function(products){
+         products.map(async function(product){
+              await document.write(product.title + "<br>");
+         })
+    })
+</script>
+
+Ex: Weather API - Async & Await
+
+import axios from "axios";
+import { useState } from "react";
 
 
+export function Weather(){
+
+
+    const url = 'https://api.openweathermap.org/data/2.5/weather&#39;;
+    const api_key = '1318ca6725c69160d346c41fc0612596';
+
+    const [cityName, setCityName] = useState('');
+    const [weatherData, setWeatherData] = useState({name:'', main:{temp:0}, weather:[{description:''}]});
+   
+
+    async function handleCityChange(e){
+        setCityName(await e.target.value);
+    }
+
+    function handleSearchClick(){
+
+        // axios.get(`url?q=${cityName}&appid=${api_key}`);
+
+        axios.get(url, {params:{
+             q: cityName,
+             appid: api_key,
+             units:'metric'
+        }})
+        .then(async response=>{
+            setWeatherData(await response.data);
+            console.log(response.data);
+        })
+    }
+
+    return(
+        <div className="container-fluid">
+            <div className="mt-4 d-flex justify-content-center">
+                <div className="w-50">
+                    <div className="input-group">
+                        <input type="text" onChange={handleCityChange} placeholder="Enter City Name" className="form-control" />
+                        <button onClick={handleSearchClick} className="bi bi-search btn btn-warning"></button>
+                    </div>
+                    <div style={{marginTop:'50px', boxShadow:'2px 2px 2px black', padding:'20px', border:'1px solid black', textAlign:'center', backgroundImage:`url(${(weatherData.weather[0].description==='mist')?'mist.jpg':'smoke.jpg'})` , color:'white', backgroundSize:'cover'}}>
+                        <h2>{weatherData.name} - {weatherData.weather[0].description.toUpperCase()} </h2>
+                        <p className="fs-4">{Math.round(weatherData.main.temp)} &deg; C <span className="bi bi-sun"></span> </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+useMemo
+- It is used to memorize any value so that it can save round trip.
+- It can cache the value and avoid re-rendering of value until it is changed.
+
+Syntax:
+        const cachedData = useMemo(()=> {return data}, [dependency])
+
+                            useCallback
+- It is similar to memo, but caches a function instead of value.
+- It can avoid re-rendering of component until the dependency changes.
+
+Syntax:
+         useCallback(()=>{
+
+         }, [dependency])
+
+
+                               Routing in React
+- Routing a technique used in web applications to configure user and SEO friendly URL's.
+- User friendly URL allows to query any content directly through the URL in address bar.
+- SEO friendly URL allows the web-crawlers to known the exact location on page.
+- Routing enables navigation in SPA. [Single Page Application]
+- New details are added to page without reloading the page.
+- User can stay on one page and get access to everything from the page.
+- Routing can be configured
+    a) Server Side
+    b) Client Side
+- Server side routes are mostly used for API's. You can create and configure API end points using server side routes.
+
+Creating Server Side API Routes using JSON Server:
+
+1. Install JSON server on your device from command prompt
+
+        C:\>npm install  -g  json-server
+
+
+2. Add a new file into your project by name   "db.json" [public folder]
+
+3. Add data into "db.json"
+
+      {
+         "key": [  { }, { } ],
+         "key": [  { }, { } ]
+      }
+
+    Note: "key" is considered as API end point.
+
+Ex:
+    db.json
+
+    {
+    "users":[
+        {
+            "id": 1,
+            "userid":"john_nit",
+            "password":"john@nit",
+            "email":"john@gmail.com"
+        },
+        {
+            "id": 2,
+            "userid":"david",
+            "password":"david11",
+            "email":"david@outlook.com"
+        }
+    ],
+    "appointments":[
+        {
+            "id":1,
+            "title":"Friend Birthday",
+            "date": "2025-03-22",
+            "userid":"john_nit"
+        },
+        {
+            "id":2,
+            "title":"Submit Project Document",
+            "date": "2025-03-18",
+            "userid":"david"
+        }
+    ]
+}
+
+4. Change to the public folder where you kept db.json and run the following command
+
+        >json-server  db.json  --watch
+
+5. Server starts by creating API end-points
+
+        http://localhost:3000/users
+        http://localhost:3000/appointments
+
+6. The server side routes are configured automatically
+
+    GET            /users            returns all users
+    GET            /users/1            returns user by id
+    POST        /users            adds new user
+    PUT            /users/1            modify specific user
+    DELETE        /users/1            delete specific user
+
+    GET            /appointment        return all appointments
+    ... similar..  for other requests
+
+    > json-server   db.json  --watch   --port  4040
+
+
+Ex:
+todo.jsx
+
+import axios from "axios";
+import { useEffect, useState } from "react"
+
+
+export function ToDO(){
+
+    const [appointments, setAppointments] = useState([]);
+
+    useEffect(()=>{
+
+        axios.get(`http://localhost:4040/appointments`)
+        .then(response=>{
+            setAppointments(response.data);
+        })
+
+    },[])
+
+    return(
+        <div className="container-fluid">
+            <h3>Your Appointments</h3>
+            <table className="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        appointments.map(appointment=>
+                        <tr key={appointment.id}>
+                            <td>{appointment.title}</td>
+                            <td>{appointment.date}</td>
+                            <td>
+                                <button className="btn btn-warning bi bi-pen"></button>
+                                <button className="btn btn-danger mx-2 bi bi-trash"></button>
+                            </td>
+                        </tr>
+                        )
+                    }
+                </tbody>
+            </table>
+        </div>
+    )
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Client Side Routing
+
+- React uses "react-router-dom" library for configuring client side routes.
+- Router DOM library is not a native library of react.
+- The popular Router DOM versions
+
+        V5            up to React 17
+        V6            React 18
+        V7            React 18 & 19
+
+- V6 & V7 are complete re-write of router-dom.
+
+1. Install React Router DOM library for project
+
+    >npm install react-router-dom --save
+    >npm install react-router-dom@6.30.0  --save   [old version]
+    >npm install react-router-dom@latest --save
+
+2. Router DOM provides following components
+
+    <BrowserRouter>
+    <Routes>
+    <Route>
+    <Outlet>
+    <Link>
+
+   - BrowserRouter is responsible for configuring virtual DOM routes and translate into
+     actual DOM. React routing for SPA must be within the scope of BrowserRouter.
+   
+      Syntax:
+            <BrowserRouter>
+
+                .... all your route configurations ...
+
+            </BrowserRouter>
+
+   - Routes is a collection of individual routes defined for application. It configures
+     a router table.
+
+Syntax:
+
+        <BrowserRouter>
+
+            <Routes>
+                ... all routes ...
+            </Routes>
+
+        </BrowserRouter>
+
+    - Route component is responsible for configuring individual route. A route defines
+      the request path and component to render.
+
+Syntax:
+        <BrowserRouter>
+            <Routes>
+                <Route  path=""   element={ } />
+                    <Route  path=""   element={ } />
+            </Routes>
+        </BrowserRouter>
+
+       - Link is a component used to configure a hyperlink that navigates user to specified
+     route path.
+
+Syntax:
+        <Link  to="home">  Home </Link>
+        <Link  to={route_path_name}>  Text | Image </Link>
+
+    - Outlet is a component that defines the location in page where the resulting
+      markup must render. It is mostly used in nested and child routes.
+
+Syntax:
+        <main>
+            <Outlet />
+        </main>
+
+Wild Card Routes:
+- Application sends the request content as response.
+- If client request is not specific or invalid then you can send a customized response using wild card routes.
+
+     path="/"         It refers to component that will render when user is not
+                 requesting any specific. [default render]
+
+    path="*"        It refers to component that renders when requested path not
+                found.
+Ex:
+
+app.js
+
+import logo from './logo.svg';
+import './App.css';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { Login } from './login';
+import { Weather } from './components/weather/weather';
+
+function App() {
+  return (
+    <div className="App">
+        <BrowserRouter>
+          <header className='d-flex border border-2 border-secondary my-2 mx-2 justify-content-between p-3'>
+             <div className='fs-4 fw-bold'>Shopper.</div>
+             <nav className='d-flex btn-group bg-primary align-items-center'>
+                <span> <Link className='btn btn-primary' to='home'>Home</Link> </span>
+                <span className='mx-3'> <Link className='btn btn-primary' to='men'>Mens' Fashion</Link> </span>
+                <span> <Link className='btn btn-primary' to='women'>Women Fashion</Link> </span>
+                <span className='mx-3'> <Link className='btn btn-primary' to='kids'>Kids Fashion</Link> </span>
+             </nav>
+             <div>
+                <span> <Link to='weather'><span className='bi bi-clouds'></span></Link> </span>
+                <span> <Link to='login'><span className='bi bi-person-fill mx-3'></span></Link> </span>
+                <span  className='bi bi-cart4'></span>
+             </div>
+          </header>
+          <section className='mt-4 p-4'>
+              <Routes>
+                   <Route path='/' element={<div><h4>Online Shopping</h4><p>30% OFF on all fashion accessories</p></div>} />
+                   <Route path='home' element={<div><h4>Online Shopping</h4><p>30% OFF on all fashion accessories</p></div>} />
+                   <Route path='men' element={<div><h4>Men's Fashion</h4><img src='men-fashion.jpg' width='200' height='300'/></div>} />
+                   <Route path='women' element={<div><h4>Women's Fashion</h4><img src='women-fashion.jpg' width='200' height='300'/></div>} />
+                   <Route path='kids' element={<div><h4>Kid's Fashion</h4><img src='kids-fashion.jpg' width='200' height='300'/></div>} />
+                   <Route path='login' element={<Login/>} />
+                   <Route path='weather' element={<Weather />} />
+                   <Route path='*' element={<div><h4 className='text-danger'>Not Found</h4><code className='text-warning'>The requested path Not found</code></div>} />
+              </Routes>
+          </section>
+        </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;
+
+Note: In index.js set <App/> as startup
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+     Route Parameters
+
+- Web application uses "http" as protocol.
+- Http is a state less protocol.
+- In multipage applications data can be transported from one page to another by using query string.
+- Query String is a key & value collection appended into URL and stored in browser address bar.
+
+Syntax:
+  https://www.amazon.in/products.asp?category=electronics&product=mobiles
+
+- Query string is appended using "?" character.
+- Multiple keys are appended using "&" character.
+- Query String is complex and not much SEO friendly or user friendly.
+- In modern web applications you can use "Route" parameters.
+- A route parameter is configured in route path.
+
+Syntax:
+    <Route  path="products/:category/:product"  element={}>
+
+- The parameter values are defined as a part of URL
+
+Syntax:
+    http://localhost:3000/products/electronics/mobiles
+
+- The route parameters can be accessed from URL by using  "useParams()" hook.
+
+Syntax:
+        let  params = useParams();
+
+- "params" reference is an object with key and value.
+
+Syntax:
+          {  params.keyName }
+          {  params.category }        // electronics
+          {  params.product }         // mobiles
+
+Ex:
+1. Add a new component   "params-demo.jsx"
+
+import { useParams } from "react-router-dom";
+
+export function ParamsDemo(){
+
+    let params = useParams();
+
+    return(
+        <div>
+            <h3>Products</h3>
+            You are searching for {params.brand} related {params.product} in {params.category} category.
+        </div>
+    )
+}
+
+2. Go to  app.js and add new route
+
+    <Routes>
+        ....
+       <Route path='products/:category/:product/:brand' element={<ParamsDemo />} />
+
+    </Routes>
+
+3. Make the following request from URL
+
+    http://localhost:3000/products/electronics/mobiles/apple
+
+
+Ex: Fakestore
+
+1. Add a new folder  "fakestore" into SRC
+
+2. Add following components
+
+fakestore-home.jsx
+
+import axios from "axios";
+import { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
+
+
+export function FakestoreHome(){
+
+    const [categories, setCategories] = useState([]);
+
+    useEffect(()=>{
+
+        axios.get(`https://fakestoreapi.com/products/categories`)
+        .then(response=>{
+             setCategories(response.data);
+        })
+
+    },[])
+
+    return(
+        <div>
+            <h5>Fakestore Home</h5>
+            <ul className="list-unstyled">
+                {
+                    categories.map(category=><li className="my-3 p-2" key={category}> <Link className="btn btn-dark w-25" to={`products/${category}`}>{category.toUpperCase()}</Link> </li>)
+                }
+            </ul>
+        </div>
+    )
+}
+
+
+fakestore-products.jsx
+
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+
+
+
+export function FakestoreProducts(){
+
+
+    const [products, setProducts] = useState([{id:0, title:'', category:'', price:0, image:'', rating:{rate:0, count:0}, description:''}]);
+
+    let params = useParams();
+
+    useEffect(()=>{
+        axios.get(`http://fakestoreapi.com/products/category/${params.category}`)
+        .then(response=>{
+             setProducts(response.data);
+        })
+    },[])
+
+    return(
+        <div>
+            <h3>Fakestore Products</h3>
+            <div className="d-flex flex-wrap">
+                {
+                    products.map(product=>
+                        <div key={product.id} className="card m-2 p-2" style={{width:'150px'}}>
+                            <div className="card-header">
+                                <img height="100" src={product.image} className="card-img-top" />
+                            </div>
+                            <div className="card-footer">
+                                <Link to={`/details/${product.id}`} className="btn btn-primary bi bi-eye-fill"> Details</Link>
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
+            <Link to="/">Back to Categories</Link>
+        </div>
+    )
+}
+
+
+fakestore-details.jsx
+
+import axios from "axios";
+import { useEffect, useState } from "react"
+import { Link, useParams } from "react-router-dom";
+
+
+export function FakestoreDetails(){
+
+
+    const [product, setProduct] = useState({id:0, title:'', category:'', price:0, image:'', rating:{rate:0, count:0}, description:''});
+
+    let params = useParams();
+
+    useEffect(()=>{
+
+        axios.get(`https://fakestoreapi.com/products/${params.id}`)
+        .then(response=>{
+            setProduct(response.data);
+        })
+
+    },[])
+
+    return(
+        <div>
+            <h3>Product Details</h3>
+            <dl className="w-25">
+                <img src={product.image} height="200" />
+                <dt>Title</dt>
+                <dd>{product.title}</dd>
+                <dt>Price</dt>
+                <dd>{product.price}</dd>
+            </dl>
+            <Link to={`/products/${product.category}`} >Back to Products</Link>
+        </div>
+    )
+}
+
+
+app.js
+
+import logo from './logo.svg';
+import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { FakestoreHome } from './fakestore/fakestore-home';
+import { FakestoreProducts } from './fakestore/fakestore-products';
+import { FakestoreDetails } from './fakestore/fakestore-details';
+
+function App() {
+  return (
+    <div className="App">
+        <BrowserRouter>
+          <header className='text-center p-2 border border-2 mt-2'>
+            <h3>Fakestore</h3>
+          </header>
+          <section className='mt-4'>
+              <Routes>
+                   <Route path="/" element={<FakestoreHome />} />
+                   <Route path='products/:category' element={<FakestoreProducts />} />
+                   <Route path='details/:id' element={<FakestoreDetails />} />
+              </Routes>
+          </section>
+       
+        </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Child Routes
+------------------
+
+- You can configure nested routes with parent and child hierarchy.
+- Route container can be defined with nested routes.
+
+Syntax:
+    <Route  path="parent"  element={<ParentComponent />}>
+
+        <Route  path="child" element={<ChildComponent} />
+
+    </Route>
+
+- Child Route requires an outlet, which defines the location to render target content.
+
+Syntax:
+      <ParentContainer>
+
+            <Outlet />
+
+     </ParentContainer>
+
+FAQ's:
+1. What is difference between Absolute & Relative path?
+A. Absolute path is independent and individual in     reference. It is not effected by existing route path, as it removes the current context and add a new path.
+       
+        Existing Path:
+             http://localhost:3000/products/category/jewelery
+
+             <Link to="/details/2" />                  => Absolute
+
+            http://localhost:3000/details/2
+
+          Existing Path
+            http://localhost:3000/products/category/jewelery
+
+            <Link to="details/2" />                => Relative
+   
+            http://localhost:3000/products/category/jewelery/details/2
+
+2. Can we define multiple Route outlets?
+A. Yes. Resulting markup is required in multiple locations in SPA. Hence multiple
+     outlets are allowed.
+
+
+3. How to configure dynamic navigation in Routes?
+4. By using  useNavigate()  hook.
+
+Syntax:
+     let navigate  = useNavigate();        // import from react-router-dom
+
+    navigate("/path/params");
+
+4. What are Search Parameters? How to access and use Search Params?
+A. Search parameter refers to Query String.
+    You can add a query string along with route parameters.
+    Search parameter allows to transport more data from one component to another.
+    It submits form data as query string.
+
+Syntax:
+        ?name=value&key=value
+
+        let  [searchparams] = useSearchParams();
+
+        { searchparams.get('name') }
+
+
+5. Can we configure both route and search parameters in URL?
+A. Yes.
+
+        useParams()            // for route parameters
+        useSearchParams()    // for query string
+
+Syntax:
+       http://localhost:3000/products/mobiles?brand=apple
+
+        products/mobiles        => route params
+        ?brand=apple            => search params
+
+6. What is the DOM method for accessing search parameters?
+A. URLSearchParams()
+
+Syntax:
+        URLSearchParams(location.search);
+
+7. What is difference between  useSearchParams()  & URLSearchParams()?
+A. useSearchParams is Virtual DOM method.
+     URLSearchParams is actual DOM method.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Route Parameters
+Search Parameters
+Child Routes
+Dynamic Navigation
+
+                        To-Do Application
+- User can register
+- User can login with registered account
+- User dash board shows all appointments after login
+- User can add a new appointment
+- User can edit existing appointments
+- User can delete any appointment
+
+Software
+- JSON Server for managing data locally.
+- React for designing UI.
+- React Material UI for designing components.
+
+   
+                           React MUI
+                          (Material UI)
+- It is a toolkit for React applications.
+- It provides templates, components and designs that allows developer to build interactive and responsive UI faster, when compared to the traditional approach.
+- MUI provides several products like
+    a) MUI Core
+    b) MUI X
+    c) Templates etc.
+- MUI Core is free while others are premium services.
+
+
+                           MUI Core
+- It is a component library.
+- It provides built-in components for handling various interactions.
+- MUI latest version is a complete re-write of previous versions.
+- The latest version of MUI uses "@emotion" library.
+
+
+Setup MUI for React App:
+1. Install latest MUI core library along with emotion library
+
+    > npm install @mui/material @emotion/react @emotion/styled  --save
+
+
+2. Every component is designed as "Controlled" component. You can customize by using "Props" [properties].
+
+    import  { component }  from  "@mui/material";
+
+                 (or)
+
+     import   component   from  "@mui/material/component-module";
+
+
+3. Implement component with props
+
+     <component   property={value} />
+
+Ex:
+    import   {  Button  }  from  "@mui/material";
+
+    <Button  variant="contained" color="error">  Login  </Button>
+
+Note: All event binding techniques are same as you define for HTML elements.
+
+
+Ex:
+mui-demo.jsx
+
+import { Button, TextField } from "@mui/material";
+import { useState } from "react";
+
+export function MUIDemo()
+{
+
+    const [username, setUserName] = useState('');
+
+    function handleNameChange(e){
+        setUserName(e.target.value);
+    }
+
+    function handleLoginClick(){
+        console.log(username);
+    }
+
+    return(
+        <div className="container-fluid">
+             <h2>Bootstrap Design</h2>
+               <div className="w-25">
+                   <label className="form-label">User Name</label>
+                   <div>
+                      <input type="text" placeholder="Your name" className="form-control" />
+                   </div>
+                   <button className="btn btn-danger w-100 mt-3">Login</button>
+               </div>
+               <br /> <br/>
+             <h2>MUI Design</h2>
+             <div className="w-25">
+                 <div>
+                 <TextField onChange={handleNameChange} type="text" label="User Name" className="w-100" variant="standard" placeholder="Enter your name" ></TextField>
+                 </div>
+                 <div>
+                  <TextField type="password" label="Password" className="w-100" variant="standard" placeholder="Your password" ></TextField>
+                 </div>
+                 <div className="mt-4">
+                    <Button onClick={handleLoginClick} variant="contained" color="error" className="w-100" > Login </Button>
+                 </div>
+             </div>
+        </div>
+    )
+}
+
+Task:
+1. alert
+2. dialog
+3. card
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+To-Do Application
+
+1. Configure data for application in  db.json [ public folder ]
+
+     {
+       "users": [
+               { "id" : 1,  "userid": ' ',  "password": ' ', "email": ' ' },
+               {                                       }
+             ],
+       "appointments": [
+                {  "id": 1, "title": ' ',  "date": ' ', "description":' ', "userid": ' ' }
+             ]
+      }
+
+
+2. JSON Server creates API routes for your data
+
+    GET                /users                return all users
+    GET                /users/id                return specific user using id
+    POST            /users                add new user into data source
+    PUT                /users/id                edit existing user & update data
+    DELETE            /users/id                removes user using id
+
+    GET                /appointments
+    GET                /appointments/id
+    POST            /appointments
+    PUT                /appointments/id
+    DELETE             /appointments/id
+   
+
+3. Start your API
+
+    >json-server  db.json  --watch  --port=4000
+
+    http://127.0.0.1:4000/users        => GET / POST
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 

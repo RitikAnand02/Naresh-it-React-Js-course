@@ -1,0 +1,114 @@
+Route Parameters
+Search Parameters
+Child Routes
+Dynamic Navigation
+
+                        To-Do Application
+- User can register
+- User can login with registered account
+- User dash board shows all appointments after login
+- User can add a new appointment
+- User can edit existing appointments
+- User can delete any appointment
+
+Software
+- JSON Server for managing data locally.
+- React for designing UI.
+- React Material UI for designing components.
+
+   
+                           React MUI
+                          (Material UI)
+- It is a toolkit for React applications.
+- It provides templates, components and designs that allows developer to build interactive and responsive UI faster, when compared to the traditional approach.
+- MUI provides several products like
+    a) MUI Core
+    b) MUI X
+    c) Templates etc.
+- MUI Core is free while others are premium services.
+
+
+                           MUI Core
+- It is a component library.
+- It provides built-in components for handling various interactions.
+- MUI latest version is a complete re-write of previous versions.
+- The latest version of MUI uses "@emotion" library.
+
+
+Setup MUI for React App:
+1. Install latest MUI core library along with emotion library
+
+    > npm install @mui/material @emotion/react @emotion/styled  --save
+
+
+2. Every component is designed as "Controlled" component. You can customize by using "Props" [properties].
+
+    import  { component }  from  "@mui/material";
+
+                 (or)
+
+     import   component   from  "@mui/material/component-module";
+
+
+3. Implement component with props
+
+     <component   property={value} />
+
+Ex:
+    import   {  Button  }  from  "@mui/material";
+
+    <Button  variant="contained" color="error">  Login  </Button>
+
+Note: All event binding techniques are same as you define for HTML elements.
+
+
+Ex:
+mui-demo.jsx
+
+import { Button, TextField } from "@mui/material";
+import { useState } from "react";
+
+export function MUIDemo()
+{
+
+    const [username, setUserName] = useState('');
+
+    function handleNameChange(e){
+        setUserName(e.target.value);
+    }
+
+    function handleLoginClick(){
+        console.log(username);
+    }
+
+    return(
+        <div className="container-fluid">
+             <h2>Bootstrap Design</h2>
+               <div className="w-25">
+                   <label className="form-label">User Name</label>
+                   <div>
+                      <input type="text" placeholder="Your name" className="form-control" />
+                   </div>
+                   <button className="btn btn-danger w-100 mt-3">Login</button>
+               </div>
+               <br /> <br/>
+             <h2>MUI Design</h2>
+             <div className="w-25">
+                 <div>
+                 <TextField onChange={handleNameChange} type="text" label="User Name" className="w-100" variant="standard" placeholder="Enter your name" ></TextField>
+                 </div>
+                 <div>
+                  <TextField type="password" label="Password" className="w-100" variant="standard" placeholder="Your password" ></TextField>
+                 </div>
+                 <div className="mt-4">
+                    <Button onClick={handleLoginClick} variant="contained" color="error" className="w-100" > Login </Button>
+                 </div>
+             </div>
+        </div>
+    )
+}
+
+Task:
+1. alert
+2. dialog
+3. card

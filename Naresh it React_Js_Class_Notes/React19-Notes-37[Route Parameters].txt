@@ -1,0 +1,219 @@
+Route Parameters
+
+- Web application uses "http" as protocol.
+- Http is a state less protocol.
+- In multipage applications data can be transported from one page to another by using query string.
+- Query String is a key & value collection appended into URL and stored in browser address bar.
+
+Syntax:
+  https://www.amazon.in/products.asp?category=electronics&product=mobiles
+
+- Query string is appended using "?" character.
+- Multiple keys are appended using "&" character.
+- Query String is complex and not much SEO friendly or user friendly.
+- In modern web applications you can use "Route" parameters.
+- A route parameter is configured in route path.
+
+Syntax:
+    <Route  path="products/:category/:product"  element={}>
+
+- The parameter values are defined as a part of URL
+
+Syntax:
+    http://localhost:3000/products/electronics/mobiles
+
+- The route parameters can be accessed from URL by using  "useParams()" hook.
+
+Syntax:
+        let  params = useParams();
+
+- "params" reference is an object with key and value.
+
+Syntax:
+          {  params.keyName }
+          {  params.category }        // electronics
+          {  params.product }         // mobiles
+
+Ex:
+1. Add a new component   "params-demo.jsx"
+
+import { useParams } from "react-router-dom";
+
+export function ParamsDemo(){
+
+    let params = useParams();
+
+    return(
+        <div>
+            <h3>Products</h3>
+            You are searching for {params.brand} related {params.product} in {params.category} category.
+        </div>
+    )
+}
+
+2. Go to  app.js and add new route
+
+    <Routes>
+        ....
+       <Route path='products/:category/:product/:brand' element={<ParamsDemo />} />
+
+    </Routes>
+
+3. Make the following request from URL
+
+    http://localhost:3000/products/electronics/mobiles/apple
+
+
+Ex: Fakestore
+
+1. Add a new folder  "fakestore" into SRC
+
+2. Add following components
+
+fakestore-home.jsx
+
+import axios from "axios";
+import { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
+
+
+export function FakestoreHome(){
+
+    const [categories, setCategories] = useState([]);
+
+    useEffect(()=>{
+
+        axios.get(`https://fakestoreapi.com/products/categories`)
+        .then(response=>{
+             setCategories(response.data);
+        })
+
+    },[])
+
+    return(
+        <div>
+            <h5>Fakestore Home</h5>
+            <ul className="list-unstyled">
+                {
+                    categories.map(category=><li className="my-3 p-2" key={category}> <Link className="btn btn-dark w-25" to={`products/${category}`}>{category.toUpperCase()}</Link> </li>)
+                }
+            </ul>
+        </div>
+    )
+}
+
+
+fakestore-products.jsx
+
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+
+
+
+export function FakestoreProducts(){
+
+
+    const [products, setProducts] = useState([{id:0, title:'', category:'', price:0, image:'', rating:{rate:0, count:0}, description:''}]);
+
+    let params = useParams();
+
+    useEffect(()=>{
+        axios.get(`http://fakestoreapi.com/products/category/${params.category}`)
+        .then(response=>{
+             setProducts(response.data);
+        })
+    },[])
+
+    return(
+        <div>
+            <h3>Fakestore Products</h3>
+            <div className="d-flex flex-wrap">
+                {
+                    products.map(product=>
+                        <div key={product.id} className="card m-2 p-2" style={{width:'150px'}}>
+                            <div className="card-header">
+                                <img height="100" src={product.image} className="card-img-top" />
+                            </div>
+                            <div className="card-footer">
+                                <Link to={`/details/${product.id}`} className="btn btn-primary bi bi-eye-fill"> Details</Link>
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
+            <Link to="/">Back to Categories</Link>
+        </div>
+    )
+}
+
+
+fakestore-details.jsx
+
+import axios from "axios";
+import { useEffect, useState } from "react"
+import { Link, useParams } from "react-router-dom";
+
+
+export function FakestoreDetails(){
+
+
+    const [product, setProduct] = useState({id:0, title:'', category:'', price:0, image:'', rating:{rate:0, count:0}, description:''});
+
+    let params = useParams();
+
+    useEffect(()=>{
+
+        axios.get(`https://fakestoreapi.com/products/${params.id}`)
+        .then(response=>{
+            setProduct(response.data);
+        })
+
+    },[])
+
+    return(
+        <div>
+            <h3>Product Details</h3>
+            <dl className="w-25">
+                <img src={product.image} height="200" />
+                <dt>Title</dt>
+                <dd>{product.title}</dd>
+                <dt>Price</dt>
+                <dd>{product.price}</dd>
+            </dl>
+            <Link to={`/products/${product.category}`} >Back to Products</Link>
+        </div>
+    )
+}
+
+
+app.js
+
+import logo from './logo.svg';
+import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { FakestoreHome } from './fakestore/fakestore-home';
+import { FakestoreProducts } from './fakestore/fakestore-products';
+import { FakestoreDetails } from './fakestore/fakestore-details';
+
+function App() {
+  return (
+    <div className="App">
+        <BrowserRouter>
+          <header className='text-center p-2 border border-2 mt-2'>
+            <h3>Fakestore</h3>
+          </header>
+          <section className='mt-4'>
+              <Routes>
+                   <Route path="/" element={<FakestoreHome />} />
+                   <Route path='products/:category' element={<FakestoreProducts />} />
+                   <Route path='details/:id' element={<FakestoreDetails />} />
+              </Routes>
+          </section>
+       
+        </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;

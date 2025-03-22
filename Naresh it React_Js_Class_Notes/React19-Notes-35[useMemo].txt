@@ -1,0 +1,153 @@
+useMemo
+- It is used to memorize any value so that it can save round trip.
+- It can cache the value and avoid re-rendering of value until it is changed.
+
+Syntax:
+        const cachedData = useMemo(()=> {return data}, [dependency])
+
+                            useCallback
+- It is similar to memo, but caches a function instead of value.
+- It can avoid re-rendering of component until the dependency changes.
+
+Syntax:
+         useCallback(()=>{
+
+         }, [dependency])
+
+
+                               Routing in React
+- Routing a technique used in web applications to configure user and SEO friendly URL's.
+- User friendly URL allows to query any content directly through the URL in address bar.
+- SEO friendly URL allows the web-crawlers to known the exact location on page.
+- Routing enables navigation in SPA. [Single Page Application]
+- New details are added to page without reloading the page.
+- User can stay on one page and get access to everything from the page.
+- Routing can be configured
+    a) Server Side
+    b) Client Side
+- Server side routes are mostly used for API's. You can create and configure API end points using server side routes.
+
+Creating Server Side API Routes using JSON Server:
+
+1. Install JSON server on your device from command prompt
+
+        C:\>npm install  -g  json-server
+
+
+2. Add a new file into your project by name   "db.json" [public folder]
+
+3. Add data into "db.json"
+
+      {
+         "key": [  { }, { } ],
+         "key": [  { }, { } ]
+      }
+
+    Note: "key" is considered as API end point.
+
+Ex:
+    db.json
+
+    {
+    "users":[
+        {
+            "id": 1,
+            "userid":"john_nit",
+            "password":"john@nit",
+            "email":"john@gmail.com"
+        },
+        {
+            "id": 2,
+            "userid":"david",
+            "password":"david11",
+            "email":"david@outlook.com"
+        }
+    ],
+    "appointments":[
+        {
+            "id":1,
+            "title":"Friend Birthday",
+            "date": "2025-03-22",
+            "userid":"john_nit"
+        },
+        {
+            "id":2,
+            "title":"Submit Project Document",
+            "date": "2025-03-18",
+            "userid":"david"
+        }
+    ]
+}
+
+4. Change to the public folder where you kept db.json and run the following command
+
+        >json-server  db.json  --watch
+
+5. Server starts by creating API end-points
+
+        http://localhost:3000/users
+        http://localhost:3000/appointments
+
+6. The server side routes are configured automatically
+
+    GET            /users            returns all users
+    GET            /users/1            returns user by id
+    POST        /users            adds new user
+    PUT            /users/1            modify specific user
+    DELETE        /users/1            delete specific user
+
+    GET            /appointment        return all appointments
+    ... similar..  for other requests
+
+    > json-server   db.json  --watch   --port  4040
+
+
+Ex:
+todo.jsx
+
+import axios from "axios";
+import { useEffect, useState } from "react"
+
+
+export function ToDO(){
+
+    const [appointments, setAppointments] = useState([]);
+
+    useEffect(()=>{
+
+        axios.get(`http://localhost:4040/appointments`)
+        .then(response=>{
+            setAppointments(response.data);
+        })
+
+    },[])
+
+    return(
+        <div className="container-fluid">
+            <h3>Your Appointments</h3>
+            <table className="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        appointments.map(appointment=>
+                        <tr key={appointment.id}>
+                            <td>{appointment.title}</td>
+                            <td>{appointment.date}</td>
+                            <td>
+                                <button className="btn btn-warning bi bi-pen"></button>
+                                <button className="btn btn-danger mx-2 bi bi-trash"></button>
+                            </td>
+                        </tr>
+                        )
+                    }
+                </tbody>
+            </table>
+        </div>
+    )
+}

@@ -1,0 +1,88 @@
+ Child Routes
+------------------
+
+- You can configure nested routes with parent and child hierarchy.
+- Route container can be defined with nested routes.
+
+Syntax:
+    <Route  path="parent"  element={<ParentComponent />}>
+
+        <Route  path="child" element={<ChildComponent} />
+
+    </Route>
+
+- Child Route requires an outlet, which defines the location to render target content.
+
+Syntax:
+      <ParentContainer>
+
+            <Outlet />
+
+     </ParentContainer>
+
+FAQ's:
+1. What is difference between Absolute & Relative path?
+A. Absolute path is independent and individual in     reference. It is not effected by existing route path, as it removes the current context and add a new path.
+       
+        Existing Path:
+             http://localhost:3000/products/category/jewelery
+
+             <Link to="/details/2" />                  => Absolute
+
+            http://localhost:3000/details/2
+
+          Existing Path
+            http://localhost:3000/products/category/jewelery
+
+            <Link to="details/2" />                => Relative
+   
+            http://localhost:3000/products/category/jewelery/details/2
+
+2. Can we define multiple Route outlets?
+A. Yes. Resulting markup is required in multiple locations in SPA. Hence multiple
+     outlets are allowed.
+
+
+3. How to configure dynamic navigation in Routes?
+4. By using  useNavigate()  hook.
+
+Syntax:
+     let navigate  = useNavigate();        // import from react-router-dom
+
+    navigate("/path/params");
+
+4. What are Search Parameters? How to access and use Search Params?
+A. Search parameter refers to Query String.
+    You can add a query string along with route parameters.
+    Search parameter allows to transport more data from one component to another.
+    It submits form data as query string.
+
+Syntax:
+        ?name=value&key=value
+
+        let  [searchparams] = useSearchParams();
+
+        { searchparams.get('name') }
+
+
+5. Can we configure both route and search parameters in URL?
+A. Yes.
+
+        useParams()            // for route parameters
+        useSearchParams()    // for query string
+
+Syntax:
+       http://localhost:3000/products/mobiles?brand=apple
+
+        products/mobiles        => route params
+        ?brand=apple            => search params
+
+6. What is the DOM method for accessing search parameters?
+A. URLSearchParams()
+
+Syntax:
+        URLSearchParams(location.search);
+
+7. What is difference between  useSearchParams()  & URLSearchParams()?
+A. useSearchParams is Virtual DOM method.
+     URLSearchParams is actual DOM method.

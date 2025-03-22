@@ -1,0 +1,190 @@
+   useRef()
+---------------
+- It configures a reference memory where you can store a value or function.
+- The reference memory allocates thread for value or task.
+- Thread is intended to run the task or keep value in background process.
+- The thread function or value is not intended for rendering in UI.
+
+Syntax:
+        const  thread = useRef(null);
+
+        thread.current = value;
+        thread.current = () =>{ }
+   
+- You can access with reference of "current" property.
+
+FAQ: What are the techniques required for handling interactions faster that normal?
+Ans:   a) You can use JavaScript promises.
+      b) You can implement async and await for functions.
+
+FAQ: What is difference between callback and promise?
+Ans:  Callback uses "Synchronous" technique to handle interactions.
+      Promise uses "Asynchronous" technique.
+
+FAQ: What is sync?
+Ans:  It is a blocking technique where all other tasks in process are blocked while
+     performing the given task.
+
+Ex: Callback
+<script>
+    function FetchData(url, success, failure){
+          if(url==="fakestore"){
+              success([{Name:'TV', Price:13000}, {Name:'Mobile', Price:12000}]);
+          } else {
+              failure('Unable to Fetch - Invalid URL');
+          }
+    }
+    FetchData(
+       prompt("Enter URL"),
+       function(response){
+         console.log(response);
+       },
+       function(error){
+          console.log(error);
+       }
+    )
+</script>
+
+FAQ: What is async?
+Ans:  It is an unblocking technique that performs all task simultaneously at the same      
+     time. It allows to run the task in background.
+
+Ex: Promise
+
+<script>
+     var FetchData = new Promise(function(resolve, reject){
+           var url = prompt("Enter Url");
+           if(url==="fakestore"){
+               resolve([{Name:'TV', Price:23000}, {Name:'Mobile', Price:12000}]);
+           } else {
+               reject('Invalid URL - Unable to Fetch Data');
+           }
+     })
+     FetchData.then(function(response){
+         console.log(response);
+     })
+     .catch(function(error){
+         console.log(error);
+     })
+     .finally(function(){
+         console.log('Request End');
+     })
+</script>
+
+Ex: Promise
+
+<script>
+  var FetchData = new Promise(function(resolve, reject){
+        var url = prompt("Enter Url");
+        if(url==="fakestore"){
+            resolve([{Name:'TV', Price:23000}, {Name:'Mobile', Price:12000}]);
+        } else {
+            reject('Invalid URL - Unable to Fetch Data');
+        }
+  })
+  FetchData
+  .then(function(response){
+      var now = new Date();
+      console.log(now.getMilliseconds());
+      console.log(response);
+     
+  })
+  .then(function(){
+       var now = new Date();
+      console.log(now.getMilliseconds());
+      console.log('Data is ready to display');
+  })
+  .then(function(){
+      var now = new Date();
+      console.log(now.getMilliseconds());
+      console.log('Data displayed successfully..');
+  })
+  .catch(function(error){
+      console.log(error);
+  })
+  .finally(function(){
+      console.log('Request End');
+  })
+</script>
+
+Ex: async & await
+<script>
+
+    async function GetData()
+    {
+        return await [{Name:'TV'},{Name:'Mobile'}];
+    }
+
+   
+    GetData().then(function(data){
+        console.log(data);
+    })
+
+</script>
+
+Ex: Async & Await
+
+<script>
+    fetch("https://fakestoreapi.com/products&quot;)
+    .then(async function(response){
+        return await response.json();
+    })
+    .then(function(products){
+         products.map(async function(product){
+              await document.write(product.title + "<br>");
+         })
+    })
+</script>
+
+Ex: Weather API - Async & Await
+
+import axios from "axios";
+import { useState } from "react";
+
+
+export function Weather(){
+
+
+    const url = 'https://api.openweathermap.org/data/2.5/weather&#39;;
+    const api_key = '1318ca6725c69160d346c41fc0612596';
+
+    const [cityName, setCityName] = useState('');
+    const [weatherData, setWeatherData] = useState({name:'', main:{temp:0}, weather:[{description:''}]});
+   
+
+    async function handleCityChange(e){
+        setCityName(await e.target.value);
+    }
+
+    function handleSearchClick(){
+
+        // axios.get(`url?q=${cityName}&appid=${api_key}`);
+
+        axios.get(url, {params:{
+             q: cityName,
+             appid: api_key,
+             units:'metric'
+        }})
+        .then(async response=>{
+            setWeatherData(await response.data);
+            console.log(response.data);
+        })
+    }
+
+    return(
+        <div className="container-fluid">
+            <div className="mt-4 d-flex justify-content-center">
+                <div className="w-50">
+                    <div className="input-group">
+                        <input type="text" onChange={handleCityChange} placeholder="Enter City Name" className="form-control" />
+                        <button onClick={handleSearchClick} className="bi bi-search btn btn-warning"></button>
+                    </div>
+                    <div style={{marginTop:'50px', boxShadow:'2px 2px 2px black', padding:'20px', border:'1px solid black', textAlign:'center', backgroundImage:`url(${(weatherData.weather[0].description==='mist')?'mist.jpg':'smoke.jpg'})` , color:'white', backgroundSize:'cover'}}>
+                        <h2>{weatherData.name} - {weatherData.weather[0].description.toUpperCase()} </h2>
+                        <p className="fs-4">{Math.round(weatherData.main.temp)} &deg; C <span className="bi bi-sun"></span> </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
