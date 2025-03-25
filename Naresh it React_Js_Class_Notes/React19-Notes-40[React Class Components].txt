@@ -1,0 +1,202 @@
+ React Class Components
+-----------------------------------
+
+JavaScript Class Concepts:
+1. Class Declaration & Expression
+2. Class Members
+    - Property
+    - Accessor
+    - Method
+    - Constructor
+3. Class static and non-static members
+4. Class private members [ES6  - # for private] [WeakMap]
+5. Class Inheritance & Polymorphism
+
+FAQ: What is issue with OOP?
+Ans:
+    - It will not support low level features.
+    - It can't directly interact with hardware services.
+    - It uses more memory.
+    - It is tedious.
+
+Creating Class Component:
+
+1. You can configure class using declaration or expression.
+
+2. Class name must start with uppercase letter.
+
+3. A component class must inherit "React.Component"  or  "React.PureComponent" base class.
+
+Syntax:
+        export class Login extends React.Component | React.PureComponent
+        {
+
+        }
+
+FAQ: What is Pure Component?
+Ans:   Pure component mounts only when there are changes in content.
+      Impure Component mounts every time even when there are no changes in    
+      content.
+
+4. The component class is a derived class hence it must call the super constructor.
+
+Syntax:
+      export class Login extends  React.Component
+      {
+              constructor()
+          {
+             super();
+          }
+      }
+
+5. A component must return JSX element. React class component returns JSX element by using "render()" method.
+
+Syntax:
+    export class Login extends React.Component
+    {
+          constructor(){
+          super();
+          }
+          render() {
+         return(
+               <div>
+                // JSX
+               </div>
+              );
+           }
+    }
+
+Ex:
+admin-login.jsx
+
+import React from "react";
+
+export class AdminLogin extends React.Component
+{
+      constructor(){
+         super();
+      }
+      render(){
+        return(
+            <div className="container-fluid">
+                <h3 className="mt-3">Admin Login</h3>
+            </div>
+        )
+      }
+}
+
+State in Class Component:
+- Class will not support hooks.
+- Class is stateful.
+- It have a state implicitly.
+- You can configure state inside constructor using "this" keyword.
+- State is an object type with key and value reference.
+
+Syntax:
+        constructor() {
+            super();
+            this.state = {
+              key : value,
+             }
+         }
+
+- State comprises of keys that can handle any type of value.
+- Data Binding is same as in function component.
+
+    <p> { this.state.key } </p>
+
+Ex:
+admin-login.jsx
+
+import React from "react";
+
+export class AdminLogin extends React.Component
+{
+      constructor(){
+         super();
+         this.state = {
+            title: 'Admin Login',
+            categories: ['All', 'Electronics', 'Fashion']
+         }
+      }
+      render(){
+        return(
+            <div className="container-fluid">
+                <h3 className="mt-3">{this.state.title}</h3>
+                <select>
+                    {
+                        this.state.categories.map(category=><option key={category}>{category}</option>)
+                    }
+                </select>
+            </div>
+        )
+      }
+}
+
+Component Mount:
+- Class component have  "componentDidMount()" method.
+- It can define actions to perform at time of mounting component.
+- You can't use "useEffect()" hook.
+- You can defined unmount actions by using the method "componentWillUnmount()".
+- You can set a new value into state while mounting or on any event by using "setState()".
+
+Syntax:
+
+    componentDidMount()
+    {
+        this.setState({ key : newValue });    
+    }
+
+Ex:
+import axios from "axios";
+import React from "react";
+
+
+export class AdminLogin extends React.Component
+{
+      constructor(){
+         super();
+         this.state = {
+            products: [],
+            categories: []
+         }
+      }
+
+      LoadCategories(){
+         axios.get('https://fakestoreapi.com/products/categories&#39;)
+         .then(response=>{
+             this.setState({categories: response.data});
+         })
+      }
+
+      LoadProducts(){
+         axios.get(`https://fakestoreapi.com/products`)
+         .then(response=>{
+             this.setState({products: response.data});
+         })
+      }
+
+      componentDidMount(){
+          this.LoadCategories();
+          this.LoadProducts();
+      }
+
+
+      render(){
+        return(
+            <div className="container-fluid">
+                <h3>Categories</h3>
+                <select>
+                    {
+                        this.state.categories.map(category=> <option key={category}>{category}</option>)
+                    }
+                </select>
+                <div className="mt-3 d-flex flex-wrap">
+                    {
+                        this.state.products.map(product=><img key={product.id} src={product.image} width="100"  height="100"/>)
+                    }
+                </div>
+            </div>
+        )
+      }
+}

@@ -7014,6 +7014,419 @@ To-Do Application
 
     http://127.0.0.1:4000/users        => GET / POST
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Task for TO-DO Application:
+
+- Setup Validation for Register & Login
+    - All fields are required
+    - Password must have at least one uppercase letter, number & special character
+    - Email must be in proper email format.
+- Design UI for login & register with MUI.
+- Setup Validation for Add Appointment
+- Appointment Date must use MUI date picker.
+- Design user dash board with MUI.
+
+                     React Class Components
+
+JavaScript Class Concepts:
+1. Class Declaration & Expression
+2. Class Members
+    - Property
+    - Accessor
+    - Method
+    - Constructor
+3. Class static and non-static members
+4. Class private members [ES6  - # for private] [WeakMap]
+5. Class Inheritance & Polymorphism
+
+FAQ: What is issue with OOP?
+Ans:
+    - It will not support low level features.
+    - It can't directly interact with hardware services.
+    - It uses more memory.
+    - It is tedious.
+
+Creating Class Component:
+
+1. You can configure class using declaration or expression.
+
+2. Class name must start with uppercase letter.
+
+3. A component class must inherit "React.Component"  or  "React.PureComponent" base class.
+
+Syntax:
+        export class Login extends React.Component | React.PureComponent
+        {
+
+        }
+
+FAQ: What is Pure Component?
+Ans:   Pure component mounts only when there are changes in content.
+      Impure Component mounts every time even when there are no changes in    
+      content.
+
+4. The component class is a derived class hence it must call the super constructor.
+
+Syntax:
+      export class Login extends  React.Component
+      {
+              constructor()
+          {
+             super();
+          }
+      }
+
+5. A component must return JSX element. React class component returns JSX element by using "render()" method.
+
+Syntax:
+    export class Login extends React.Component
+    {
+          constructor(){
+          super();
+          }
+          render() {
+         return(
+               <div>
+                // JSX
+               </div>
+              );
+           }
+    }
+
+Ex:
+admin-login.jsx
+
+import React from "react";
+
+export class AdminLogin extends React.Component
+{
+      constructor(){
+         super();
+      }
+      render(){
+        return(
+            <div className="container-fluid">
+                <h3 className="mt-3">Admin Login</h3>
+            </div>
+        )
+      }
+}
+
+State in Class Component:
+- Class will not support hooks.
+- Class is stateful.
+- It have a state implicitly.
+- You can configure state inside constructor using "this" keyword.
+- State is an object type with key and value reference.
+
+Syntax:
+        constructor() {
+            super();
+            this.state = {
+              key : value,
+             }
+         }
+
+- State comprises of keys that can handle any type of value.
+- Data Binding is same as in function component.
+
+    <p> { this.state.key } </p>
+
+Ex:
+admin-login.jsx
+
+import React from "react";
+
+export class AdminLogin extends React.Component
+{
+      constructor(){
+         super();
+         this.state = {
+            title: 'Admin Login',
+            categories: ['All', 'Electronics', 'Fashion']
+         }
+      }
+      render(){
+        return(
+            <div className="container-fluid">
+                <h3 className="mt-3">{this.state.title}</h3>
+                <select>
+                    {
+                        this.state.categories.map(category=><option key={category}>{category}</option>)
+                    }
+                </select>
+            </div>
+        )
+      }
+}
+
+Component Mount:
+- Class component have  "componentDidMount()" method.
+- It can define actions to perform at time of mounting component.
+- You can't use "useEffect()" hook.
+- You can defined unmount actions by using the method "componentWillUnmount()".
+- You can set a new value into state while mounting or on any event by using "setState()".
+
+Syntax:
+
+    componentDidMount()
+    {
+        this.setState({ key : newValue });    
+    }
+
+Ex:
+import axios from "axios";
+import React from "react";
+
+
+export class AdminLogin extends React.Component
+{
+      constructor(){
+         super();
+         this.state = {
+            products: [],
+            categories: []
+         }
+      }
+
+      LoadCategories(){
+         axios.get('https://fakestoreapi.com/products/categories&#39;)
+         .then(response=>{
+             this.setState({categories: response.data});
+         })
+      }
+
+      LoadProducts(){
+         axios.get(`https://fakestoreapi.com/products`)
+         .then(response=>{
+             this.setState({products: response.data});
+         })
+      }
+
+      componentDidMount(){
+          this.LoadCategories();
+          this.LoadProducts();
+      }
+
+
+      render(){
+        return(
+            <div className="container-fluid">
+                <h3>Categories</h3>
+                <select>
+                    {
+                        this.state.categories.map(category=> <option key={category}>{category}</option>)
+                    }
+                </select>
+                <div className="mt-3 d-flex flex-wrap">
+                    {
+                        this.state.products.map(product=><img key={product.id} src={product.image} width="100"  height="100"/>)
+                    }
+                </div>
+            </div>
+        )
+      }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Class Components
+----------------------------
+
+- Pure Component
+- React Component
+- Render Method
+- State in Class Component
+    this.state = { }
+    this.setState({ })
+- Component Did Mount
+- Style Binding
+    <div  style={ {key:value } }>
+- Class Binding
+    <div className={ }>
+- Data Binding
+    <p> { } </p>
+                     Events in Class Component
+- Events are subscribed to methods in class.
+- All Synthetic Events are same as you have used in Function Component.
+
+Syntax:
+        class  Login extends  React.Component
+        {
+              ....
+              handleLoginClick()
+              {
+              }
+              render() {
+               return(
+                 <div>
+                    <button onClick={this.handleLoginClick}> </button>
+                 </div>
+                )
+               }
+        }
+
+- Event arguments are defined using "event" parameter, which provides access to element and event details.
+   
+        handleLoginClick(e)
+        {
+            e.clientX;
+            e.target.id;
+            e.target.name;
+            ....
+        }
+
+Ex:
+ admin-login.jsx
+
+import axios from "axios";
+import React from "react";
+
+
+export class AdminLogin extends React.Component
+{
+      constructor(){
+         super();
+      }
+
+      handleLoginClick(e){
+         alert('Login Success');
+         console.log(`Id=${e.target.id}\nName=${e.target.name}\nX=${e.clientX}`);
+      }
+
+      render(){
+        return(
+            <div className="container-fluid">
+                <h2>Events</h2>
+                <button onClick={this.handleLoginClick} id="btnLogin" name="Login-Button">Login</button>
+            </div>
+        )
+      }
+}
+
+Note: Events configured in class are subscribed to methods in class.
+      If methods are using state then it is mandatory to register method and bind to    
+      class while creating instance of component class.
+
+Syntax:
+
+       constructor() {
+        super();
+        this.state = { }
+        this.handleLoginClick = this.handleLoginClick.bind(this);
+        }
+
+FAQ: Why method can't use state?
+Ans:   State is configured before method is registered. Hence state can't recognize
+       methods that are configured after creating component object.
+
+FAQ: Can we use event subscriber without registering inside constructor?
+Ans:  Yes. You can bind and register a method only when event is trigged.
+
+   
+      <button onClick={this.handleLoginClick.bind(this)}>  
+
+
+FAQ: Can we register and use subscriber methods without bind()?
+Ans:  Yes. By keeping the memory allocated for method alive event after the method
+      end. You can keep memory alive by returning method as a result of event.
+
+
+Syntax:
+    <button onClick={()=> this.handleLoginClick() }>
+
+Ex:
+admin-login.jsx
+
+import axios from "axios";
+import React from "react";
+
+
+export class AdminLogin extends React.Component
+{
+      constructor(){
+         super();
+         this.state = {
+            msg:"Click Login"
+         }
+         this.handleLoginClick = this.handleLoginClick.bind(this);
+         
+      }
+
+      handleLoginClick(){
+        this.setState({msg: 'Login Success..'});
+      }
+
+      handleCancelClick(){
+         this.setState({msg: 'Canceled..'});
+      }
+
+      handleContinueClick(){
+         this.setState({msg: 'Continue with OTP'});
+      }
+
+      render(){
+        return(
+            <div className="container-fluid">
+                <h2>Events</h2>
+                <button onClick={this.handleLoginClick} id="btnLogin" name="Login-Button">Login</button>
+                <button onClick={this.handleCancelClick.bind(this)}>Cancel</button>
+                <button onClick={()=> this.handleContinueClick()} >Continue</button>
+                <p>{this.state.msg}</p>
+            </div>
+        )
+      }
+}
+                        Forms in Class Component
+- You can't use any library that requires and uses hooks.
+- You can use any library that provides pre-defined components for handling forms.
+- Formik Library provides components like
+   
+        <Formik>
+        <Form>
+        <Field>
+        <ErrorMessage>
+
+- You can use "Yup" for validation in formik component.
+
+Ex:
+admin-login.jsx
+
+import axios from "axios";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import React from "react";
+import * as yup from "yup";
+
+
+export class AdminLogin extends React.Component
+{
+      constructor(){
+         super();
+      }
+
+
+      render(){
+        return(
+            <div className="container-fluid">
+                <h2>Admin Login</h2>
+                <Formik initialValues={{UserName:'', Password:''}} onSubmit={(values)=>{console.log(values)}} validationSchema={yup.object({UserName: yup.string().required('User Name Required'), Password: yup.string().required('Password Required')})} >
+                    <Form>
+                        <dl>
+                            <dt>User Name</dt>
+                            <dd> <Field type="text" name="UserName" /> </dd>
+                            <dd className="text-danger"> <ErrorMessage name="UserName" /> </dd>
+                            <dt>Password</dt>
+                            <dd> <Field type="password" name="Password" /> </dd>
+                            <dd className="text-danger"> <ErrorMessage name="Password" /> </dd>
+                        </dl>
+                        <button type="submit">Login</button>
+                    </Form>
+                </Formik>
+            </div>
+        )
+      }
+}
+
+- Controlled Components using Class
+- Component Life Cycle
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
