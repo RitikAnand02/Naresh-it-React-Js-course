@@ -7427,6 +7427,198 @@ export class AdminLogin extends React.Component
 - Controlled Components using Class
 - Component Life Cycle
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Controlled Class Components
+- Class comprises of built-in "Props".
+- These properties can control the component behavior.
+- Props are object type with key and value collection.
+- All keys of props are dynamic.
+
+Syntax: function component
+
+        function Name(props)
+        {
+             return(
+                <div> { props.key } </div>
+                  )
+        }
+
+Syntax: class component
+
+        class Name extends React.Component
+        {
+              constructor() {
+             super();
+            }
+              render() {
+             return(
+                  <div> { this.props.key } </div>
+                   )
+            }
+        }
+
+Note: You can implement conditional rendering in class components by using
+      various decision making statements in render() method.
+
+Ex:
+1. Go to controlled-components folder
+
+2. Add a new file  "toolbar.jsx"
+
+import React from "react";
+
+export class Toolbar extends React.Component
+{
+     constructor(){
+        super();
+     }
+     render(){
+        return(
+            <div className="btn-toolbar my-2 bg-danger d-flex justify-content-between">
+                <button className="btn btn-danger"> {this.props.title} </button>
+                <div className="btn-group">
+                    {
+                        this.props.menuItems.map(item=><button className="btn btn-danger" key={item}>{item}</button>)
+                    }
+                </div>
+                <div className="btn-group">
+                    <button className="btn btn-danger bi bi-person-fill"></button>
+                    <button className="btn btn-danger bi bi-heart-fill"></button>
+                    <button className="btn btn-danger bi bi-cart4"></button>
+                </div>
+            </div>
+        )
+     }
+}
+
+3. Go to any component and import toolbar
+
+admin-login.jsx
+
+import axios from "axios";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import React from "react";
+import * as yup from "yup";
+import { Toolbar } from "../controlled-components/toolbar";
+
+
+export class AdminLogin extends React.Component
+{
+      constructor(){
+         super();
+      }
+
+
+      render(){
+        return(
+            <div className="container-fluid">
+                <header>
+                    <Toolbar title='Shopper.' menuItems={['Home', 'Shop', 'Pages', 'Blog', 'Docs']} />
+                    <Toolbar  title='Amazon' menuItems={['Amazon Home', 'Electronics', 'Fashion']} />
+                </header>
+                <h2>Admin Login</h2>
+                <Formik initialValues={{UserName:'', Password:''}} onSubmit={(values)=>{console.log(values)}} validationSchema={yup.object({UserName: yup.string().required('User Name Required'), Password: yup.string().required('Password Required')})} >
+                    <Form>
+                        <dl>
+                            <dt>User Name</dt>
+                            <dd> <Field type="text" name="UserName" /> </dd>
+                            <dd className="text-danger"> <ErrorMessage name="UserName" /> </dd>
+                            <dt>Password</dt>
+                            <dd> <Field type="password" name="Password" /> </dd>
+                            <dd className="text-danger"> <ErrorMessage name="Password" /> </dd>
+                        </dl>
+                        <button type="submit">Login</button>
+                    </Form>
+                </Formik>
+            </div>
+        )
+      }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+						TypeScript
+						--------------
+
+FAQ: What are the issues with JavaScript?
+Ans:    
+     - It is not strongly typed.
+     - It is not implicitly strictly typed.
+     - It is not an OOP language.
+     - Limited extensibility and code level security.
+
+- Typescript is strictly typed version of JavaScript.
+- It is strongly typed.
+- It is an OOP language.
+- Typescript is built with typescript.
+- It supports low level features.
+- It can directly interact with hardware services.
+- It uses less memory and faster.
+- Typescript can build large scale applications.
+- "Anders Hejlberg" of Microsoft is the architect of TypeScript language.
+   [ also known for his contribution towards a language C# ]
+- Typescript is trans compiled into JavaScript.
+
+
+Typescript Architecture:
+1. Core Compiler    
+    - core.ts            It sets up the environment for running typescript program.
+    - program.ts        It checks the program structure.
+    - scanner.ts        It is responsible for handling input.
+    - emitter.ts        It is responsible for handling output.
+    - parser.ts        It is responsible for type conversion.
+    - checker.ts        It is responsible for verifying the types. [data types]
+
+2. Standalone Compiler
+    - tsc.ts             It is responsible for trans compiling the Typescript code into
+                    JavaScript.
+
+3. Language Service
+    - services.ts       It is responsible for managing a business layer for typescript
+                   language. It provides a library of functions and values for
+                   typescript.
+
+4. Typescript Server
+    - server.ts       It is responsible for hosting your application and handling
+                   request & response.
+                   Typescript programs are compiled and processed on server.
+
+5. VS Shim
+    - shims.ts           It is responsible for making typescript cross platform.
+                   It generates manage code.
+
+6. Managed            It refers to the managed library.
+    Language           A managed library is cross platform library.
+    Service
+
+Setup Environment for Typescript:
+
+1. Install typescript for your PC
+
+    C:\>npm install -g typescript
+
+2. Check the version of types
+
+    C:\> tsc  -v        [ latest is 5.8.2 ]
+
+3. Create a new folder for typescript
+
+    D:\typescript
+
+4. Open in folder in Visual studio code
+
+
+5. Open terminal and run the following commands
+
+        > npm  init  -y            [ package.json ]
+        > tsc  -init             [ tsconfig.json ]   [tslint.json - obsolete]
+
+6. Add a new typescript file into project
+
+         index.ts
+
+    console.log("Welcome to TypeScript");
+
+    > tsc  index.ts             [ generates  index.js ]
+    > node index.js            [ runs index.js program]
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 

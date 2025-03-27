@@ -1,0 +1,108 @@
+  Controlled Class Components
+---------------------------------------
+
+- Class comprises of built-in "Props".
+- These properties can control the component behavior.
+- Props are object type with key and value collection.
+- All keys of props are dynamic.
+
+Syntax: function component
+
+        function Name(props)
+        {
+             return(
+                <div> { props.key } </div>
+                  )
+        }
+
+Syntax: class component
+
+        class Name extends React.Component
+        {
+              constructor() {
+             super();
+            }
+              render() {
+             return(
+                  <div> { this.props.key } </div>
+                   )
+            }
+        }
+
+Note: You can implement conditional rendering in class components by using
+      various decision making statements in render() method.
+
+Ex:
+1. Go to controlled-components folder
+
+2. Add a new file  "toolbar.jsx"
+
+import React from "react";
+
+export class Toolbar extends React.Component
+{
+     constructor(){
+        super();
+     }
+     render(){
+        return(
+            <div className="btn-toolbar my-2 bg-danger d-flex justify-content-between">
+                <button className="btn btn-danger"> {this.props.title} </button>
+                <div className="btn-group">
+                    {
+                        this.props.menuItems.map(item=><button className="btn btn-danger" key={item}>{item}</button>)
+                    }
+                </div>
+                <div className="btn-group">
+                    <button className="btn btn-danger bi bi-person-fill"></button>
+                    <button className="btn btn-danger bi bi-heart-fill"></button>
+                    <button className="btn btn-danger bi bi-cart4"></button>
+                </div>
+            </div>
+        )
+     }
+}
+
+3. Go to any component and import toolbar
+
+admin-login.jsx
+
+import axios from "axios";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import React from "react";
+import * as yup from "yup";
+import { Toolbar } from "../controlled-components/toolbar";
+
+
+export class AdminLogin extends React.Component
+{
+      constructor(){
+         super();
+      }
+
+
+      render(){
+        return(
+            <div className="container-fluid">
+                <header>
+                    <Toolbar title='Shopper.' menuItems={['Home', 'Shop', 'Pages', 'Blog', 'Docs']} />
+                    <Toolbar  title='Amazon' menuItems={['Amazon Home', 'Electronics', 'Fashion']} />
+                </header>
+                <h2>Admin Login</h2>
+                <Formik initialValues={{UserName:'', Password:''}} onSubmit={(values)=>{console.log(values)}} validationSchema={yup.object({UserName: yup.string().required('User Name Required'), Password: yup.string().required('Password Required')})} >
+                    <Form>
+                        <dl>
+                            <dt>User Name</dt>
+                            <dd> <Field type="text" name="UserName" /> </dd>
+                            <dd className="text-danger"> <ErrorMessage name="UserName" /> </dd>
+                            <dt>Password</dt>
+                            <dd> <Field type="password" name="Password" /> </dd>
+                            <dd className="text-danger"> <ErrorMessage name="Password" /> </dd>
+                        </dl>
+                        <button type="submit">Login</button>
+                    </Form>
+                </Formik>
+            </div>
+        )
+      }
+}

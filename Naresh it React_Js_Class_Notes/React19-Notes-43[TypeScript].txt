@@ -1,0 +1,84 @@
+							TypeScript
+							--------------
+
+FAQ: What are the issues with JavaScript?
+Ans:    
+     - It is not strongly typed.
+     - It is not implicitly strictly typed.
+     - It is not an OOP language.
+     - Limited extensibility and code level security.
+
+- Typescript is strictly typed version of JavaScript.
+- It is strongly typed.
+- It is an OOP language.
+- Typescript is built with typescript.
+- It supports low level features.
+- It can directly interact with hardware services.
+- It uses less memory and faster.
+- Typescript can build large scale applications.
+- "Anders Hejlberg" of Microsoft is the architect of TypeScript language.
+   [ also known for his contribution towards a language C# ]
+- Typescript is trans compiled into JavaScript.
+
+
+Typescript Architecture:
+1. Core Compiler    
+    - core.ts            It sets up the environment for running typescript program.
+    - program.ts        It checks the program structure.
+    - scanner.ts        It is responsible for handling input.
+    - emitter.ts        It is responsible for handling output.
+    - parser.ts        It is responsible for type conversion.
+    - checker.ts        It is responsible for verifying the types. [data types]
+
+2. Standalone Compiler
+    - tsc.ts             It is responsible for trans compiling the Typescript code into
+                    JavaScript.
+
+3. Language Service
+    - services.ts       It is responsible for managing a business layer for typescript
+                   language. It provides a library of functions and values for
+                   typescript.
+
+4. Typescript Server
+    - server.ts       It is responsible for hosting your application and handling
+                   request & response.
+                   Typescript programs are compiled and processed on server.
+
+5. VS Shim
+    - shims.ts           It is responsible for making typescript cross platform.
+                   It generates manage code.
+
+6. Managed            It refers to the managed library.
+    Language           A managed library is cross platform library.
+    Service
+
+Setup Environment for Typescript:
+
+1. Install typescript for your PC
+
+    C:\>npm install -g typescript
+
+2. Check the version of types
+
+    C:\> tsc  -v        [ latest is 5.8.2 ]
+
+3. Create a new folder for typescript
+
+    D:\typescript
+
+4. Open in folder in Visual studio code
+
+
+5. Open terminal and run the following commands
+
+        > npm  init  -y            [ package.json ]
+        > tsc  -init             [ tsconfig.json ]   [tslint.json - obsolete]
+
+6. Add a new typescript file into project
+
+         index.ts
+
+    console.log("Welcome to TypeScript");
+
+    > tsc  index.ts             [ generates  index.js ]
+    > node index.js            [ runs index.js program]
