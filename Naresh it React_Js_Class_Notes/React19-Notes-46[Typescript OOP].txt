@@ -1,0 +1,155 @@
+ Typescript OOP
+
+Contracts in OOP:
+- A contract defines rules for designing any component.
+- It enables reusability, separation and easy extensibility.
+- In OOP contract as designed as "interface".
+
+Syntax:
+        interface  IName
+        {
+              // rules
+        }
+
+- Contract must contain only declaration not implementation.
+- A contract can define rules for both property and method.
+   
+Syntax:
+        interface  IName
+        {
+            property: datatype;
+            method(): datatype | void;
+        }
+
+- A contract can have optional rules defined using null reference character [ ? ].
+
+Syntax:
+        interface IName
+        {
+            property?: datatype;
+            method?(): datatype | void;
+        }
+
+- Optional rules are required to define goals for any contract.
+
+Note: Objective is time bound and mandatory to implement.
+      Goal is not time bound and optional to implement.
+
+- A contract can have read-only rules.
+- Every rule can be assigned with a new value or functionality after initialization.
+- You can prevent assignment by configuring the rule as "readonly".
+
+Syntax:
+       interface  IName
+       {
+          readonly  property: datatype;
+       }
+
+- You can extend a contract by adding new rules.
+- Extensibility is achieved by using inheritance.
+- A contract "extends" another contract.
+- It allow to implement multiple contracts. [multiple inheritance]
+- It is possible as interface will not have a constructor.
+- Interface will not allow to create an instance.
+
+Syntax:
+        interface   IName extends  Contract1, Contract2
+        {
+        }
+
+Ex:
+interface ICategory
+{
+    CategoryName?:string;
+}
+
+interface IRating {
+    Rating:number;
+}
+
+interface IProduct extends ICategory, IRating
+{
+    Name:string;
+    readonly Price:number;
+    Qty:number;
+    Total():number;
+    Print?():void;
+}
+
+
+let tv:IProduct = {
+    Name : "Samsung TV",
+    Price: 40000.44,
+    Qty: 2,
+    CategoryName: "Electronics",
+    Rating: 4.2,
+    Total() {
+        return this.Qty * this.Price
+    },
+    Print(){
+        console.log(`Name=${this.Name}\nPrice=${this.Price}\nTotal=${this.Total()}\nCategory=${this.CategoryName}\nRating=${this.Rating}`);
+    }
+};
+tv.Print();
+
+- A contract is used as type for any memory reference.
+- The default type is object, you can configure as array.
+
+Syntax:
+    let obj : IProduct = {  };
+
+    let obj : IProduct[] = [ { }, { } ];
+
+Classes:
+- Class declaration and expression is same as in JavaScript.
+- It supports ES6+ static members.
+- Class members are same
+    a) Property    
+    b) Accessor
+    c) Method
+    d) Constructor
+- Class supports access modifiers like
+    a) public
+    b) private
+    c) protected
+
+FAQ: What is difference between static and non-static?
+Ans:
+ a) Static
+     - It refers to continuous memory.
+     - Memory allocated for first object will continue for next.
+     - It uses more memory.
+     - It is good for continuous operations.
+     - A static member is accessible with in or outside class by using class name.
+
+ b) Non Static | Dynamic
+    - It refers to discreet memory.
+    - Memory is newly allocated for object every time.
+    - It is safe and uses less memory.
+    - It is good for disconnected actions.
+    - It is accessible with in class by using "this" keyword and outside class by using
+      and instance of class.
+
+POC:
+
+class Demo
+{
+    static s = 0;
+    n = 0;
+    constructor(){
+        Demo.s = Demo.s + 1;
+        this.n = this.n + 1;
+    }
+    Print(){
+        console.log(`s=${Demo.s} n=${this.n}`);
+    }
+}
+
+let obj1 = new Demo();
+obj1.Print();
+
+let obj2 = new Demo();
+obj2.Print();
+
+let obj3 = new Demo();
+obj3.Print();

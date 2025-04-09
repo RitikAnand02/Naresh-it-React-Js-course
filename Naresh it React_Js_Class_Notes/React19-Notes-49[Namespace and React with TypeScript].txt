@@ -1,0 +1,187 @@
+Namespace
+- A namespace is a collection of sub-namespaces and OOP components.
+- It can have a set of contracts, templates or components.
+- It is used to build and organize libraries at large scale.
+
+Syntax:
+         namespace  Project
+         {
+          namespace  Module
+          {
+                // contracts
+            // templates
+            // components
+          }
+         }
+
+- A namespace is imported by using "///<reference />"  directive.
+
+Syntax:
+        ///<reference  path="./folder/module" />
+
+- You can alias namespace of access using fully qualified name.
+
+Syntax: Fully Qualified
+
+        Project.Module.ClassName
+
+        let obj = new Project.Module.ClassName();
+
+Syntax: Aliasing Namespace
+
+        import   className = Project.Module.ClassName;
+       
+        let obj = new className();
+
+- To compile the typescript library with namespace you have to use the command
+
+        > tsc -outFile  index.js  index.ts
+
+        > node index.js
+
+Note: In typescript latest release the parent name space doesn't require export.
+      All other members must be marked as export.
+
+Ex:
+1. Add folders
+        -contracts
+        -templates
+        -components
+        -app
+
+2. contract/ProductContract.ts
+
+namespace Project
+{
+     export namespace Contracts
+      {
+            export interface IProduct
+            {
+                Name:string;
+                Price:number;
+                Qty:number;
+                Total():number;
+                Print():void;
+            }
+      }
+}
+
+3. template/ProductTemplate.ts
+
+///<reference path="../contracts/ProductContract.ts" />
+
+import ProductContract = Project.Contracts.IProduct;
+
+namespace Project
+{
+     export namespace Templates
+     {
+          export abstract class ProductTemplate implements ProductContract
+          {
+               public Name:string = "";
+               public Price:number = 0;
+               public Qty:number = 0;
+               public abstract Total():number;
+               public abstract Print():void;
+          }
+     }
+}
+
+4. components/ProductComponent.ts
+
+///<reference path="../templates/ProductTemplate.ts" />
+
+import ProductTemplate =  Project.Templates.ProductTemplate;
+
+namespace Project
+{
+      export namespace Components
+      {
+           export class ProductComponent extends ProductTemplate
+           {
+                Name = "Samsung TV";
+                Price = 45000;
+                Qty = 2;
+                Total(){
+                    return this.Qty * this.Price;
+                }
+                Print(){
+                    console.log(`Name=${this.Name}\nPrice=${this.Price}\nQty=${this.Qty}\nTotal=${this.Total()}`);
+                }
+           }
+      }
+}
+
+5. app/index.ts
+
+///<reference path="../components/ProductComponent.ts" />
+
+import ProductComponent = Project.Components.ProductComponent;
+
+let tv = new ProductComponent();
+tv.Print();
+
+6. Compile and Run
+
+    D:..\app> tsc  -outFile  index.js  index.ts
+   
+             > node index.js
+
+
+                    React Application with TypeScript
+
+- You can use various bundling tools for creating react app.
+    a) Webpack
+    b) Vite
+    c) Parcel
+- Vite is a build tool that provides various features for developer to
+    a) build
+    b) debug
+    c) test
+    d) deploy
+
+Creating a new Project using Vite and TypeScript for React:
+
+1. Make sure that your device is installed with Node 18+ version
+
+2. Open your PC location in command prompt
+
+
+      D:\>npm  create  vite@latest   app-name  -- --template  react-ts    [Typescript]
+      D:\>npm  create  vite@latest   app-name  -- --template  react    [JavaScript]
+
+
+3. A project folder is created at specified location
+
+4. Change into the folder and run the command
+
+      D:\app-name> npm  install
+
+      - It will install react, react-dom, typescript dependencies.
+
+5. Run your project
+   
+    D:\app-name> npm run dev
+
+    http://localhost:5173
+
+
+React Vite App File System:
+
+    node_modules        : comprises of library files installed using npm.
+    public                : comprises of static resources
+    src                    : comprises of dynamic resources
+    .gitignore                : configuration to ignore folders while publishing to GIT
+    eslint.config.js            : It is JavaScript language analysis tool
+    index.html            : startup page
+    package.json
+    package.lock.json
+    README.md
+    tsconfig.json            : typescript configuration file
+    tsconfig.app.json        : typescript configuration for current app
+    tsconfig.node.json        : node JS migrations
+    vite.config.ts            : vite configuration for app
+                          [It configures react for your app]
+
+Note: The index.js is now replaced with  "main.tsx" in "src" folder.
+      index.html  is importing  main.tsx

@@ -1,0 +1,147 @@
+Video Library Project - MERN Stack
+Setup Database - MongoDB
+
+CRUD Operations in MongoDB:
+    - Database
+    - Collection [Table]
+    - Document [Record]
+    - Field
+
+1. Open MongoDB Compass
+2. Connect with MongoDB server
+        mongodb://127.0.0.1:27017
+3. Select connection
+4. Open MongoDB Shell. It is a CLI tool for handling database.
+
+Commands:
+1. To create a new database or to start using existing database
+
+        > use  databaseName
+
+        > use  demodb         // creates a new database if doesn't exist
+
+Note: Database will be displayed in list only when it is having collections.
+
+2. To create a new collection [table]
+
+        >db.createCollection("name", { attributes })
+       
+        >db.createCollection("products")
+
+3. To view databases and collections
+
+        > show dbs            // to view database
+        > show collections        // to view collections [tables]
+
+4. Add data into collection [table]
+       
+        a) insertOne()
+        b) insertMany()
+
+    > db.collectionName.insertOne({key:value})
+    > db.collectionName.insertMany([{key:value}, {key:value},..])
+
+    All JavaScript data types are used for MongoDB
+
+Ex:
+ > db.products.insertMany([{Id:1, Name:"TV", Price:23000, Rating:{Rate:4.2, Count:500}}, {Id:2, Name:"Mobile", Price:12000, Rating:{Rate:4.1, Count:230}}])
+
+
+5. Read data from collection
+        a) find()
+        b) findOne()
+
+Syntax:
+        > db.collectionName.find({query})
+
+        > db.products.find({})            // returns all documents
+        > db.products.find({id:3})
+
+        Operators:
+
+            $gt        greater than
+            $gte        greater than or equal
+            $lt        less than
+            $lte        less than or equal
+            $eq        equal
+            $ne        not equal
+            $or        OR
+            $and    AND
+
+        > db.products.find({Price:{$gte:5000}})
+        > db.products.find({'Rating.Rate': {$gt:4}})
+        > db.products.find({$and:[{Category:"Electronics"}, {Price:{$gte:5000}}]})
+
+6. Update Document
+
+        a) updateOne()
+        b) updateMany()
+
+    > db.collectionName.updateOne({findQuery}, {updateQuery})
+
+    Operators:
+   
+        $set                update data into specified field
+        $unset            removes a field
+        $rename             changes field name
+
+    > db.products.updateOne({Id:1}, {$set:{Price:25000, Name:"Samsung TV"}})
+
+7. Delete Document
+
+    a) deleteOne()
+    b) deleteMany()
+
+    > db.products.deleteOne({findQuery})
+
+    > db.products.deleteMany({Category:"Electronics"})
+    > db.products.deleteOne({Id:3})
+
+
+Zoom Meeting ID:   91690775166
+PassCode       :  112233
+
+Timing     9:30 AM to 6:30 PM
+
+
+                         Server Side Application
+                           [Node & Express JS]
+- Node is a JavaScript runtime used to build web applications, scripts, command line tools etc.
+- Express JS is a middleware framework for Node JS.
+- Middleware enables communication between client-server-database.
+- You can create API using node & expression.
+
+1. Create a new folder on your PC
+
+        D:\server-app
+
+2. Setup package JSON
+   
+        >npm init -y
+
+3. Install the following libraries
+
+        > npm  install  express  --save
+        > npm  install  cors  --save
+
+4. Add a new file  "server.js"
+
+const express = require("express");
+
+const app = express();
+
+app.get("/", (req, res)=>{
+     res.send("Welcome to API");
+     res.end();
+});
+
+app.get("/products", (req, res)=>{
+     res.send([{Name:"TV"},{Name:"Mobile"}]);
+     res.end();
+});
+
+app.listen(5050);
+console.log(`Server Started http://127.0.0.1:5050`);
+
+5. Run
+    > node server.js

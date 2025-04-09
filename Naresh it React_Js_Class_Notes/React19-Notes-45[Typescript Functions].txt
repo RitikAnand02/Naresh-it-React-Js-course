@@ -1,0 +1,233 @@
+TypeScript Language
+- Variables
+- Data Types
+- Union of Types
+- Type Inference
+- Primitive & Non Primitive
+- Array
+- Tuple
+- Object
+- Optional Keys  [ ? ]
+
+Array of Objects:
+- You can configure strongly typed array with schema based objects.
+- The data type is defined as object that handles array.
+
+Syntax:
+     let  values : { } [ ]  = [ ] ;
+
+     {  }        => It sets rules for object
+     [  ]        => It handles multiple values
+
+Ex:
+index.ts
+
+let products:{Name:string, Price?:number}[] = [];
+
+products = [
+    {Name: 'TV', Price:5000.33},
+    {Name:'Mobile', Price:1200.33}
+];
+
+products.map(product=>{
+    console.log(`${product.Name} - ${product.Price}`);
+})
+
+Map Type:
+- The class "Map" is used to configure a Map type.
+- It is a generic type in typescript.
+- You can make keys strongly typed for specific data type.
+  [JavaScript map keys handle any type]
+- You can configure any or restrict to specific.
+
+Syntax:
+    let  data : Map<keyType, valueType> =  new Map();
+
+    data.get()
+    data.set()
+    data.has()
+    data.keys()
+    data.values()
+    data.entries()
+    data.delete()
+    data.clear() etc..
+
+Ex:
+
+let data:Map<string, number> = new Map();
+let list:Map<number, any> = new Map();
+let values:Map<any, any> = new Map();
+
+data.set("A", 1200);
+
+console.log(data.get("A"));
+data.keys()
+data.entries()
+data.values()
+
+
+Date Type:
+- You can configure strongly typed date values in typescript.
+- All date and time functions are same as in JavaScript.
+
+Syntax:
+     let  now : Date   = new Date();        // loads current date & time
+     let  mfd  : Date  = new Date("yy-mm-dd hrs:min:sec.milliSec");
+
+    now.get..()
+    now.set..()
+
+Regular Expression Type:
+- Typescript provides "RegExp" as data type for regular expression.
+- It allows meta characters and quantifiers enclosed in "/  /".
+
+Syntax:
+     let pattern: RegExp = /\+91\d{10}/;
+
+- Value is verified with regular expression by using  "match()" method.
+- The value type must be any type to verify with regular expression.
+
+Note: Statements and Operators are same as in JavaScript.
+
+1. Operators
+    - Arithmetic
+    - Logical
+    - Comparison
+    - Assignment
+    - Bitwise
+    - Special  etc.
+
+2. Statements
+    Selection
+        if, else, switch, case, default
+    Iteration
+        for..in, for..of
+    Looping
+        for, while, do while
+    Jump
+        break, continue, return
+    Exception handling
+        try, catch, throw, finally
+
+
+                           Typescript Functions
+- You can configure a function with declaration or expression.
+- Typescript function declaration comprises of
+    a) parameter data type
+    b) function with return data type or void
+
+Syntax:
+       function  Name(param : datatype) : datatype | void
+       {
+       }
+
+Ex:
+index.js
+
+function Addition(a:number, b:number):number
+{
+     return a + b;
+}
+
+function Print():void
+{
+    console.log(`Addition=${Addition(50,20)}`);
+}
+Print();
+
+- Typescript function can have optional parameters.
+- Optional parameter must be last parameter.
+- A required parameter can't follow an optional parameter.
+
+Syntax:
+     function Name(param1:type,  param2?:type)        // valid
+     {
+     }
+
+     function Name(param1?type: param2:type)            // invalid
+     {
+     }
+
+- Optional parameters are verified by using "undefined" type.
+
+Ex:
+
+index.ts
+function Details(id:number, name:string, price?:number):void
+{
+     if(price) {
+         console.log(`id=${id}\nname=${name}\nprice=${price}`);
+     } else {
+        console.log(`id=${id}\nname=${name}\n`);
+     }
+}
+Details(1, "TV");
+Details(2, "Mobile", 5000.44);
+
+- A function can configure rest parameters.
+- Rest parameter must be defined as array type.
+- It can be strongly typed array with specific type of arguments or any type.
+
+Syntax:
+      function  Name(...params: number[])
+      {
+      }
+      Name(10, 20, 50);
+
+      function Name(...params: any[])
+      {
+      }
+      Name (1, "A", true);
+
+Ex:
+index.ts
+
+function Details(...product:any[]):void
+{
+     let [id, name, price] = product;
+
+     if(price) {
+         console.log(`id=${id}\nname=${name}\nprice=${price}`);
+     } else {
+        console.log(`id=${id}\nname=${name}\n`);
+     }
+}
+Details(1, "TV");
+Details(2, "Mobile", 5000.44);
+
+Type Script Promise:
+- Promise function uses a generic type.
+- It allows to restrict specific data typed on resolve.
+- However the reject function is always any type.
+
+Syntax:
+
+    let  fetch : Promise<datatype> = new Promise(function(resolve, reject){
+
+        resolve(datatype);
+        reject(any_type);
+
+    })
+
+    fetch.then((data)=>{ }).catch((error)=>{ }).finally(()=>{ })
+
+Ex:
+index.ts
+
+let FetchData:Promise<{Name:string, Price:number}> = new Promise(function(resolve, reject){
+       
+        let url = "https://server.com&quot;;
+
+        if(url==="https://fakestore.com&quot;){
+             resolve({Name:'TV', Price:50000});
+        } else {
+             reject('Invalid URL - API Not found');
+        }
+})
+
+FetchData.then(function(data){
+    console.log(data);
+})
+.catch(function(error){
+    console.log(error);
+})

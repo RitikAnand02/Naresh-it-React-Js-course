@@ -1,0 +1,43 @@
+Creating Database for Project
+    - MongoDB
+Creating API and Configure End Points
+    - Node & Express JS
+
+Creating UI with React:
+
+1. Install required libraries for React app
+
+    > npm install  bootstrap bootstrap-icons  formik yup axios  react-cookie --save
+    > npm install @mui/material @emotion/react @emotion/styled  --save
+    > npm install  react-router-dom --save
+
+2. Go to "main.tsx" and import Cookies Provider
+
+3.  Set  "App" component as startup component.
+
+      import {  CookiesProvider }  from  'react-cookie';
+
+      <CookiesProvider>
+           <App />
+      </CookiesProvider>
+
+4. Import bootstrap & icons CSS  into main.tsx
+
+5. Add contracts folder into "src" and setup all contracts required to connect with database in backend.
+
+        contracts/admin-contract.ts
+        contracts/user-contract.ts
+        contracts/video-contract.ts
+        contracts/categories-contract.ts
+
+6. Add components folder into src with following component files
+
+        user-login.tsx
+        user-dash.tsx
+        admin-login.tsx
+        admin-dash.tsx
+        admin-add-video.tsx
+        admin-edit-video.tsx
+        admin-delete-video.tsx
+        register-user.tsx
+        video-home.tsx

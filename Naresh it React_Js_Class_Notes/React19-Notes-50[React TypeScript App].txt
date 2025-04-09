@@ -1,0 +1,242 @@
+What's new with React TypeScript:
+
+1. Component is a function that returns JSX.Element
+
+     - TypeScript supports type inference, hence the return type is not mandatory to
+    define.
+
+     Syntax:
+     export function Login() : JSX.Element
+     {
+         return (
+            <>
+                JSX        
+            </>
+            );
+      }
+
+
+2. JSX Rules are same.
+
+3. Component file must have extension .tsx.
+
+          Login.tsx
+
+Note: All library files must have extension ".ts".
+        - Contracts
+        - Templates
+      Component & Hooks are defined as ".tsx".
+
+
+4. Component state is generic type.
+
+    const [get, set] = useState<T>();
+
+    const [categories, setCategories] = useState<string[]>([ '  ', '  ']);
+
+    You can use a contract for configuring data type.
+
+    const [product, setProduct] = useState<IProduct>();
+
+    interface IProduct
+    {
+      Id:number;
+      Name:string;
+    }
+
+5. Data Binding, Style Binding, Class Binding & Event Binding all are same.
+
+6. All hooks are same.
+
+7. Axios, Formik, Yup, Routing, cookies etc. all are same.
+
+8. Controlled components uses Props type is an any type object.
+
+Syntax:
+        export function Navbar(props:any)
+        {
+        }
+
+9. Setup Bootstrap or MUI for project is same. MUI components are same.
+
+10. Import bootstrap, cookie provider and other global provides in "main.tsx".
+
+Note: The state configure for handling data must be strongly typed.
+      It is default nullable, if value is not initialized.
+
+Syntax: If value is not initialized
+         const [categories, setCategories] = useState<string[]>();
+
+         categories?.map(category=> <li> </li>)
+
+Syntax: If value is initialized
+
+        const [categories, setCategories] = useState<string[]>([ ' ' ]);
+
+        categories.map(category=> <li></li>)
+
+Ex: Fakestore API
+
+1. Add contracts folder into "src"
+
+2. Add a new file  "fakestore-contract.ts"
+
+export interface FakestoreContract
+{
+    id:number;
+    title:string;
+    description:string;
+    image:string;
+    price:number;
+    rating: {rate:number, count:number}
+}
+
+3. demo.tsx
+
+import { useEffect, useState } from "react";
+import { FakestoreContract } from "../contracts/fakestore-contract";
+import axios from "axios";
+
+
+export function Demo(){
+
+   
+    const [categories, setCategories] = useState<string[]>();
+    const [products, setProducts] = useState<FakestoreContract[]>();
+
+    function LoadCategories(){
+        axios.get(`https://fakestoreapi.com/products/categories`)
+        .then(response => {
+            setCategories(response.data);
+        })
+    }
+    function LoadProducts(){
+        axios.get(`https://fakestoreapi.com/products`)
+        .then(response=>{
+            setProducts(response.data);
+        })
+    }
+
+    useEffect(()=>{
+        LoadCategories();
+        LoadProducts();
+    },[])
+
+    return(
+        <div className="container-fluid">
+            <header>
+                <h3 className="text-center">Fakestore</h3>
+            </header>
+            <section className="row mt-4">
+                <nav className="col-2">
+                    <label className="form-label">Select Category</label>
+                    <select className="form-select">
+                        {
+                            categories?.map(category=><option key={category}>{category}</option>)
+                        }
+                    </select>
+                </nav>
+                <main className="col-10 d-flex flex-wrap overflow-auto" style={{height:'400px'}}>
+                     {
+                        products?.map(product=>
+                            <div key={product.id} className="card p-1 m-2" style={{width:'200px'}}>
+                                <img src={product.image} className="card-img-top" height='120' />
+                                <div className="card-header" style={{height:'100px'}}>
+                                    {product.title}
+                                </div>
+                            </div>
+                        )
+                     }
+                </main>
+            </section>
+        </div>
+    )
+}
+
+                          MERN Stack Application
+                                [ Project ]
+- Video Library Application
+
+    Admin Module
+
+    * Admin can login
+    * Admin can add videos
+    * Edit videos
+    * Delete videos
+   
+    User Module
+   
+    * User can register
+    * User can login
+    * User can browse and view videos
+    * User can search videos by title, category etc.
+    * User can save videos to watch later. [My List]
+
+- Libraries and Frameworks
+   
+    MongoDB        : for database
+    Express JS        : for middleware
+    Node JS            : for server side app
+    React             : for UI - front end
+    React Router        : for routing
+    Axios             : for API communication
+    Formik             : for form
+    Yup                : for validation
+    React Cookies    : for user state
+    Redux Toolkit         : for Videos watch later [application state]
+
+                 Setup Database for Application
+
+- MongoDB database
+- It is an Non-SQL database [no-SQL]
+- It uses BSON type data types.
+- It is similar to JSON.
+- It provides simple methods for handling CRUD operations.
+
+1. Install MongoDB community server on your device.
+
+2. Select "MongoDB compass" tool while installing MongoDB server.
+
+3. Compass is a GUI tool that provides an UI to handle database on server.
+
+    https://www.mongodb.com/try/download/community
+
+4. After installing MongoDB start its server
+
+    - Go to "services.msc"  from your programs
+    - Right Click on "MongoDB Server" and select start.
+
+5. Open MongoDB compass from programs
+
+6. Connect to Server using following connection string
+
+      mongodb://127.0.0.1:27017
+
+7. After connecting you will find default databases
+   
+    a) admin
+    b) config
+    c) local
+
+MongoDB Terminology:
+
+    Oracle, MySQL                    MongoDB
+    -----------------------------------------------------------------------
+    Database                            Database
+
+    Table                            Collection
+
+    Record / Row                        Document
+
+    Field / Column                        Field / Key
+
+    Join                                Embedded Document
+
+   
+    find()
+    insertOne()
+    insertMany()
+    updateOne()
+    updateMany()
+    deleteOne()
+    deleteMany()

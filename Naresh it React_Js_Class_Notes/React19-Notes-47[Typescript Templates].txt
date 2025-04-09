@@ -1,0 +1,129 @@
+TypeScript OOP
+- Contracts / Interface
+- Classes
+    - Members are same as in JS
+    - Static and Non Static Members
+   
+Access Modifiers:
+1. public
+2. private
+3. protected
+
+- public allows access from any location and by using any instance.
+- private allows access with in class.
+- protected allows access with in class and from derived class only by using derived class reference. [or instance]
+
+Ex:
+class Super
+{
+    public Name:string = "TV";
+    private Price:number = 40000;
+    protected Stock:boolean = true;
+    public Print():void {
+        console.log(`${this.Stock}\n${this.Name}\n${this.Price}`);
+    }
+}
+class Derived extends Super
+{
+    public Print():void {
+        let obj = new Derived();
+        obj.Stock;  // protected
+        obj.Name;   // public
+    }
+}
+
+let obj = new Derived();
+obj.Name;       // public
+
+- Inheritance and rules are same as in JavaScript. [extends]
+- A class can implement the contract.
+- Contract is used to defined rules for a class.
+- Class implements contract and allows to customize by adding new properties and methods.
+- Class is a program template, hence it allows customization.
+- Class can implement multiple contracts.
+
+Syntax:
+        class Name implements Contract1, Contract2
+        {
+        }
+
+Ex:
+interface IProduct
+{
+    Name:string;
+    Price:number;
+}
+interface ICategory
+{
+    CategoryName:string;
+}
+
+class Product implements IProduct, ICategory
+{
+    public Name = "TV";
+    public Price = 50000;
+    public CategoryName = "Electronics";
+}
+
+Templates in OOP:
+- A template provides pre-defined structure.
+- It comprises of some features implemented and some of them need to be implemented.
+- Client implements templates by customizing according to the requirements.
+- Templates are mostly used for Rollouts and Implementation of secured modules in application for any business.
+- Template hides its structure and provides only implementation.
+- The process of hiding structure and providing only implantation to developer is known as "Abstraction".
+- Typescript can create template as "Abstract Class".
+
+Syntax:
+    abstract class Name
+    {
+       
+    }
+
+- Abstract class can have members implemented and yet to implement.
+- The members that require implementation are marked as "abstract".
+
+    {
+      public abstract property;
+      public abstract method();
+    }
+
+- If a class have at least on abstract member then it must be marked as abstract.
+- You have extend abstract class to implement the abstract member.
+- You can't create instance for abstract class. But it can have a constructor.
+
+Ex:
+interface IProduct
+{
+    Name:string;
+    Price:number;
+    Qty:number;
+    Total():number;
+    Print():void;
+}
+abstract class ProductTemplate implements IProduct
+{
+    constructor(){
+        console.log("Abstract class Constructor");
+    }
+    public Name:string = "";
+    public Price:number = 0;
+    public Qty:number = 1;
+    public abstract Total():number;
+    public abstract Print():void;
+}
+class Component extends ProductTemplate
+{
+        Name = "Samsung TV";
+        Price = 50000;
+        Qty = 2;
+        Total(){
+            return this.Qty * this.Price;
+        }
+        Print(){
+            console.log(`Name=${this.Name}\nPrice=${this.Price}\nQty=${this.Qty}\nTotal=${this.Total()}`);
+        }
+}
+
+let tv = new Component();
+tv.Print();

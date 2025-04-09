@@ -1,0 +1,257 @@
+Create Database and Collection for Project
+1. Create a new database on MongoDB
+        "video-tutorial"
+
+2. Add collections
+
+        1. admin [collection]
+
+        {
+          admin_id : string,
+          password : string
+        }
+
+        2. users [collection]
+
+        {
+          userid: string,
+          username: string,
+          password: string,
+          email:string
+        }
+       
+        3. videos [collection]
+
+        {    
+          video_id : number,
+          title: string,
+          description: string,
+          url: string,
+          likes: number,
+          views: number,
+          dislikes: number,
+          category_id: number [FK]
+        }
+
+        4. categories [collection]
+
+         {
+          category_id: number, [PK]
+          category_name: string
+        }
+
+
+Create API to handle request [ End Points ]
+
+    GET        /admin                     get admin users
+    GET        /users                     get all users
+    GET        /videos                     get all videos
+    GET        /videos/1                     get specific video by id
+    GET        /categories                 get all categories
+   
+    POST    /register-user                 add new user into database
+    POST    /add-video                 add new video into database
+    PUT        /edit-video/1                 update and save video details
+    DELETE    /delete-video/1             delete video by ID.
+
+1. Go to your server app  [ add server folder into react-typescript-app ]
+
+2. Install following libraries
+
+        > npm install  express  mongodb  cors  --save
+
+
+        express        : It is a middleware for configuring API end points
+        mongodb     : It is a drivers library to connect with MongoDB database
+        cors            : Cross Origin Resource Sharing for handling request like
+                      GET, POST, PUT, DELETE. [restrictions]
+
+3. Add a new file "api.cjs" into server folder
+
+// import libraries
+
+const cors = require("cors");
+const express = require("express");
+const mongoClient = require("mongodb").MongoClient;
+
+// Create connection string and app
+
+const conString = "mongodb://127.0.0.1:27017";
+
+const app = express();
+app.use(cors());
+app.use(express.urlencoded({extended:true}));
+app.use(express.json());
+
+// Create API end points
+
+app.get('/admin',(req, res)=>{
+
+    mongoClient.connect(conString).then(clientObject=>{
+       
+        var database = clientObject.db("video-tutorial");
+
+        database.collection("admin").find({}).toArray().then(documents=>{
+              res.send(documents);
+              res.end();
+        });
+    });
+});
+
+app.get('/users',(req, res)=>{
+
+    mongoClient.connect(conString).then(clientObject=>{
+       
+        var database = clientObject.db("video-tutorial");
+
+        database.collection("users").find({}).toArray().then(documents=>{
+              res.send(documents);
+              res.end();
+        });
+    });
+});
+
+app.get('/videos',(req, res)=>{
+
+    mongoClient.connect(conString).then(clientObject=>{
+       
+        var database = clientObject.db("video-tutorial");
+
+        database.collection("videos").find({}).toArray().then(documents=>{
+              res.send(documents);
+              res.end();
+        });
+    });
+});
+
+app.get('/videos/:id',(req, res)=>{
+
+    var id = parseInt(req.params.id);
+
+    mongoClient.connect(conString).then(clientObject=>{
+       
+        var database = clientObject.db("video-tutorial");
+
+        database.collection("videos").findOne({video_id:id}).then(document=>{
+              res.send(document);
+              res.end();
+        });
+    });
+});
+
+app.get('/categories',(req, res)=>{
+
+    mongoClient.connect(conString).then(clientObject=>{
+       
+        var database = clientObject.db("video-tutorial");
+
+        database.collection("categories").find({}).toArray().then(documents=>{
+              res.send(documents);
+              res.end();
+        });
+    });
+});
+
+app.post('/register-user', (req, res)=>{
+
+        var user = {
+            userid: req.body.userid,
+            username: req.body.username,
+            password: req.body.password,
+            email: req.body.email
+        };
+
+        mongoClient.connect(conString).then(clientObject=>{
+
+            var database = clientObject.db("video-tutorial");
+
+            database.collection("users").insertOne(user).then(()=>{
+                 console.log('User Registered');
+                 res.send();
+            });
+        });
+});
+
+
+app.post('/add-video', (req, res)=>{
+
+    var video = {
+        video_id : parseInt(req.body.video_id),
+        title: req.body.title,
+        description: req.body.description,
+        url: req.body.url,
+        likes: parseInt(req.body.likes),
+        dislikes: parseInt(req.body.dislikes),
+        views: parseInt(req.body.views),
+        category_id: parseInt(req.body.category_id)
+    };
+
+    mongoClient.connect(conString).then(clientObject=>{
+
+        var database = clientObject.db("video-tutorial");
+
+        database.collection("videos").insertOne(video).then(()=>{
+             console.log('Video Added');
+             res.send();
+        });
+    });
+});
+
+app.put('/edit-video/:id', (req, res)=>{
+
+    var id = parseInt(req.params.id);
+
+    var video = {
+        video_id : parseInt(req.body.video_id),
+        title: req.body.title,
+        description: req.body.description,
+        url: req.body.url,
+        likes: parseInt(req.body.likes),
+        dislikes: parseInt(req.body.dislikes),
+        views: parseInt(req.body.views),
+        category_id: parseInt(req.body.category_id)
+    };
+
+    mongoClient.connect(conString).then(clientObject=>{
+
+        var database = clientObject.db("video-tutorial");
+
+        database.collection("videos").updateOne({video_id:id},{$set: video}).then(()=>{
+             console.log('Video Updated');
+             res.send();
+        });
+    });
+});
+
+app.delete('/delete-video/:id', (req, res)=>{
+
+    var id = parseInt(req.params.id);
+
+    mongoClient.connect(conString).then(clientObject=>{
+
+        var database = clientObject.db("video-tutorial");
+
+        database.collection("videos").deleteOne({video_id:id}).then(()=>{
+             console.log('Video Deleted');
+             res.send();
+        });
+    });
+});
+
+
+
+app.listen(4040);
+console.log(`Server Started http://127.0.0.1:4040`);
+
+
+4. Go to package.json
+
+    scripts: {
+
+        "api"  :  "node  ./server/api.cjs"
+
+    }
+
+ 5. From terminal you can run command
+
+    >npm run api

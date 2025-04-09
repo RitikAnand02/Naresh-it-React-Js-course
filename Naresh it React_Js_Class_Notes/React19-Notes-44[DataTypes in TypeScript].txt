@@ -1,0 +1,170 @@
+   TypeScript Language
+
+1. Variables & Data Types
+
+- Variables are declared and initialized by using  var, let, const.
+- Variable naming rules are same as in JavaScript.
+- TypeScript is a strongly typed language, hence every variable requires a data type to configure.
+
+Syntax:
+        let  variableName : datatype;
+
+- If data is not defined then the default type is "any".
+- The type "any" is root for all data types.
+
+Syntax:
+        let  age;        age:any;
+
+- The data type for variable can be JavaScript
+    a) Primitive Type
+    b) Non Primitive Type
+
+- JavaScript Primitive Data Types
+
+    a) number
+    b) boolean
+    c) string
+    d) null
+    e) undefined
+    f) Symbol
+    g) bigint
+
+Syntax:
+        let  username:string = "John";
+        let  age:number = 23;
+        let  subscribed:boolean = true;
+        etc..
+
+- TypeScript supports "Type Inference". The data type of variable can be configured according to the value initialized.
+
+Syntax:
+        let age = 22;          // age:number
+        age = "A";        // invalid
+
+- TypeScript supports union of types. It allows to configure multiple types for a variable.
+
+Syntax:
+          let  x : number | string;
+        x = 10;  
+        x = "A";
+        x = true;        // invalid
+
+Ex:
+    let username: string | null = prompt("Enter Name");        // prompt returns string
+                                                       or null.
+
+TypeScript Non Primitive Types:
+
+1. Array Type
+- Typescript array can be configured for similar data types.
+- It can also handle various types like JavaScript.
+
+Syntax:
+        let  sales:number[]  = new Array();
+        let  names:string[]  =  [ ];
+        let  values:any[]   = [ ];
+
+- Array() constructor will not allow to initialize various data types even when the type is configured as "any". It uses the first value type as data type.
+- Array() constructor will allow to assign various data types when data type any.
+
+Syntax:
+        let  values:any[]  = new Array(10, "A");        // invalid only numbers allowed
+
+        let values:any[] = new Array();
+        values[0] = 10;        // valid
+        values[1] = "A";        // valid
+        values[2] = true;        // valid
+
+- Array meta character "[ ]" allows initialization and assignment of various types when data type is configured as "any".
+- If a collection allows initialization and assignment of various types then its known as
+  "Tuple".
+
+          let  values:any[] = [ ];
+
+- Array supports union of types only for assignment not for initialization.
+
+Syntax:
+          let  values:string[] | number[] = [ ];
+          values[0] = 10;
+          values[1] = "A";
+          values[2] = 20;
+
+Syntax:
+          let  values:string[] | number[] = [10, "A" ];        // invalid
+
+- All array methods are same as in JavaScript.
+
+Ex:
+index.ts
+
+let values:string[]|number[] = [];
+
+values[0] = 10;
+values[1] = "A";
+values[2] = 20;
+values[3] = "B";
+
+values.map(value=>{
+    console.log(value);
+})
+
+> tsc index.ts
+> node index.js
+
+
+2. Object Type
+- JavaScript object is schema less.
+- TypeScript object is a structured object.
+- It can set rules for configuring values in the reference of keys.
+- Rules are defined as an object.
+
+Syntax:
+    let  obj : { rules } = {  data } ;
+
+- Rules refer to key and value.
+- Data refer to key and value.
+
+Syntax:
+     let  obj : {key:datatype}  = { key:value }
+
+- Rules are considered as a contract, and you have to implement exactly the same that is defined in contract.
+- You can't add new keys or you can't miss existing keys.
+- Contract allows to configure optional keys by using null reference character "?".
+
+Syntax:
+     let obj : { key?:datatype } = { } ;
+
+Ex:
+
+index.ts
+
+let product:{Name:string, Price:number, Rating?:number} = {
+    Name: "TV",
+    Price: 50000.33,
+}
+product.Rating = 4.5;
+if(product.Rating){
+    console.log(`Name=${product.Name}\nPrice=${product.Price}\nRating=${product.Rating}`);
+} else {
+    console.log(`Name=${product.Name}\nPrice=${product.Price}`);
+}
+
+Ex:
+index.ts
+
+
+let product:{Name:string, Price:number, Qty:number, Total():number, Print?():void} = {
+
+    Name: "TV",
+    Price: 56000.44,
+    Qty: 2,
+    Total:function(){
+        return this.Qty * this.Price
+    },
+    Print:function(){
+        console.log(`Name=${this.Name}\nPrice=${this.Price}\nQty=${this.Qty}\nTotal=${this.Total()}`);
+    }
+}
+product.Print();
+
+- All object manipulations are same as in JavaScript.
