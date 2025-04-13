@@ -9422,6 +9422,438 @@ Creating UI with React:
         register-user.tsx
         video-home.tsx
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Functionalities to Implement
+- Likes, dislikes counter must increase and store in database
+- User must able to view the video separately in a new route.
+- It must increase the views count.
+- User must able to search by category or title.
+- User can register a new account.
+- Setup validation while adding, editing videos.
+
+
+                          React Redux
+
+- Redux is a JavaScript library.
+- It is used to configure and maintain global application memory for JavaScript based applications.
+- It is a large scale version of application memory when compared to useReducer in React.
+- It is predictable and debuggable.
+- It provides a complete toolkit for developers to manage application state.
+- Redux can be used with angular, react, vue and all JavaScript apps.
+
+Redux Components:
+    a) Store
+    b) State
+    c) Reducer
+
+- Store is the location where data is kept.
+- State can access data from store and update to UI.
+- Reducer comprises of actions required to update data in store.
+
+Setup Redux for Project
+
+1. Install Redux toolkit with React support
+
+    > npm install @reduxjs/toolkit   react-redux  --save
+
+2. Redux toolkit provides
+    a) Slicer
+    b) Store
+    c) Reducer
+    d) Initial State
+
+3. Create a new slicer
+
+    - Slicer configure the initial data to store in global memory.
+    - It initializes the global memory.
+    - It uses initial state.
+    - You can create by using "createSlice()" method.
+    - It also defines the actions to perform
+    - Actions are required to update the data in global memory.
+
+Syntax:
+        video-slicer.tsx
+
+      let initialState = {
+          videos : [ ],
+          videosCount: 0
+       }
+
+     const  videoSlice = createSlice({
+        name: 'video',
+            initialState,
+        reducers: {
+            addToList: (payload)=>{ videos.push(payload) }
+        }
+      })
+
+    export  videoSlice.actions;
+   
+4. Configure a store from Redux toolkit
+
+    - It requires configureStore()  method
+    - It can create a store at application level
+    - It can get data from your reducer and update into store.
+    - Store is provided Global so that you can access from any component.
+
+Syntax:
+     store.tsx
+
+     import { configureStore }  from  "@redux/toolkit";
+
+    export function configureStore(){
+        // specify the reducers.
+    }
+
+5. Go to main.tsx and set provider for store.
+
+Syntax:
+        <Provider  store={ store } >
+            <App />
+        </Provider>
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Redux in Video Library Project
+
+1. Install Redux with React support into project
+
+    > npm install  @reduxjs/toolkit   react-redux   --save
+
+2. Go to "src" folder and add a new folder by name "slicers".
+
+3. Add a new file  "video-slicer.tsx"
+
+4. Import "createSlice" and configure the slice with initial state and reducer actions.
+
+5. Create Slice method comprises various properties
+    a) actions
+    b) reducer
+
+   You have to export the actions and reducers
+
+          video-slicer.tsx
+
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+    videos : [],
+    videosCount: 0
+}
+
+const videoSlice = createSlice({
+    name: 'video',
+    initialState,
+    reducers: {
+        addToSaveList : (state:any, action)=>{
+            state.videos.push(action.payload);
+            state.videosCount = state.videos.length;
+        }
+    }
+});
+
+export const {addToSaveList} = videoSlice.actions;
+export default videoSlice.reducer;
+
+6. Go to "src" and add a new folder by name "store"
+
+7. Add a new file into store folder by name
+
+            "store.tsx"
+
+8. Configure store by using redux toolkit "configureStore" function.
+    Store uses your video slicer and implements the reducers defined in slicer.
+
+Note: The slicer is configured as default export, you have to import default
+      and implement.
+
+            store.tsx
+
+import { configureStore } from "@reduxjs/toolkit";
+import videoSlicer from "../slicers/video-slicer";
+
+export default configureStore({
+    reducer: videoSlicer
+});
+
+9. Go to "main.tsx" and configure the provider by importing store from react-redux
+    [ Provider locates value in memory and injects into component ]
+
+    - Import provider & store [from your local store]
+
+                main.tsx
+
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App.tsx'
+import '../node_modules/bootstrap/dist/css/bootstrap.css';
+import '../node_modules/bootstrap-icons/font/bootstrap-icons.css';
+import { CookiesProvider } from 'react-cookie';
+import store from './store/store.tsx';
+import { Provider } from 'react-redux';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+     <CookiesProvider>
+         <Provider store={store} >
+            <App />
+         </Provider>
+     </CookiesProvider>
+  </StrictMode>,
+)
+
+10. Go to your project user-dashboard component.
+
+12. Import useDispatch(), which is responsible for dispatching the actions configured in reducer and update data into store.
+
+13. Dispatch will carry the payload to store from component.
+
+                user-dash.tsx
+
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie"
+import { Link, useNavigate } from "react-router-dom";
+import { VideoContract } from "../contracts/video-contract";
+import axios from "axios";
+import { addToSaveList } from "../slicers/video-slicer";
+import { useDispatch} from "react-redux";
+
+export function UserDash(){
+
+    const [cookies, setCookie, removeCookie] = useCookies(['user_id']);
+    const [videos, setVideos] = useState<VideoContract[]>();
+
+    let navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        axios.get(`http://127.0.0.1:4040/videos`)
+        .then(response=>{
+             setVideos(response.data);
+        });
+    },[])
+
+    function SignoutClick(){
+        removeCookie('user_id');
+        navigate('/');
+    }
+
+    function AddToWatchLaterClick(video:VideoContract){
+        dispatch(addToSaveList(video));
+    }
+
+
+    return(
+        <div>
+            <h3 className="d-flex mt-4 justify-content-between"><span>{cookies['user_id']}  <button className="bi bi-plus btn">My List</button> </span> <span>User Dash</span> <button onClick={SignoutClick} className="btn btn-link">  Signout</button> </h3>
+            <div className="my-3 w-50">
+                <div className="input-group">
+                    <input type="text" className="form-control" placeholder="Search videos: Java, Aws, React" /> <button className="bi bi-search btn btn-warning"></button>
+                 </div>
+               
+            </div>
+            <section className="d-flex flex-wrap">
+                {
+                    videos?.map(video=>
+                        <div className="card m-2 p-2" style={{width:'300px'}} key={video.video_id}>
+                            <div className="card-header">
+                                <iframe width="100%" height="200" src={video.url}></iframe>
+                            </div>
+                            <div className="card-body">
+                                <div className="fw-bold">{video.title}</div>
+                                <p>{video.description}</p>
+                            </div>
+                            <div className="card-footer">
+                                <button className="btn bi bi-hand-thumbs-up"> {video.likes} </button>
+                                <button className="btn bi bi-hand-thumbs-down"> {video.dislikes} </button>
+                                <button className="btn bi bi-eye-fill"> {video.views} </button>
+                                <button className="btn bi bi-plus " onClick={()=> { AddToWatchLaterClick(video) } } > Watch Later</button>
+                            </div>
+                        </div>
+                    )
+                }
+            </section>
+        </div>
+    )
+}
+
+Note : Download  "redux-dev-tools" extension in your browser.
+     
+14. To access data from store you can import store in any component
+
+   
+    import store from "../store/store";
+
+    store.getState().store.videos
+    store.getState().store.videosCount
+
+Implementing Callback & Memo in video library Project:
+- Callback and Memo are used to save round trips.
+- You can cache the data and use across multiple requests.
+- Data is fetched from server only when there are changes identified on server.
+- useMemo can store your data in memory.
+- useCallback can store a function in memory.
+
+Syntax:
+   const ref = useMemo(()=>{
+         // gets value
+    },[dependency])
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Testing & Deploying
+
+- Testing is the process of verifying AS-IS & TO-BE.
+- AS-IS refers to developer design & TO-BE is client requirement.
+
+        AS-IS === TO-BE            => Test Pass
+        AS-IS !== TO-BE            => Test Fail
+
+- JavaScript based testing frameworks are required for testing React application
+        - JEST
+        - Jasmine Karma
+        - VITest  
+
+- React application designed using JavaScript is enabled with JEST framework.
+
+Testing a Component:
+- Testing component comprises of 3 phases
+    a) Arrange
+    b) Act
+    c) Assert
+
+- Arrange is the process of configuring the component to test.
+- Act defines the design and functionality to test.
+- Assert is to verify test results and report the results.
+- JEST framework provides various mock functions for arrange, act and assert
+
+     test()               It configures a case
+     render()            It renders the component to test
+     screen             It provides methods to access UI content
+     getBy..()            These are reference methods
+     toBe..()            These are assert methods
+
+Ex:
+weather.jsx        
+Weather Component
+Client Requirements:
+    - Title must be "Weatherman"
+    - It must have a link to navigate to Google Weather    
+        <a> requires href with value "developers.google.com"
+
+1. Add a new test file
+   
+        weather.test.js  [weather.spec.js]
+
+2. Import the component and test functions
+
+    import  { screen , render }  from  "@testing-library/react";
+    import  { component   from "./component";
+
+3. Configure the test case using "test()"
+
+    test("title", ()=>{
+
+    });
+
+4. Render the component
+
+    render(<Component/>);
+
+5. Initialize the references for elements to test
+
+    var  ref = screen.getBy..();
+
+6. Configure the act
+
+    expect(ref).toBe..();
+    expect(ref).toHave..();
+
+    weather.test.js
+
+import { screen, render } from "@testing-library/react";
+import { Weather } from "./weather";
+
+// Title Test
+
+test("Title Test",()=>{
+
+    render(<Weather />);
+
+    let title = screen.getByTestId("title");
+
+    expect(title).toHaveTextContent(/Weatherman/);
+});
+
+// Link to Google test
+
+test("Google Link Test", ()=>{
+
+    render(<Weather />);
+
+    let link = screen.getByText(/Google Weather/);
+
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute("href", "https://developers.google.com&quot;);
+});
+
+7. Start testing
+
+    > npm run test
+
+Deploying
+- It is the process of building application for production so that it can Go-Live.
+- You can deploy on local server or cloud server.
+- Local Servers
+    a) IIS
+    b) XAMP
+    c) WAMP
+    d) Tomcat  etc..
+- Cloud Servers
+    a) Firebase
+    b) AWS
+    c) Azure
+    d) Netlify
+    e) GIT Hub Pages etc.
+
+Ex: Deploying on Firebase [ Google Cloud ]
+
+1. Login into your  Firebase account with Google ID
+
+    https://firebase.com
+
+2. Go to "Console" and create a new project
+
+     Name : weatherman-react-app
+
+3. Install firebase tools on your PC
+
+    C:\>npm install  firebase-tools  -g
+
+4. Go to your project terminal
+
+    - Build your application for production
+       
+        > npm run build
+
+    - Login into firebase
+
+        > firebase login
+
+    - Initialize firebase
+
+        > firebase init
+
+       ?Firebase features do you want to set up :   Hosting
+       ? Project : Use existing project
+       ? Select Project : weatherman-react-app
+       ? production folder : build
+       ? re-write index.html : No
+
+    - Deploy
+
+        > firebase deploy
+
+Note: After making changes
+
+        > npm run build
+        > firebase deploy
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 

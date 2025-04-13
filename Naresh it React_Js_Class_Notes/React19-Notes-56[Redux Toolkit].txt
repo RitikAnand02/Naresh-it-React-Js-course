@@ -1,0 +1,184 @@
+Redux in Video Library Project
+
+1. Install Redux with React support into project
+
+    > npm install  @reduxjs/toolkit   react-redux   --save
+
+2. Go to "src" folder and add a new folder by name "slicers".
+
+3. Add a new file  "video-slicer.tsx"
+
+4. Import "createSlice" and configure the slice with initial state and reducer actions.
+
+5. Create Slice method comprises various properties
+    a) actions
+    b) reducer
+
+   You have to export the actions and reducers
+
+          video-slicer.tsx
+
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+    videos : [],
+    videosCount: 0
+}
+
+const videoSlice = createSlice({
+    name: 'video',
+    initialState,
+    reducers: {
+        addToSaveList : (state:any, action)=>{
+            state.videos.push(action.payload);
+            state.videosCount = state.videos.length;
+        }
+    }
+});
+
+export const {addToSaveList} = videoSlice.actions;
+export default videoSlice.reducer;
+
+6. Go to "src" and add a new folder by name "store"
+
+7. Add a new file into store folder by name
+
+            "store.tsx"
+
+8. Configure store by using redux toolkit "configureStore" function.
+    Store uses your video slicer and implements the reducers defined in slicer.
+
+Note: The slicer is configured as default export, you have to import default
+      and implement.
+
+            store.tsx
+
+import { configureStore } from "@reduxjs/toolkit";
+import videoSlicer from "../slicers/video-slicer";
+
+export default configureStore({
+    reducer: videoSlicer
+});
+
+9. Go to "main.tsx" and configure the provider by importing store from react-redux
+    [ Provider locates value in memory and injects into component ]
+
+    - Import provider & store [from your local store]
+
+                main.tsx
+
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App.tsx'
+import '../node_modules/bootstrap/dist/css/bootstrap.css';
+import '../node_modules/bootstrap-icons/font/bootstrap-icons.css';
+import { CookiesProvider } from 'react-cookie';
+import store from './store/store.tsx';
+import { Provider } from 'react-redux';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+     <CookiesProvider>
+         <Provider store={store} >
+            <App />
+         </Provider>
+     </CookiesProvider>
+  </StrictMode>,
+)
+
+10. Go to your project user-dashboard component.
+
+12. Import useDispatch(), which is responsible for dispatching the actions configured in reducer and update data into store.
+
+13. Dispatch will carry the payload to store from component.
+
+                user-dash.tsx
+
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie"
+import { Link, useNavigate } from "react-router-dom";
+import { VideoContract } from "../contracts/video-contract";
+import axios from "axios";
+import { addToSaveList } from "../slicers/video-slicer";
+import { useDispatch} from "react-redux";
+
+export function UserDash(){
+
+    const [cookies, setCookie, removeCookie] = useCookies(['user_id']);
+    const [videos, setVideos] = useState<VideoContract[]>();
+
+    let navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        axios.get(`http://127.0.0.1:4040/videos`)
+        .then(response=>{
+             setVideos(response.data);
+        });
+    },[])
+
+    function SignoutClick(){
+        removeCookie('user_id');
+        navigate('/');
+    }
+
+    function AddToWatchLaterClick(video:VideoContract){
+        dispatch(addToSaveList(video));
+    }
+
+
+    return(
+        <div>
+            <h3 className="d-flex mt-4 justify-content-between"><span>{cookies['user_id']}  <button className="bi bi-plus btn">My List</button> </span> <span>User Dash</span> <button onClick={SignoutClick} className="btn btn-link">  Signout</button> </h3>
+            <div className="my-3 w-50">
+                <div className="input-group">
+                    <input type="text" className="form-control" placeholder="Search videos: Java, Aws, React" /> <button className="bi bi-search btn btn-warning"></button>
+                 </div>
+               
+            </div>
+            <section className="d-flex flex-wrap">
+                {
+                    videos?.map(video=>
+                        <div className="card m-2 p-2" style={{width:'300px'}} key={video.video_id}>
+                            <div className="card-header">
+                                <iframe width="100%" height="200" src={video.url}></iframe>
+                            </div>
+                            <div className="card-body">
+                                <div className="fw-bold">{video.title}</div>
+                                <p>{video.description}</p>
+                            </div>
+                            <div className="card-footer">
+                                <button className="btn bi bi-hand-thumbs-up"> {video.likes} </button>
+                                <button className="btn bi bi-hand-thumbs-down"> {video.dislikes} </button>
+                                <button className="btn bi bi-eye-fill"> {video.views} </button>
+                                <button className="btn bi bi-plus " onClick={()=> { AddToWatchLaterClick(video) } } > Watch Later</button>
+                            </div>
+                        </div>
+                    )
+                }
+            </section>
+        </div>
+    )
+}
+
+Note : Download  "redux-dev-tools" extension in your browser.
+     
+14. To access data from store you can import store in any component
+
+   
+    import store from "../store/store";
+
+    store.getState().store.videos
+    store.getState().store.videosCount
+
+Implementing Callback & Memo in video library Project:
+- Callback and Memo are used to save round trips.
+- You can cache the data and use across multiple requests.
+- Data is fetched from server only when there are changes identified on server.
+- useMemo can store your data in memory.
+- useCallback can store a function in memory.
+
+Syntax:
+   const ref = useMemo(()=>{
+         // gets value
+    },[dependency])

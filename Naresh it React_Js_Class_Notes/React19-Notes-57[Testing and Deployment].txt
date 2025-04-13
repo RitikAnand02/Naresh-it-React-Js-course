@@ -1,0 +1,157 @@
+Testing & Deploying
+
+- Testing is the process of verifying AS-IS & TO-BE.
+- AS-IS refers to developer design & TO-BE is client requirement.
+
+        AS-IS === TO-BE            => Test Pass
+        AS-IS !== TO-BE            => Test Fail
+
+- JavaScript based testing frameworks are required for testing React application
+        - JEST
+        - Jasmine Karma
+        - VITest  
+
+- React application designed using JavaScript is enabled with JEST framework.
+
+Testing a Component:
+- Testing component comprises of 3 phases
+    a) Arrange
+    b) Act
+    c) Assert
+
+- Arrange is the process of configuring the component to test.
+- Act defines the design and functionality to test.
+- Assert is to verify test results and report the results.
+- JEST framework provides various mock functions for arrange, act and assert
+
+     test()               It configures a case
+     render()            It renders the component to test
+     screen             It provides methods to access UI content
+     getBy..()            These are reference methods
+     toBe..()            These are assert methods
+
+Ex:
+weather.jsx        
+Weather Component
+Client Requirements:
+    - Title must be "Weatherman"
+    - It must have a link to navigate to Google Weather    
+        <a> requires href with value "developers.google.com"
+
+1. Add a new test file
+   
+        weather.test.js  [weather.spec.js]
+
+2. Import the component and test functions
+
+    import  { screen , render }  from  "@testing-library/react";
+    import  { component   from "./component";
+
+3. Configure the test case using "test()"
+
+    test("title", ()=>{
+
+    });
+
+4. Render the component
+
+    render(<Component/>);
+
+5. Initialize the references for elements to test
+
+    var  ref = screen.getBy..();
+
+6. Configure the act
+
+    expect(ref).toBe..();
+    expect(ref).toHave..();
+
+    weather.test.js
+
+import { screen, render } from "@testing-library/react";
+import { Weather } from "./weather";
+
+// Title Test
+
+test("Title Test",()=>{
+
+    render(<Weather />);
+
+    let title = screen.getByTestId("title");
+
+    expect(title).toHaveTextContent(/Weatherman/);
+});
+
+// Link to Google test
+
+test("Google Link Test", ()=>{
+
+    render(<Weather />);
+
+    let link = screen.getByText(/Google Weather/);
+
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute("href", "https://developers.google.com&quot;);
+});
+
+7. Start testing
+
+    > npm run test
+
+Deploying
+- It is the process of building application for production so that it can Go-Live.
+- You can deploy on local server or cloud server.
+- Local Servers
+    a) IIS
+    b) XAMP
+    c) WAMP
+    d) Tomcat  etc..
+- Cloud Servers
+    a) Firebase
+    b) AWS
+    c) Azure
+    d) Netlify
+    e) GIT Hub Pages etc.
+
+Ex: Deploying on Firebase [ Google Cloud ]
+
+1. Login into your  Firebase account with Google ID
+
+    https://firebase.com
+
+2. Go to "Console" and create a new project
+
+     Name : weatherman-react-app
+
+3. Install firebase tools on your PC
+
+    C:\>npm install  firebase-tools  -g
+
+4. Go to your project terminal
+
+    - Build your application for production
+       
+        > npm run build
+
+    - Login into firebase
+
+        > firebase login
+
+    - Initialize firebase
+
+        > firebase init
+
+       ?Firebase features do you want to set up :   Hosting
+       ? Project : Use existing project
+       ? Select Project : weatherman-react-app
+       ? production folder : build
+       ? re-write index.html : No
+
+    - Deploy
+
+        > firebase deploy
+
+Note: After making changes
+
+        > npm run build
+        > firebase deploy

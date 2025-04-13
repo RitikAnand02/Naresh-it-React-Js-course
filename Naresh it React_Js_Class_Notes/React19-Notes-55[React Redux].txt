@@ -1,0 +1,88 @@
+Functionalities to Implement
+- Likes, dislikes counter must increase and store in database
+- User must able to view the video separately in a new route.
+- It must increase the views count.
+- User must able to search by category or title.
+- User can register a new account.
+- Setup validation while adding, editing videos.
+
+
+                          React Redux
+
+- Redux is a JavaScript library.
+- It is used to configure and maintain global application memory for JavaScript based applications.
+- It is a large scale version of application memory when compared to useReducer in React.
+- It is predictable and debuggable.
+- It provides a complete toolkit for developers to manage application state.
+- Redux can be used with angular, react, vue and all JavaScript apps.
+
+Redux Components:
+    a) Store
+    b) State
+    c) Reducer
+
+- Store is the location where data is kept.
+- State can access data from store and update to UI.
+- Reducer comprises of actions required to update data in store.
+
+Setup Redux for Project
+
+1. Install Redux toolkit with React support
+
+    > npm install @reduxjs/toolkit   react-redux  --save
+
+2. Redux toolkit provides
+    a) Slicer
+    b) Store
+    c) Reducer
+    d) Initial State
+
+3. Create a new slicer
+
+    - Slicer configure the initial data to store in global memory.
+    - It initializes the global memory.
+    - It uses initial state.
+    - You can create by using "createSlice()" method.
+    - It also defines the actions to perform
+    - Actions are required to update the data in global memory.
+
+Syntax:
+        video-slicer.tsx
+
+      let initialState = {
+          videos : [ ],
+          videosCount: 0
+       }
+
+     const  videoSlice = createSlice({
+        name: 'video',
+            initialState,
+        reducers: {
+            addToList: (payload)=>{ videos.push(payload) }
+        }
+      })
+
+    export  videoSlice.actions;
+   
+4. Configure a store from Redux toolkit
+
+    - It requires configureStore()  method
+    - It can create a store at application level
+    - It can get data from your reducer and update into store.
+    - Store is provided Global so that you can access from any component.
+
+Syntax:
+     store.tsx
+
+     import { configureStore }  from  "@redux/toolkit";
+
+    export function configureStore(){
+        // specify the reducers.
+    }
+
+5. Go to main.tsx and set provider for store.
+
+Syntax:
+        <Provider  store={ store } >
+            <App />
+        </Provider>
